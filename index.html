@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>帝京大学 過去問演習</title>
+  <link rel="stylesheet" href="../数学演習サイト/prototype/static/katex/katex.min.css">
+  <link rel="stylesheet" href="./static/styles.css">
+  <script defer src="../数学演習サイト/prototype/static/katex/katex.min.js"></script>
+  <script defer src="../数学演習サイト/prototype/static/katex/contrib/auto-render.min.js"></script>
+  <script defer src="./static/data.js"></script>
+  <script defer src="./static/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <p class="eyebrow">TEIKYO UNIVERSITY / MATH PRACTICE</p>
+      <h1>帝京大学 過去問演習</h1>
+    </div>
+    <div class="top-actions">
+      <button id="resetProgressBtn" class="ghost" type="button">進捗リセット</button>
+      <button id="printBtn" class="ghost" type="button">印刷</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar">
+      <section class="panel inverse">
+        <p class="eyebrow">SOURCE</p>
+        <h2>2026 総合型選抜</h2>
+        <p class="source-text">薬・理工学部 数学</p>
+        <div class="meter" aria-label="進捗"><i id="progressFill"></i></div>
+        <p class="meter-text" id="progressText">0 / 0</p>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>大問</h2>
+          <span class="muted" id="groupCount"></span>
+        </div>
+        <nav id="groupList" class="group-list" aria-label="大問一覧"></nav>
+      </section>
+
+      <section class="panel">
+        <h2>演習設定</h2>
+        <div class="stack">
+          <label class="checkline"><input id="instantCheck" type="checkbox"> 入力中に正誤を表示</label>
+          <label class="checkline"><input id="hideSolutions" type="checkbox" checked> 採点前は解説を隠す</label>
+          <button id="randomBtn" type="button">未完了からランダム</button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <section class="panel problem-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" id="groupMeta">GROUP</p>
+            <h2 id="groupTitle"></h2>
+          </div>
+          <span class="badge" id="topicTag"></span>
+        </div>
+        <div class="stem" id="groupStem"></div>
+        <div id="subList" class="sub-list"></div>
+      </section>
+    </section>
+
+    <aside class="resultbar">
+      <section class="panel">
+        <h2>採点</h2>
+        <div class="score" id="scoreBox">
+          <span class="score-main">—</span>
+          <span class="score-sub">未採点</span>
+        </div>
+        <div class="actions">
+          <button id="gradeBtn" class="primary" type="button">採点する</button>
+          <button id="clearBtn" class="ghost" type="button">この大問をやり直す</button>
+        </div>
+        <div id="resultList" class="result-list"></div>
+      </section>
+
+      <section class="panel keypad-panel">
+        <h2>入力</h2>
+        <div id="activeLabel" class="muted">マスを選択してください</div>
+        <div class="keypad" id="keypad"></div>
+      </section>
+
+      <section class="panel">
+        <h2>解説</h2>
+        <div id="solutionList" class="solution-list muted">採点後に表示します。</div>
+      </section>
+    </aside>
+  </main>
+
+  <div id="solutionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow" id="modalMeta">SOLUTION</p>
+          <h2 id="modalTitle">詳細解説</h2>
+        </div>
+        <button id="modalCloseBtn" class="ghost" type="button" aria-label="詳細解説を閉じる">閉じる</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+</body>
+</html>
