@@ -1,20 +1,47 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const DATA = window.TEIKYO_DATA || { problem_groups: [] };
-const groups = DATA.problem_groups || [];
+const DATASETS = window.TEIKYO_DATASETS || { sougou: window.TEIKYO_DATA || { problem_groups: [] } };
+const EXAMS = {
+  sougou: {
+    label: "総合型選抜",
+    shortLabel: "総合型",
+    eyebrow: "TEIKYO UNIVERSITY / AO MATH",
+    sourceTitle: "2026 総合型選抜",
+    sourceText: "薬・理工学部 数学",
+    legacyProgressKey: "teikyo_2026_math_practice_v1",
+  },
+  recommend: {
+    label: "学校推薦型選抜",
+    shortLabel: "学校推薦型",
+    eyebrow: "TEIKYO UNIVERSITY / RECOMMENDATION MATH",
+    sourceTitle: "2026 学校推薦型選抜",
+    sourceText: "薬・理工学部 数学",
+    legacyProgressKey: "teikyo_2026_recommend_math_practice_v1",
+  },
+};
+const AVAILABLE_EXAMS = Object.keys(EXAMS).filter((key) => DATASETS[key]);
+const CURRENT_EXAM_KEY = "teikyo_2026_math_current_exam_v1";
+let currentExamKey = loadCurrentExam();
+let DATA = DATASETS[currentExamKey] || { problem_groups: [] };
+let groups = DATA.problem_groups || [];
 const LEGACY_PROGRESS_KEY = "teikyo_2026_math_practice_v1";
-const STUDENTS_KEY = "teikyo_2026_math_students_v1";
+const STUDENTS_KEY = "teikyo_2026_math_students_unified_v1";
+const LEGACY_STUDENT_KEYS = ["teikyo_2026_math_students_v1", "teikyo_2026_recommend_math_students_v1"];
 const CURRENT_STUDENT_KEY = "teikyo_2026_math_current_student_v1";
-const PROGRESS_PREFIX = "teikyo_2026_math_progress_v1:";
+const PROGRESS_PREFIX = "teikyo_2026_math_progress_v2:";
+const DRAFT_PREFIX = "teikyo_2026_math_drafts_v2:";
 
 let currentGroup = 0;
 let answers = {};
+let answerDrafts = {};
 let graded = false;
 let active = null;
 let students = loadStudents();
 let currentStudentName = loadCurrentStudent();
 let progress = {};
+
+const HINT_LEVELS = ["着眼点", "立式", "計算", "答え合わせ"];
 
 const DETAIL_TEXT = {
   "1-(1)": [
@@ -141,6 +168,39 @@ const DETAIL_TEXT = {
   ]
 };
 
+const DETAIL_TEXTS = {
+  sougou: DETAIL_TEXT,
+  ...(window.TEIKYO_DETAIL_TEXTS || {}),
+};
+
+function loadCurrentExam() {
+  const requested = new URLSearchParams(window.location.search).get("exam");
+  if (requested && AVAILABLE_EXAMS.includes(requested)) return requested;
+  const stored = localStorage.getItem(CURRENT_EXAM_KEY);
+  if (stored && AVAILABLE_EXAMS.includes(stored)) return stored;
+  if (AVAILABLE_EXAMS.includes("sougou")) return "sougou";
+  return AVAILABLE_EXAMS[0] || "sougou";
+}
+
+function setCurrentExam(key) {
+  if (!DATASETS[key]) return;
+  currentExamKey = key;
+  localStorage.setItem(CURRENT_EXAM_KEY, key);
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set("exam", key);
+  window.history.replaceState(null, "", nextUrl);
+  DATA = DATASETS[currentExamKey] || { problem_groups: [] };
+  groups = DATA.problem_groups || [];
+  currentGroup = 0;
+  progress = loadProgressFor(currentStudentName);
+  answerDrafts = loadDraftsFor(currentStudentName);
+  migrateLegacyProgress();
+  progress = loadProgressFor(currentStudentName);
+  answerDrafts = loadDraftsFor(currentStudentName);
+  ensureAnswersForGroup();
+  render();
+}
+
 function readJson(key, fallback) {
   try {
     return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
@@ -158,12 +218,17 @@ function normalizeStudentName(name = "") {
 }
 
 function progressKeyFor(name) {
-  return `${PROGRESS_PREFIX}${encodeURIComponent(name)}`;
+  return `${PROGRESS_PREFIX}${currentExamKey}:${encodeURIComponent(name)}`;
+}
+
+function draftKeyFor(name) {
+  return `${DRAFT_PREFIX}${currentExamKey}:${encodeURIComponent(name)}`;
 }
 
 function loadStudents() {
-  const list = readJson(STUDENTS_KEY, []);
-  return Array.isArray(list) ? [...new Set(list.map(normalizeStudentName).filter(Boolean))] : [];
+  const lists = [readJson(STUDENTS_KEY, []), ...LEGACY_STUDENT_KEYS.map((key) => readJson(key, []))];
+  return [...new Set(lists.flat().map(normalizeStudentName).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, "ja"));
 }
 
 function saveStudents() {
@@ -179,6 +244,7 @@ function setCurrentStudent(name) {
   currentStudentName = normalizeStudentName(name);
   localStorage.setItem(CURRENT_STUDENT_KEY, currentStudentName);
   progress = loadProgressFor(currentStudentName);
+  answerDrafts = loadDraftsFor(currentStudentName);
 }
 
 function loadProgressFor(name) {
@@ -186,17 +252,29 @@ function loadProgressFor(name) {
   return readJson(progressKeyFor(name), {});
 }
 
+function loadDraftsFor(name) {
+  if (!name) return {};
+  return readJson(draftKeyFor(name), {});
+}
+
 function saveProgress() {
   if (!currentStudentName) return;
   writeJson(progressKeyFor(currentStudentName), progress);
 }
 
+function saveDrafts() {
+  if (!currentStudentName) return;
+  writeJson(draftKeyFor(currentStudentName), answerDrafts);
+}
+
 function migrateLegacyProgress() {
-  const legacyRaw = localStorage.getItem(LEGACY_PROGRESS_KEY);
-  if (!legacyRaw || localStorage.getItem(`${LEGACY_PROGRESS_KEY}_migrated`)) return;
-  const legacy = readJson(LEGACY_PROGRESS_KEY, {});
+  const legacyKey = EXAMS[currentExamKey]?.legacyProgressKey || LEGACY_PROGRESS_KEY;
+  const migratedKey = `${legacyKey}_migrated_into_unified`;
+  const legacyRaw = localStorage.getItem(legacyKey);
+  if (!legacyRaw || localStorage.getItem(migratedKey)) return;
+  const legacy = readJson(legacyKey, {});
   if (!legacy || !Object.keys(legacy).length) {
-    localStorage.setItem(`${LEGACY_PROGRESS_KEY}_migrated`, "1");
+    localStorage.setItem(migratedKey, "1");
     return;
   }
   const legacyStudent = "既存データ";
@@ -208,7 +286,7 @@ function migrateLegacyProgress() {
     writeJson(progressKeyFor(legacyStudent), legacy);
   }
   if (!currentStudentName) setCurrentStudent(legacyStudent);
-  localStorage.setItem(`${LEGACY_PROGRESS_KEY}_migrated`, "1");
+  localStorage.setItem(migratedKey, "1");
 }
 
 function escapeHtml(text = "") {
@@ -242,6 +320,10 @@ function groupKey(index) {
   return `group-${groups[index]?.group_number || index + 1}`;
 }
 
+function groupDraftKey(index) {
+  return groupKey(index);
+}
+
 function subKey(groupIndex, subIndex) {
   return `${groupKey(groupIndex)}-${subIndex}`;
 }
@@ -273,6 +355,11 @@ function fieldValue(field) {
   return normalize(cells.join(""));
 }
 
+function isFieldFilled(field) {
+  const cells = answers[field.uid] || [];
+  return cells.every((cell) => String(cell || "").trim() !== "");
+}
+
 function isFieldCorrect(field) {
   return fieldValue(field) === normalize(field.value);
 }
@@ -292,14 +379,65 @@ function createViewFields(groupIndex, subIndex, sub) {
 
 function ensureAnswersForGroup() {
   const group = groups[currentGroup];
-  answers = {};
+  const draftKey = groupDraftKey(currentGroup);
+  answers = answerDrafts[draftKey] || {};
   (group.sub_problems || []).forEach((sub, subIndex) => {
     createViewFields(currentGroup, subIndex, sub).forEach((field) => {
-      answers[field.uid] = Array.from({ length: field.cellCount }, () => "");
+      const stored = Array.isArray(answers[field.uid]) ? answers[field.uid] : [];
+      answers[field.uid] = Array.from({ length: field.cellCount }, (_, index) => stored[index] || "");
     });
   });
+  answerDrafts[draftKey] = answers;
   graded = false;
-  active = null;
+  setFirstAvailableActive();
+}
+
+function persistCurrentAnswers() {
+  answerDrafts[groupDraftKey(currentGroup)] = answers;
+  saveDrafts();
+}
+
+function currentFields() {
+  const group = groups[currentGroup];
+  return (group.sub_problems || []).flatMap((sub, subIndex) =>
+    createViewFields(currentGroup, subIndex, sub).map((field) => ({ field, sub, subIndex }))
+  );
+}
+
+function fieldEntries() {
+  return currentFields().flatMap(({ field, sub, subIndex }) =>
+    Array.from({ length: field.cellCount }, (_, cellIndex) => ({ field, sub, subIndex, cellIndex }))
+  );
+}
+
+function setFirstAvailableActive() {
+  const blank = fieldEntries().find(({ field, cellIndex }) => !answers[field.uid]?.[cellIndex]);
+  const first = blank || fieldEntries()[0];
+  active = first ? { uid: first.field.uid, cellIndex: first.cellIndex } : null;
+}
+
+function renderExamShell() {
+  const exam = EXAMS[currentExamKey] || EXAMS.sougou;
+  document.title = `帝京大学 ${exam.label} 数学過去問演習`;
+  $("#appTitle").textContent = `帝京大学 ${exam.label}`;
+  $("#sourceTitle").textContent = exam.sourceTitle;
+  $("#sourceText").textContent = exam.sourceText;
+  $(".brand .eyebrow").textContent = exam.eyebrow;
+  $("#examSwitch").innerHTML = AVAILABLE_EXAMS.map((key) => {
+    const option = EXAMS[key];
+    return `<button class="exam-option ${key === currentExamKey ? "active" : ""}" type="button" role="tab"
+      aria-selected="${key === currentExamKey ? "true" : "false"}" data-exam="${key}">
+      <span>${escapeHtml(option.shortLabel)}</span>
+      <small>${totalCountFor(key)}小問</small>
+    </button>`;
+  }).join("");
+  $$("[data-exam]").forEach((button) => {
+    button.addEventListener("click", () => setCurrentExam(button.dataset.exam));
+  });
+}
+
+function totalCountFor(examKey) {
+  return (DATASETS[examKey]?.problem_groups || []).reduce((sum, group) => sum + (group.sub_problems || []).length, 0);
 }
 
 function renderGroups() {
@@ -419,17 +557,70 @@ function renderField(field) {
   </div>`;
 }
 
+function stepsForSub(group, sub) {
+  return DETAIL_TEXTS[currentExamKey]?.[detailKey(group, sub)] || fallbackDetail(sub);
+}
+
+function hintLevelLabel(stepIndex, totalSteps) {
+  if (totalSteps <= 1) return HINT_LEVELS[0];
+  if (stepIndex === totalSteps - 1) return HINT_LEVELS[3];
+  const levelIndex = Math.min(HINT_LEVELS.length - 2, Math.floor(stepIndex * (HINT_LEVELS.length - 1) / totalSteps));
+  return HINT_LEVELS[levelIndex];
+}
+
+function hintSummaryForFields(fields) {
+  const summaries = fields.map((field) => {
+    const sign = field.format === "signed_integer" || String(field.value || "").startsWith("-") ? "符号に注意" : "";
+    return `${field.title || "空欄"}: ${field.cellCount}マス${sign ? ` / ${sign}` : ""}`;
+  });
+  return summaries.length ? summaries.join("、") : "";
+}
+
+function renderHintBox(group, sub, subIndex, fields) {
+  if (!$("#hintMode")?.checked) return "";
+  const key = subKey(currentGroup, subIndex);
+  const entry = progress[key] || {};
+  const steps = stepsForSub(group, sub);
+  const shown = Math.min(entry.hintsUsed || 0, steps.length);
+  const nextNumber = Math.min(shown + 1, steps.length);
+  const isAtAnswer = shown === steps.length - 1;
+  const fieldHint = hintSummaryForFields(fields);
+  const revealed = steps.slice(0, shown).map((step, stepIndex) => `
+    <li>
+      <span class="hint-level">L${Math.min(stepIndex + 1, 4)} ${escapeHtml(hintLevelLabel(stepIndex, steps.length))}</span>
+      <p>${mdLite(step)}</p>
+    </li>
+  `).join("");
+  const emptyText = fieldHint
+    ? `<p class="hint-empty">まずは問題文から使う公式を探してください。空欄の形は ${escapeHtml(fieldHint)} です。</p>`
+    : `<p class="hint-empty">まずは問題文から、求める量と条件を分けてみてください。</p>`;
+  return `<div class="hint-box" data-hint-box="${subIndex}">
+    <div class="hint-toolbar">
+      <button class="hint-button" type="button" data-hint="${subIndex}" ${shown >= steps.length ? "disabled" : ""}>
+        ${shown >= steps.length ? "ヒント完了" : `${isAtAnswer ? "答え合わせへ" : "ヒントを見る"} (${nextNumber}/${steps.length})`}
+      </button>
+      <span class="hint-status">${shown ? `${shown}段階使用` : "ノーヒント挑戦中"}</span>
+    </div>
+    <div class="hint-steps">${revealed ? `<ol>${revealed}</ol>` : emptyText}</div>
+  </div>`;
+}
+
 function renderSubProblem(sub, subIndex) {
+  const group = groups[currentGroup];
   const fields = createViewFields(currentGroup, subIndex, sub);
+  const filled = fields.filter(isFieldFilled).length;
   const isCorrect = graded && fields.every(isFieldCorrect);
   const isWrong = graded && !isCorrect;
+  const hintsUsed = progress[subKey(currentGroup, subIndex)]?.hintsUsed || 0;
+  const noHintBadge = isCorrect && hintsUsed === 0 ? `<span class="no-hint-badge">ノーヒント正解</span>` : "";
   return `<article class="sub-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" data-sub="${subIndex}">
     <div class="sub-head">
       <div class="sub-label">${escapeHtml(sub.label)}</div>
-      <div class="sub-meta">${fields.length} fields</div>
+      <div class="sub-meta">${noHintBadge}${filled}/${fields.length} 入力</div>
     </div>
     <div class="sub-stem"><p>${mdLite(sub.stem_md)}</p></div>
     <div class="fields">${fields.map(renderField).join("")}</div>
+    ${renderHintBox(group, sub, subIndex, fields)}
   </article>`;
 }
 
@@ -441,6 +632,7 @@ function renderProblem() {
   $("#groupStem").innerHTML = `<p>${mdLite(group.stem_md || "")}</p>`;
   $("#subList").innerHTML = (group.sub_problems || []).map(renderSubProblem).join("");
   bindCells();
+  bindHints();
   renderMath($("#groupStem"));
   renderMath($("#subList"));
 }
@@ -455,6 +647,30 @@ function bindCells() {
   });
 }
 
+function bindHints() {
+  $$("[data-hint]").forEach((button) => {
+    button.addEventListener("click", () => revealHint(Number(button.dataset.hint)));
+  });
+}
+
+function revealHint(subIndex) {
+  const group = groups[currentGroup];
+  const sub = group.sub_problems[subIndex];
+  const key = subKey(currentGroup, subIndex);
+  const steps = stepsForSub(group, sub);
+  const current = Math.min(progress[key]?.hintsUsed || 0, steps.length);
+  if (current >= steps.length) return;
+  if (current === steps.length - 1 && !confirm("最後のヒントには答えが含まれます。先に一度、今の答えで採点しますか？\n\nOK: 答え合わせのヒントを開く\nキャンセル: まだ考える")) return;
+  progress[key] = {
+    ...(progress[key] || {}),
+    hintsUsed: current + 1,
+    hintAt: new Date().toISOString(),
+  };
+  saveProgress();
+  renderProblem();
+  renderScore(true);
+}
+
 function renderKeypad() {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "⌫", "消去", "次へ"];
   $("#keypad").innerHTML = keys.map((key) => {
@@ -466,12 +682,21 @@ function renderKeypad() {
   });
 }
 
+function activeEntry() {
+  if (!active) return null;
+  return fieldEntries().find(({ field, cellIndex }) => field.uid === active.uid && cellIndex === active.cellIndex) || null;
+}
+
 function renderActiveLabel() {
   if (!active) {
     $("#activeLabel").textContent = "マスを選択してください";
     return;
   }
-  $("#activeLabel").textContent = `${active.uid.replaceAll("-", ".")} / ${active.cellIndex + 1}マス目`;
+  const entry = activeEntry();
+  const box = entry?.field.labels?.[active.cellIndex] || `${active.cellIndex + 1}マス目`;
+  $("#activeLabel").textContent = entry
+    ? `大問${groups[currentGroup].group_number} ${entry.sub.label} / ${box}`
+    : `${active.uid.replaceAll("-", ".")} / ${active.cellIndex + 1}マス目`;
 }
 
 function handleKey(key) {
@@ -490,9 +715,10 @@ function handleKey(key) {
     cells[active.cellIndex] = key;
     moveNextCell();
   }
+  persistCurrentAnswers();
   if ($("#instantCheck").checked) graded = true;
   renderProblem();
-  renderScore(false);
+  renderScore(true);
   renderActiveLabel();
 }
 
@@ -521,9 +747,11 @@ function gradeCurrent() {
   (group.sub_problems || []).forEach((sub, subIndex) => {
     const fields = createViewFields(currentGroup, subIndex, sub);
     const correct = fields.every(isFieldCorrect);
-    progress[subKey(currentGroup, subIndex)] = { correct, at: new Date().toISOString() };
+    const key = subKey(currentGroup, subIndex);
+    progress[key] = { ...(progress[key] || {}), correct, at: new Date().toISOString() };
   });
   saveProgress();
+  persistCurrentAnswers();
   render();
 }
 
@@ -540,15 +768,20 @@ function renderScore(forceBlank = false) {
   if (!graded && forceBlank) {
     $("#scoreBox").innerHTML = `<span class="score-main">—</span><span class="score-sub">未採点</span>`;
     $("#resultList").innerHTML = "";
+    $("#gradeBtn").textContent = "採点する";
+    $("#nextWrongBtn").disabled = true;
     return;
   }
   const results = groupResults();
   const correct = results.filter((r) => r.correct).length;
   const total = results.length;
+  $("#gradeBtn").textContent = graded ? "再採点する" : "採点する";
+  $("#nextWrongBtn").disabled = !graded || correct === total;
   $("#scoreBox").innerHTML = `<span class="score-main">${correct}/${total}</span><span class="score-sub">${Math.round((correct / total) * 100)}% correct</span>`;
   $("#resultList").innerHTML = results.map((r) => `<div class="result-row">
     <span>${escapeHtml(r.sub.label)}</span>
     <span class="${r.correct ? "ok" : "ng"}">${r.correct ? "正解" : `${r.correctFields}/${r.total}`}</span>
+    <small class="hint-log">${progress[subKey(currentGroup, r.subIndex)]?.hintsUsed || 0} hint</small>
   </div>`).join("");
 }
 
@@ -598,7 +831,7 @@ function fallbackDetail(sub) {
 }
 
 function detailStepsHtml(group, sub) {
-  const steps = DETAIL_TEXT[detailKey(group, sub)] || fallbackDetail(sub);
+  const steps = stepsForSub(group, sub);
   return `<ol>${steps.map((step) => `<li>${mdLite(step)}</li>`).join("")}</ol>`;
 }
 
@@ -637,6 +870,8 @@ function closeSolutionModal() {
 }
 
 function clearCurrent() {
+  answerDrafts[groupDraftKey(currentGroup)] = {};
+  saveDrafts();
   ensureAnswersForGroup();
   render();
 }
@@ -646,6 +881,7 @@ function randomUnfinished() {
     .map((group, groupIndex) => ({ group, groupIndex }))
     .filter(({ group, groupIndex }) => (group.sub_problems || []).some((_, subIndex) => !progress[subKey(groupIndex, subIndex)]?.correct));
   const target = candidates[Math.floor(Math.random() * candidates.length)] || { groupIndex: 0 };
+  if (!candidates.length) return;
   currentGroup = target.groupIndex;
   ensureAnswersForGroup();
   render();
@@ -655,18 +891,67 @@ function resetProgress() {
   const target = currentStudentName ? `${currentStudentName} さんの進捗` : "ゲストの画面内進捗";
   if (!confirm(`${target}をリセットしますか。`)) return;
   progress = {};
+  answerDrafts = {};
   saveProgress();
+  saveDrafts();
   ensureAnswersForGroup();
   render();
+}
+
+function focusFirstBlank() {
+  const blank = fieldEntries().find(({ field, cellIndex }) => !answers[field.uid]?.[cellIndex]);
+  if (!blank) return;
+  active = { uid: blank.field.uid, cellIndex: blank.cellIndex };
+  renderProblem();
+  renderActiveLabel();
+}
+
+function focusFirstWrong() {
+  if (!graded) return;
+  const wrong = fieldEntries().find(({ field }) => !isFieldCorrect(field));
+  if (!wrong) return;
+  active = { uid: wrong.field.uid, cellIndex: wrong.cellIndex };
+  renderProblem();
+  renderActiveLabel();
+}
+
+function handlePhysicalKey(event) {
+  const target = event.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement) return;
+  if (!active || !$("#solutionModal").classList.contains("hidden")) return;
+  if (/^[0-9]$/.test(event.key)) {
+    event.preventDefault();
+    handleKey(event.key);
+  } else if (event.key === "-" || event.key === "Minus") {
+    event.preventDefault();
+    handleKey("-");
+  } else if (event.key === "Backspace") {
+    event.preventDefault();
+    handleKey("⌫");
+  } else if (event.key === "Delete") {
+    event.preventDefault();
+    handleKey("消去");
+  } else if (event.key === "Enter") {
+    event.preventDefault();
+    gradeCurrent();
+  } else if (event.key === "Tab") {
+    event.preventDefault();
+    moveNextCell();
+    renderProblem();
+    renderActiveLabel();
+  }
 }
 
 function bindStaticEvents() {
   $("#gradeBtn").addEventListener("click", gradeCurrent);
   $("#clearBtn").addEventListener("click", clearCurrent);
+  $("#nextBlankBtn").addEventListener("click", focusFirstBlank);
+  $("#nextWrongBtn").addEventListener("click", focusFirstWrong);
   $("#randomBtn").addEventListener("click", randomUnfinished);
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#printBtn").addEventListener("click", () => window.print());
   $("#hideSolutions").addEventListener("change", renderSolutions);
+  $("#hintMode").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
     setCurrentStudent(event.target.value);
     refreshStudentView();
@@ -688,9 +973,11 @@ function bindStaticEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeSolutionModal();
   });
+  document.addEventListener("keydown", handlePhysicalKey);
 }
 
 function render() {
+  renderExamShell();
   renderStudentMenu();
   renderGroups();
   renderProgress();
@@ -709,6 +996,7 @@ document.addEventListener("DOMContentLoaded", () => {
     saveStudents();
   }
   progress = loadProgressFor(currentStudentName);
+  answerDrafts = loadDraftsFor(currentStudentName);
   bindStaticEvents();
   ensureAnswersForGroup();
   render();

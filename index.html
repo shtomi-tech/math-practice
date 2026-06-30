@@ -3,19 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>帝京大学 過去問演習</title>
+  <title>帝京大学 数学過去問演習</title>
   <link rel="stylesheet" href="../数学演習サイト/prototype/static/katex/katex.min.css">
   <link rel="stylesheet" href="./static/styles.css">
   <script defer src="../数学演習サイト/prototype/static/katex/katex.min.js"></script>
   <script defer src="../数学演習サイト/prototype/static/katex/contrib/auto-render.min.js"></script>
-  <script defer src="./static/data.js"></script>
+  <script defer src="./static/sougou-data.js"></script>
+  <script defer src="./static/recommend-data.js"></script>
+  <script defer src="./static/recommend-details.js"></script>
   <script defer src="./static/app.js"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
       <p class="eyebrow">TEIKYO UNIVERSITY / MATH PRACTICE</p>
-      <h1>帝京大学 過去問演習</h1>
+      <h1 id="appTitle">帝京大学 数学過去問演習</h1>
     </div>
     <div class="top-actions">
       <button id="resetProgressBtn" class="ghost" type="button">進捗リセット</button>
@@ -25,10 +27,15 @@
 
   <main class="shell">
     <aside class="sidebar">
+      <section class="panel exam-panel">
+        <h2>選抜方式</h2>
+        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="選抜方式"></div>
+      </section>
+
       <section class="panel inverse">
         <p class="eyebrow">SOURCE</p>
-        <h2>2026 総合型選抜</h2>
-        <p class="source-text">薬・理工学部 数学</p>
+        <h2 id="sourceTitle">2026 総合型選抜</h2>
+        <p class="source-text" id="sourceText">薬・理工学部 数学</p>
         <div class="meter" aria-label="進捗"><i id="progressFill"></i></div>
         <p class="meter-text" id="progressText">0 / 0</p>
       </section>
@@ -58,6 +65,7 @@
       <section class="panel">
         <h2>演習設定</h2>
         <div class="stack">
+          <label class="checkline"><input id="hintMode" type="checkbox" checked> ヒントモード（段階表示）</label>
           <label class="checkline"><input id="instantCheck" type="checkbox"> 入力中に正誤を表示</label>
           <label class="checkline"><input id="hideSolutions" type="checkbox" checked> 採点前は解説を隠す</label>
           <button id="randomBtn" type="button">未完了からランダム</button>
@@ -88,6 +96,8 @@
         </div>
         <div class="actions">
           <button id="gradeBtn" class="primary" type="button">採点する</button>
+          <button id="nextBlankBtn" class="ghost" type="button">未入力へ</button>
+          <button id="nextWrongBtn" class="ghost" type="button">誤答へ</button>
           <button id="clearBtn" class="ghost" type="button">この大問をやり直す</button>
         </div>
         <div id="resultList" class="result-list"></div>
