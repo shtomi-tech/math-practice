@@ -365,6 +365,10 @@ p {
   display: none;
 }
 
+.hidden {
+  display: none;
+}
+
 .checkline {
   display: flex;
   align-items: center;

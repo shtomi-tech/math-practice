@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>帝京大学 数学過去問演習</title>
+  <title>数学過去問演習</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="./static/styles.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -16,8 +16,8 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <p class="eyebrow">TEIKYO UNIVERSITY / MATH PRACTICE</p>
-      <h1 id="appTitle">帝京大学 数学過去問演習</h1>
+      <p class="eyebrow">MATH / PAST EXAMS</p>
+      <h1 id="appTitle">数学過去問演習</h1>
     </div>
     <div class="top-actions">
       <button id="resetProgressBtn" class="ghost" type="button">進捗リセット</button>
@@ -27,9 +27,14 @@
 
   <main class="shell">
     <aside class="sidebar">
+      <section class="panel exam-panel" id="schoolPanel">
+        <h2>学校・出典</h2>
+        <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
+      </section>
+
       <section class="panel exam-panel">
-        <h2>選抜方式</h2>
-        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="選抜方式"></div>
+        <h2>方式・年度</h2>
+        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
       </section>
 
       <section class="panel inverse">

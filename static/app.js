@@ -1,26 +1,52 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const DATASETS = window.TEIKYO_DATASETS || { sougou: window.TEIKYO_DATA || { problem_groups: [] } };
-const EXAMS = {
-  sougou: {
-    label: "総合型選抜",
-    shortLabel: "総合型",
-    eyebrow: "TEIKYO UNIVERSITY / AO MATH",
-    sourceTitle: "2026 総合型選抜",
-    sourceText: "薬・理工学部 数学",
-    legacyProgressKey: "teikyo_2026_math_practice_v1",
+// 帝京の既存データ（window.TEIKYO_DATASETS）と、新規追加分（window.MATH_DATASETS）を統合。
+// 各 exam.key は DATASETS 内で一意（進捗キーの識別子を兼ねるため衝突不可）。
+const DATASETS = { ...(window.TEIKYO_DATASETS || {}), ...(window.MATH_DATASETS || {}) };
+if (!Object.keys(DATASETS).length && window.TEIKYO_DATA) DATASETS.sougou = window.TEIKYO_DATA;
+
+// 学校（出典）→ 方式・年度 の2階層。新しい学校は window.MATH_SCHOOLS に配列で追記して増やす
+// （帝京は下記の既定に含まれる。追加校のデータは window.MATH_DATASETS へ登録する）。
+const DEFAULT_SCHOOLS = [
+  {
+    id: "teikyo",
+    name: "帝京大学",
+    eyebrow: "TEIKYO UNIVERSITY / MATH",
+    exams: [
+      {
+        key: "sougou",
+        label: "総合型選抜",
+        shortLabel: "総合型",
+        sourceTitle: "2026 総合型選抜",
+        sourceText: "薬・理工学部 数学",
+        legacyProgressKey: "teikyo_2026_math_practice_v1",
+      },
+      {
+        key: "recommend",
+        label: "学校推薦型選抜",
+        shortLabel: "学校推薦型",
+        sourceTitle: "2026 学校推薦型選抜",
+        sourceText: "薬・理工学部 数学",
+        legacyProgressKey: "teikyo_2026_recommend_math_practice_v1",
+      },
+    ],
   },
-  recommend: {
-    label: "学校推薦型選抜",
-    shortLabel: "学校推薦型",
-    eyebrow: "TEIKYO UNIVERSITY / RECOMMENDATION MATH",
-    sourceTitle: "2026 学校推薦型選抜",
-    sourceText: "薬・理工学部 数学",
-    legacyProgressKey: "teikyo_2026_recommend_math_practice_v1",
-  },
-};
-const AVAILABLE_EXAMS = Object.keys(EXAMS).filter((key) => DATASETS[key]);
+];
+const SCHOOLS = [...DEFAULT_SCHOOLS, ...(window.MATH_SCHOOLS || [])];
+
+// exam.key -> { ...exam, schoolId, eyebrow }（データが存在する方式のみ）
+const EXAMS = {};
+const SCHOOL_BY_EXAM = {};
+SCHOOLS.forEach((school) => {
+  (school.exams || []).forEach((exam) => {
+    if (!DATASETS[exam.key]) return;
+    EXAMS[exam.key] = { ...exam, schoolId: school.id, eyebrow: exam.eyebrow || school.eyebrow };
+    SCHOOL_BY_EXAM[exam.key] = school;
+  });
+});
+const AVAILABLE_EXAMS = Object.keys(EXAMS);
+const AVAILABLE_SCHOOLS = SCHOOLS.filter((school) => (school.exams || []).some((exam) => DATASETS[exam.key]));
 const CURRENT_EXAM_KEY = "teikyo_2026_math_current_exam_v1";
 let currentExamKey = loadCurrentExam();
 let DATA = DATASETS[currentExamKey] || { problem_groups: [] };
@@ -171,6 +197,7 @@ const DETAIL_TEXT = {
 const DETAIL_TEXTS = {
   sougou: DETAIL_TEXT,
   ...(window.TEIKYO_DETAIL_TEXTS || {}),
+  ...(window.MATH_DETAIL_TEXTS || {}),
 };
 
 function loadCurrentExam() {
@@ -417,16 +444,33 @@ function setFirstAvailableActive() {
 }
 
 function renderExamShell() {
-  const exam = EXAMS[currentExamKey] || EXAMS.sougou;
-  document.title = `帝京大学 ${exam.label} 数学過去問演習`;
-  $("#appTitle").textContent = `帝京大学 ${exam.label}`;
+  const exam = EXAMS[currentExamKey] || EXAMS[AVAILABLE_EXAMS[0]];
+  const school = SCHOOL_BY_EXAM[currentExamKey] || AVAILABLE_SCHOOLS[0];
+  document.title = `${school.name} ${exam.label}｜数学過去問演習`;
+  $("#appTitle").textContent = `${school.name} ${exam.label}`;
   $("#sourceTitle").textContent = exam.sourceTitle;
   $("#sourceText").textContent = exam.sourceText;
-  $(".brand .eyebrow").textContent = exam.eyebrow;
-  $("#examSwitch").innerHTML = AVAILABLE_EXAMS.map((key) => {
-    const option = EXAMS[key];
+  $(".brand .eyebrow").textContent = exam.eyebrow || school.eyebrow || "MATH / PAST EXAMS";
+
+  // 学校が1つだけのときは学校切替パネルを隠す
+  $("#schoolPanel").classList.toggle("hidden", AVAILABLE_SCHOOLS.length <= 1);
+  $("#schoolSwitch").innerHTML = AVAILABLE_SCHOOLS.map((s) => {
+    const active = s.id === school.id;
+    return `<button class="exam-option ${active ? "active" : ""}" type="button" role="tab"
+      aria-selected="${active ? "true" : "false"}" data-school="${escapeHtml(s.id)}">
+      <span>${escapeHtml(s.name)}</span>
+      <small>${examCountForSchool(s)}方式</small>
+    </button>`;
+  }).join("");
+  $$("[data-school]").forEach((button) => {
+    button.addEventListener("click", () => setCurrentSchool(button.dataset.school));
+  });
+
+  const schoolExams = (school.exams || []).filter((e) => DATASETS[e.key]);
+  $("#examSwitch").innerHTML = schoolExams.map((option) => {
+    const key = option.key;
     return `<button class="exam-option ${key === currentExamKey ? "active" : ""}" type="button" role="tab"
-      aria-selected="${key === currentExamKey ? "true" : "false"}" data-exam="${key}">
+      aria-selected="${key === currentExamKey ? "true" : "false"}" data-exam="${escapeHtml(key)}">
       <span>${escapeHtml(option.shortLabel)}</span>
       <small>${totalCountFor(key)}小問</small>
     </button>`;
@@ -434,6 +478,18 @@ function renderExamShell() {
   $$("[data-exam]").forEach((button) => {
     button.addEventListener("click", () => setCurrentExam(button.dataset.exam));
   });
+}
+
+function examCountForSchool(school) {
+  return (school.exams || []).filter((exam) => DATASETS[exam.key]).length;
+}
+
+function setCurrentSchool(schoolId) {
+  const school = AVAILABLE_SCHOOLS.find((s) => s.id === schoolId);
+  if (!school) return;
+  if (SCHOOL_BY_EXAM[currentExamKey]?.id === schoolId) return;
+  const firstExam = (school.exams || []).find((exam) => DATASETS[exam.key]);
+  if (firstExam) setCurrentExam(firstExam.key);
 }
 
 function totalCountFor(examKey) {
