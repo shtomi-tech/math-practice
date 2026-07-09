@@ -20,43 +20,16 @@
       <h1 id="appTitle">数学過去問演習</h1>
     </div>
     <div class="top-actions">
-      <button id="resetProgressBtn" class="ghost" type="button">進捗リセット</button>
       <button id="printBtn" class="ghost" type="button">印刷</button>
     </div>
   </header>
 
   <main class="shell">
     <aside class="sidebar">
-      <section class="panel exam-panel" id="schoolPanel">
-        <h2>学校・出典</h2>
-        <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
-      </section>
-
-      <section class="panel exam-panel">
-        <h2>方式・年度</h2>
-        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
-      </section>
-
-      <section class="panel inverse">
-        <p class="eyebrow">SOURCE</p>
-        <h2 id="sourceTitle">2026 総合型選抜</h2>
-        <p class="source-text" id="sourceText">薬・理工学部 数学</p>
-        <div class="meter" aria-label="進捗"><i id="progressFill"></i></div>
-        <p class="meter-text" id="progressText">0 / 0</p>
-      </section>
-
-      <section class="panel student-panel">
-        <h2>生徒</h2>
-        <div class="student-tools">
-          <select id="studentSel" title="生徒を選択"></select>
-          <input id="newStudent" class="hidden-input" type="text" placeholder="新しい生徒の名前" autocomplete="off">
-          <div class="student-actions">
-            <button id="addStudentBtn" type="button">新規</button>
-            <button id="renameStudentBtn" class="ghost" type="button">改名</button>
-            <button id="deleteStudentBtn" class="ghost danger" type="button">削除</button>
-          </div>
-          <p id="studentHint" class="hint">ゲスト：記録は保存されません。</p>
-        </div>
+      <section class="panel start-panel">
+        <h2>演習</h2>
+        <button id="continueBtn" class="cta" type="button">▶ つづきから解く</button>
+        <p class="hint" id="continueHint"></p>
       </section>
 
       <section class="panel">
@@ -67,15 +40,49 @@
         <nav id="groupList" class="group-list" aria-label="大問一覧"></nav>
       </section>
 
-      <section class="panel">
-        <h2>演習設定</h2>
+      <section class="panel inverse">
+        <p class="eyebrow">SOURCE</p>
+        <h2 id="sourceTitle">2026 総合型選抜</h2>
+        <p class="source-text" id="sourceText">薬・理工学部 数学</p>
+        <div class="meter" aria-label="進捗"><i id="progressFill"></i></div>
+        <p class="meter-text" id="progressText">0 / 0</p>
+      </section>
+
+      <section class="panel exam-panel" id="schoolPanel">
+        <h2>学校・出典</h2>
+        <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
+      </section>
+
+      <section class="panel exam-panel">
+        <h2>方式・年度</h2>
+        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
+      </section>
+
+      <section class="panel student-panel">
+        <h2>生徒</h2>
+        <div class="student-tools">
+          <select id="studentSel" title="生徒を選択"></select>
+          <input id="newStudent" class="hidden-input" type="text" placeholder="新しい生徒の名前" autocomplete="off">
+          <p id="studentHint" class="hint">ゲスト：記録は保存されません。</p>
+          <details id="studentManage">
+            <summary>生徒の管理…</summary>
+            <div class="student-actions">
+              <button id="renameStudentBtn" class="ghost" type="button">この生徒の名前を変える</button>
+              <button id="deleteStudentBtn" class="ghost danger" type="button">この生徒の記録を削除</button>
+              <button id="resetProgressBtn" class="ghost danger" type="button">この生徒の記録をすべて消す</button>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <details class="panel settings-panel">
+        <summary>詳細設定</summary>
         <div class="stack">
           <label class="checkline"><input id="hintMode" type="checkbox" checked> ヒントモード（段階表示）</label>
           <label class="checkline"><input id="instantCheck" type="checkbox"> 入力中に正誤を表示</label>
           <label class="checkline"><input id="hideSolutions" type="checkbox" checked> 採点前は解説を隠す</label>
-          <button id="randomBtn" type="button">未完了からランダム</button>
         </div>
-      </section>
+      </details>
     </aside>
 
     <section class="workspace">
@@ -101,8 +108,7 @@
         </div>
         <div class="actions">
           <button id="gradeBtn" class="primary" type="button">採点する</button>
-          <button id="nextBlankBtn" class="ghost" type="button">未入力へ</button>
-          <button id="nextWrongBtn" class="ghost" type="button">誤答へ</button>
+          <button id="nextIssueBtn" class="ghost" type="button">次のマスへ</button>
           <button id="clearBtn" class="ghost" type="button">この大問をやり直す</button>
         </div>
         <div id="resultList" class="result-list"></div>

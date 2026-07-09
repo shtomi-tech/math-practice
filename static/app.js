@@ -505,7 +505,7 @@ function renderGroups() {
     return `<button class="group-item ${index === currentGroup ? "active" : ""} ${done ? "done" : ""}" data-group="${index}" type="button">
       <span class="num">[${escapeHtml(group.group_number)}]</span>
       <span class="name">${escapeHtml(group.title)}</span>
-      <span class="mini">${nDone}/${subs.length} complete</span>
+      <span class="mini">${nDone}/${subs.length} 完了</span>
     </button>`;
   }).join("");
   $$("[data-group]").forEach((button) => {
@@ -528,6 +528,7 @@ function renderStudentMenu() {
   const sel = $("#studentSel");
   sel.innerHTML = [`<option value="">ゲスト（記録なし）</option>`]
     .concat(students.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`))
+    .concat([`<option value="__add__">＋ 新しい生徒を追加…</option>`])
     .join("");
   sel.value = students.includes(currentStudentName) ? currentStudentName : "";
   if (sel.value !== currentStudentName) setCurrentStudent("");
@@ -545,11 +546,16 @@ function refreshStudentView() {
   render();
 }
 
+function showAddStudentInput() {
+  const input = $("#newStudent");
+  input.classList.remove("hidden-input");
+  input.focus();
+}
+
 function addStudent() {
   const input = $("#newStudent");
   if (input.classList.contains("hidden-input")) {
-    input.classList.remove("hidden-input");
-    input.focus();
+    showAddStudentInput();
     return;
   }
   const name = normalizeStudentName(input.value);
@@ -729,9 +735,10 @@ function revealHint(subIndex) {
 
 function renderKeypad() {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "⌫", "消去", "次へ"];
+  const keyLabels = { "消去": "全部消す" };
   $("#keypad").innerHTML = keys.map((key) => {
     const wide = key === "消去" || key === "次へ" ? "wide" : "";
-    return `<button class="${wide}" type="button" data-key="${key}">${key}</button>`;
+    return `<button class="${wide}" type="button" data-key="${key}">${keyLabels[key] || key}</button>`;
   }).join("");
   $$("[data-key]").forEach((button) => {
     button.addEventListener("click", () => handleKey(button.dataset.key));
@@ -820,24 +827,36 @@ function groupResults() {
   });
 }
 
+function anyBlankField() {
+  return fieldEntries().some(({ field, cellIndex }) => !answers[field.uid]?.[cellIndex]);
+}
+
+function anyWrongField() {
+  return fieldEntries().some(({ field }) => !isFieldCorrect(field));
+}
+
+function renderNextIssueBtn() {
+  $("#nextIssueBtn").disabled = graded ? !anyWrongField() : !anyBlankField();
+}
+
 function renderScore(forceBlank = false) {
   if (!graded && forceBlank) {
     $("#scoreBox").innerHTML = `<span class="score-main">—</span><span class="score-sub">未採点</span>`;
     $("#resultList").innerHTML = "";
     $("#gradeBtn").textContent = "採点する";
-    $("#nextWrongBtn").disabled = true;
+    renderNextIssueBtn();
     return;
   }
   const results = groupResults();
   const correct = results.filter((r) => r.correct).length;
   const total = results.length;
   $("#gradeBtn").textContent = graded ? "再採点する" : "採点する";
-  $("#nextWrongBtn").disabled = !graded || correct === total;
-  $("#scoreBox").innerHTML = `<span class="score-main">${correct}/${total}</span><span class="score-sub">${Math.round((correct / total) * 100)}% correct</span>`;
+  renderNextIssueBtn();
+  $("#scoreBox").innerHTML = `<span class="score-main">${correct}/${total}</span><span class="score-sub">正答率 ${Math.round((correct / total) * 100)}%</span>`;
   $("#resultList").innerHTML = results.map((r) => `<div class="result-row">
     <span>${escapeHtml(r.sub.label)}</span>
     <span class="${r.correct ? "ok" : "ng"}">${r.correct ? "正解" : `${r.correctFields}/${r.total}`}</span>
-    <small class="hint-log">${progress[subKey(currentGroup, r.subIndex)]?.hintsUsed || 0} hint</small>
+    <small class="hint-log">ヒント${progress[subKey(currentGroup, r.subIndex)]?.hintsUsed || 0}回</small>
   </div>`).join("");
 }
 
@@ -932,15 +951,32 @@ function clearCurrent() {
   render();
 }
 
-function randomUnfinished() {
-  const candidates = groups
-    .map((group, groupIndex) => ({ group, groupIndex }))
-    .filter(({ group, groupIndex }) => (group.sub_problems || []).some((_, subIndex) => !progress[subKey(groupIndex, subIndex)]?.correct));
-  const target = candidates[Math.floor(Math.random() * candidates.length)] || { groupIndex: 0 };
-  if (!candidates.length) return;
-  currentGroup = target.groupIndex;
+function firstUnfinishedGroupIndex() {
+  const index = groups.findIndex((group, groupIndex) =>
+    (group.sub_problems || []).some((_, subIndex) => !progress[subKey(groupIndex, subIndex)]?.correct));
+  return index === -1 ? 0 : index;
+}
+
+function continueStudying() {
+  currentGroup = firstUnfinishedGroupIndex();
   ensureAnswersForGroup();
   render();
+}
+
+function renderContinuePanel() {
+  const done = completedCount();
+  const total = totalCount();
+  const hint = $("#continueHint");
+  if (!total) {
+    hint.textContent = "";
+    return;
+  }
+  if (done >= total) {
+    hint.textContent = "全問完了しました。好きな大問を選んで見直せます。";
+    return;
+  }
+  const target = groups[firstUnfinishedGroupIndex()];
+  hint.textContent = target ? `次は [${target.group_number}] ${target.title} です。` : "";
 }
 
 function resetProgress() {
@@ -969,6 +1005,11 @@ function focusFirstWrong() {
   active = { uid: wrong.field.uid, cellIndex: wrong.cellIndex };
   renderProblem();
   renderActiveLabel();
+}
+
+function focusNextIssue() {
+  if (graded) focusFirstWrong();
+  else focusFirstBlank();
 }
 
 function handlePhysicalKey(event) {
@@ -1001,18 +1042,22 @@ function handlePhysicalKey(event) {
 function bindStaticEvents() {
   $("#gradeBtn").addEventListener("click", gradeCurrent);
   $("#clearBtn").addEventListener("click", clearCurrent);
-  $("#nextBlankBtn").addEventListener("click", focusFirstBlank);
-  $("#nextWrongBtn").addEventListener("click", focusFirstWrong);
-  $("#randomBtn").addEventListener("click", randomUnfinished);
+  $("#nextIssueBtn").addEventListener("click", focusNextIssue);
+  $("#continueBtn").addEventListener("click", continueStudying);
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#printBtn").addEventListener("click", () => window.print());
   $("#hideSolutions").addEventListener("change", renderSolutions);
   $("#hintMode").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
-    setCurrentStudent(event.target.value);
+    const value = event.target.value;
+    if (value === "__add__") {
+      event.target.value = students.includes(currentStudentName) ? currentStudentName : "";
+      showAddStudentInput();
+      return;
+    }
+    setCurrentStudent(value);
     refreshStudentView();
   });
-  $("#addStudentBtn").addEventListener("click", addStudent);
   $("#newStudent").addEventListener("keydown", (event) => {
     if (event.key === "Enter") addStudent();
     if (event.key === "Escape") {
@@ -1037,6 +1082,7 @@ function render() {
   renderStudentMenu();
   renderGroups();
   renderProgress();
+  renderContinuePanel();
   renderProblem();
   renderKeypad();
   renderActiveLabel();

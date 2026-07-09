@@ -346,13 +346,49 @@ p {
 }
 
 .student-actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+  margin-top: 10px;
 }
 
-.student-actions button {
-  padding-inline: 8px;
+.start-panel .cta {
+  width: 100%;
+  min-height: 52px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.start-panel .hint {
+  margin-top: 10px;
+}
+
+details.panel summary,
+#studentManage summary {
+  cursor: pointer;
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+details.panel[open] summary,
+#studentManage[open] summary {
+  margin-bottom: 12px;
+}
+
+#studentManage {
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+#studentManage summary {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 .hint {
@@ -578,8 +614,7 @@ p {
   gap: 8px;
 }
 
-.actions .primary,
-.actions button:last-child {
+.actions .primary {
   grid-column: 1 / -1;
 }
 
