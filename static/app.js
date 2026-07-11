@@ -63,6 +63,7 @@ let answers = {};
 let answerDrafts = {};
 let graded = false;
 let active = null;
+let modalReturnFocus = null;
 let students = loadStudents();
 let currentStudentName = loadCurrentStudent();
 let progress = {};
@@ -690,6 +691,9 @@ function renderProblem() {
   const group = groups[currentGroup];
   $("#groupMeta").textContent = `GROUP ${group.group_number} / ${group.source_year}`;
   $("#groupTitle").textContent = group.title;
+  $("#problemPosition").textContent = `大問 ${currentGroup + 1} / ${groups.length}`;
+  $("#prevGroupBtn").disabled = currentGroup <= 0;
+  $("#nextGroupBtn").disabled = currentGroup >= groups.length - 1;
   $("#topicTag").textContent = group.topic_tag || "数学";
   $("#groupStem").innerHTML = `<p>${mdLite(group.stem_md || "")}</p>`;
   $("#subList").innerHTML = (group.sub_problems || []).map(renderSubProblem).join("");
@@ -705,8 +709,15 @@ function bindCells() {
       active = { uid: cell.dataset.cell, cellIndex: Number(cell.dataset.cellIndex) };
       renderProblem();
       renderActiveLabel();
+      focusActiveCell();
     });
   });
+}
+
+function focusActiveCell() {
+  if (!active) return;
+  const cell = document.querySelector(`[data-cell="${CSS.escape(active.uid)}"][data-cell-index="${active.cellIndex}"]`);
+  cell?.focus();
 }
 
 function bindHints() {
@@ -836,7 +847,24 @@ function anyWrongField() {
 }
 
 function renderNextIssueBtn() {
-  $("#nextIssueBtn").disabled = graded ? !anyWrongField() : !anyBlankField();
+  const button = $("#nextIssueBtn");
+  const hasIssue = graded ? anyWrongField() : anyBlankField();
+  button.disabled = !hasIssue;
+  button.textContent = graded ? "誤答へ" : "未入力へ";
+}
+
+function movePrevCell() {
+  if (!active) return;
+  if (active.cellIndex > 0) {
+    active.cellIndex -= 1;
+    return;
+  }
+  const ids = Object.keys(answers);
+  const idx = ids.indexOf(active.uid);
+  if (idx > 0) {
+    const previousUid = ids[idx - 1];
+    active = { uid: previousUid, cellIndex: Math.max(0, (answers[previousUid] || []).length - 1) };
+  }
 }
 
 function renderScore(forceBlank = false) {
@@ -935,6 +963,7 @@ function openSolutionModal(groupIndex, subIndex) {
       </section>
     </div>
   `;
+  modalReturnFocus = document.activeElement;
   $("#solutionModal").classList.remove("hidden");
   $("#modalCloseBtn").focus();
   renderMath($("#solutionModal"));
@@ -942,6 +971,8 @@ function openSolutionModal(groupIndex, subIndex) {
 
 function closeSolutionModal() {
   $("#solutionModal").classList.add("hidden");
+  if (modalReturnFocus instanceof HTMLElement) modalReturnFocus.focus();
+  modalReturnFocus = null;
 }
 
 function clearCurrent() {
@@ -1012,6 +1043,15 @@ function focusNextIssue() {
   else focusFirstBlank();
 }
 
+function moveGroup(offset) {
+  const next = currentGroup + offset;
+  if (next < 0 || next >= groups.length) return;
+  currentGroup = next;
+  ensureAnswersForGroup();
+  render();
+  $("#groupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function handlePhysicalKey(event) {
   const target = event.target;
   if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement) return;
@@ -1031,11 +1071,18 @@ function handlePhysicalKey(event) {
   } else if (event.key === "Enter") {
     event.preventDefault();
     gradeCurrent();
-  } else if (event.key === "Tab") {
+  } else if (event.key === "ArrowRight") {
     event.preventDefault();
     moveNextCell();
     renderProblem();
     renderActiveLabel();
+    focusActiveCell();
+  } else if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    movePrevCell();
+    renderProblem();
+    renderActiveLabel();
+    focusActiveCell();
   }
 }
 
@@ -1044,6 +1091,8 @@ function bindStaticEvents() {
   $("#clearBtn").addEventListener("click", clearCurrent);
   $("#nextIssueBtn").addEventListener("click", focusNextIssue);
   $("#continueBtn").addEventListener("click", continueStudying);
+  $("#prevGroupBtn").addEventListener("click", () => moveGroup(-1));
+  $("#nextGroupBtn").addEventListener("click", () => moveGroup(1));
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#printBtn").addEventListener("click", () => window.print());
   $("#hideSolutions").addEventListener("change", renderSolutions);
@@ -1072,7 +1121,25 @@ function bindStaticEvents() {
     if (event.target.id === "solutionModal") closeSolutionModal();
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeSolutionModal();
+    const modal = $("#solutionModal");
+    if (modal.classList.contains("hidden")) return;
+    if (event.key === "Escape") {
+      closeSolutionModal();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', modal)
+      .filter((element) => !element.disabled && element.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
   document.addEventListener("keydown", handlePhysicalKey);
 }

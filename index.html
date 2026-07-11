@@ -21,6 +21,55 @@
     </div>
     <div class="top-actions">
       <button id="printBtn" class="ghost" type="button">印刷</button>
+      <details class="utility-menu">
+        <summary>その他</summary>
+        <div class="utility-menu-body">
+          <section class="utility-section student-panel">
+            <h2>生徒</h2>
+            <div class="student-tools">
+              <select id="studentSel" title="生徒を選択"></select>
+              <input id="newStudent" class="hidden-input" type="text" placeholder="新しい生徒の名前" autocomplete="off">
+              <p id="studentHint" class="hint">ゲスト：記録は保存されません。</p>
+              <details id="studentManage">
+                <summary>生徒の管理…</summary>
+                <div class="student-actions">
+                  <button id="renameStudentBtn" class="ghost" type="button">この生徒の名前を変える</button>
+                  <button id="deleteStudentBtn" class="ghost danger" type="button">この生徒の記録を削除</button>
+                  <button id="resetProgressBtn" class="ghost danger" type="button">この生徒の記録をすべて消す</button>
+                </div>
+              </details>
+            </div>
+          </section>
+          <section class="utility-section settings-panel">
+            <h2>詳細設定</h2>
+            <div class="stack">
+              <label class="checkline"><input id="hintMode" type="checkbox" checked> ヒントモード（段階表示）</label>
+              <label class="checkline"><input id="instantCheck" type="checkbox"> 入力中に正誤を表示</label>
+              <label class="checkline"><input id="hideSolutions" type="checkbox" checked> 採点前は解説を隠す</label>
+            </div>
+          </section>
+        </div>
+      </details>
+    </div>
+    <div class="contextbar" aria-label="演習条件">
+      <section class="context-item context-source">
+        <span class="eyebrow">SOURCE</span>
+        <strong id="sourceTitle">2026 総合型選抜</strong>
+        <span id="sourceText">薬・理工学部 数学</span>
+      </section>
+      <section class="context-item exam-panel" id="schoolPanel">
+        <span class="context-label">学校</span>
+        <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
+      </section>
+      <section class="context-item exam-panel">
+        <span class="context-label">方式・年度</span>
+        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
+      </section>
+      <section class="context-progress" aria-label="全体の進捗">
+        <span class="context-label">進捗</span>
+        <div class="meter"><i id="progressFill"></i></div>
+        <span class="meter-text" id="progressText">0 / 0</span>
+      </section>
     </div>
   </header>
 
@@ -39,50 +88,6 @@
         </div>
         <nav id="groupList" class="group-list" aria-label="大問一覧"></nav>
       </section>
-
-      <section class="panel inverse">
-        <p class="eyebrow">SOURCE</p>
-        <h2 id="sourceTitle">2026 総合型選抜</h2>
-        <p class="source-text" id="sourceText">薬・理工学部 数学</p>
-        <div class="meter" aria-label="進捗"><i id="progressFill"></i></div>
-        <p class="meter-text" id="progressText">0 / 0</p>
-      </section>
-
-      <section class="panel exam-panel" id="schoolPanel">
-        <h2>学校・出典</h2>
-        <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
-      </section>
-
-      <section class="panel exam-panel">
-        <h2>方式・年度</h2>
-        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
-      </section>
-
-      <section class="panel student-panel">
-        <h2>生徒</h2>
-        <div class="student-tools">
-          <select id="studentSel" title="生徒を選択"></select>
-          <input id="newStudent" class="hidden-input" type="text" placeholder="新しい生徒の名前" autocomplete="off">
-          <p id="studentHint" class="hint">ゲスト：記録は保存されません。</p>
-          <details id="studentManage">
-            <summary>生徒の管理…</summary>
-            <div class="student-actions">
-              <button id="renameStudentBtn" class="ghost" type="button">この生徒の名前を変える</button>
-              <button id="deleteStudentBtn" class="ghost danger" type="button">この生徒の記録を削除</button>
-              <button id="resetProgressBtn" class="ghost danger" type="button">この生徒の記録をすべて消す</button>
-            </div>
-          </details>
-        </div>
-      </section>
-
-      <details class="panel settings-panel">
-        <summary>詳細設定</summary>
-        <div class="stack">
-          <label class="checkline"><input id="hintMode" type="checkbox" checked> ヒントモード（段階表示）</label>
-          <label class="checkline"><input id="instantCheck" type="checkbox"> 入力中に正誤を表示</label>
-          <label class="checkline"><input id="hideSolutions" type="checkbox" checked> 採点前は解説を隠す</label>
-        </div>
-      </details>
     </aside>
 
     <section class="workspace">
@@ -96,6 +101,11 @@
         </div>
         <div class="stem" id="groupStem"></div>
         <div id="subList" class="sub-list"></div>
+        <nav class="problem-nav" aria-label="大問の移動">
+          <button id="prevGroupBtn" class="ghost" type="button">← 前の大問</button>
+          <span id="problemPosition" class="muted"></span>
+          <button id="nextGroupBtn" class="ghost" type="button">次の大問 →</button>
+        </nav>
       </section>
     </section>
 
