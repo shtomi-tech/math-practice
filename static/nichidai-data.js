@@ -84,7 +84,13 @@ window.MATH_DATASETS.nichidai_2026_zengaku1 = {
           "answer_fields": [
             {"format": "integer", "value": "2", "boxes": ["14"]}
           ],
-          "solution_md": "$x=\\dfrac{\\theta}{2}$ とおく。$\\dfrac{\\pi}{4}<x<\\dfrac{\\pi}{2}$ なので $t=\\tan x>1$。2倍角公式より $\\tan\\theta=\\tan 2x=\\dfrac{2t}{1-t^2}$ だから、$\\dfrac{2t}{1-t^2}=-\\dfrac43$。よって $2t^2-3t-2=0$、すなわち $(2t+1)(t-2)=0$。$t>1$ より $t=2$、したがって $\\tan\\dfrac{\\theta}{2}=2$。"
+          "solution_md": "$\\tan\\theta$ が与えられていて、求めるのが $\\tan\\dfrac{\\theta}{2}$ なので、2倍角の公式が使えそうである。$t=\\tan\\dfrac{\\theta}{2}$ と置き換える。$\\dfrac{\\pi}{2}<\\theta<\\pi$ より $\\dfrac{\\pi}{4}<\\dfrac{\\theta}{2}<\\dfrac{\\pi}{2}$ だから、$t>1$。2倍角公式より $\\tan\\theta=\\dfrac{2t}{1-t^2}$ なので、$\\dfrac{2t}{1-t^2}=-\\dfrac43$。これを整理すると $2t^2-3t-2=0$、すなわち $(2t+1)(t-2)=0$。$t>1$ より $t=2$、したがって $\\tan\\dfrac{\\theta}{2}=2$。",
+          "learning_points": [
+            "求めたい式そのものを文字で置くと、置き換えを最小限にできる。",
+            "与えられた条件を、置き換えた文字の方程式へ翻訳する。",
+            "方程式を解く前に、置き換えた文字の範囲を確認する。",
+            "方程式の解を、元の問題の条件で選別する。"
+          ]
         },
         {
           "label": "(2)",
@@ -93,7 +99,11 @@ window.MATH_DATASETS.nichidai_2026_zengaku1 = {
             {"format": "integer", "value": "2", "boxes": ["15"]},
             {"format": "integer", "value": "11", "boxes": ["16", "17"]}
           ],
-          "solution_md": "$\\dfrac{3\\theta}{2}=\\theta+\\dfrac{\\theta}{2}$ に加法定理を用いる。$\\tan\\dfrac{3\\theta}{2}=\\dfrac{\\tan\\theta+\\tan\\frac{\\theta}{2}}{1-\\tan\\theta\\tan\\frac{\\theta}{2}}=\\dfrac{-\\frac43+2}{1-\\left(-\\frac43\\right)\\cdot2}=\\dfrac{2/3}{11/3}=\\dfrac{2}{11}$。"
+          "solution_md": "$\\dfrac{3\\theta}{2}=\\theta+\\dfrac{\\theta}{2}$ に加法定理を用いる。$\\tan\\dfrac{3\\theta}{2}=\\dfrac{\\tan\\theta+\\tan\\frac{\\theta}{2}}{1-\\tan\\theta\\tan\\frac{\\theta}{2}}=\\dfrac{-\\frac43+2}{1-\\left(-\\frac43\\right)\\cdot2}=\\dfrac{2/3}{11/3}=\\dfrac{2}{11}$。",
+          "learning_points": [
+            "複雑な角は、既知の角の和に分解すると加法定理を使える。",
+            "前の小問で求めた値は、次の小問の新しい道具として再利用できる。"
+          ]
         }
       ]
     },

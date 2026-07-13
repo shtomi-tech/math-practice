@@ -32,10 +32,11 @@ window.MATH_DETAIL_TEXTS.nichidai_2026_zengaku1 = {
     "一般項は $a_n=a_1+(n-1)d=6+4(n-1)=4n+2$。"
   ],
   "2-(1)": [
-    "$x=\\dfrac{\\theta}{2}$ とおくと、条件より $\\dfrac{\\pi}{4}<x<\\dfrac{\\pi}{2}$。したがって $t=\\tan x>1$。",
-    "2倍角公式 $\\tan 2x=\\dfrac{2\\tan x}{1-\\tan^2x}$ を使う。$\\tan\\theta=\\tan 2x=-\\dfrac43$ なので、$\\dfrac{2t}{1-t^2}=-\\dfrac43$。",
-    "整理すると $6t=-4+4t^2$、すなわち $2t^2-3t-2=0$。",
-    "$(2t+1)(t-2)=0$ だが、$t>1$ より $t=2$。したがって $\\tan\\dfrac{\\theta}{2}=2$。"
+    "$\\tan\\theta$ が与えられていて、求める角が $\\dfrac{\\theta}{2}$ なので、2倍角の公式が使えそうである。",
+    "$t=\\tan\\dfrac{\\theta}{2}$ と置き換える。",
+    "$\\dfrac{\\pi}{2}<\\theta<\\pi$ より $\\dfrac{\\pi}{4}<\\dfrac{\\theta}{2}<\\dfrac{\\pi}{2}$ なので、$t>1$。これが解の選択に必要になる。",
+    "2倍角公式 $\\tan\\theta=\\dfrac{2t}{1-t^2}$ より $\\dfrac{2t}{1-t^2}=-\\dfrac43$。整理すると、$2t^2-3t-2=0$。",
+    "$(2t+1)(t-2)=0$ だから $t=-\\dfrac12,2$。$t>1$ より $t=2$、したがって $\\tan\\dfrac{\\theta}{2}=2$。"
   ],
   "2-(2)": [
     "$\\dfrac{3\\theta}{2}=\\theta+\\dfrac{\\theta}{2}$ と分解し、加法定理 $\\tan(A+B)=\\dfrac{\\tan A+\\tan B}{1-\\tan A\\tan B}$ を使う。",

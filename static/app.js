@@ -741,6 +741,10 @@ function renderSubProblem(sub, subIndex) {
       ? "正解です"
       : `${result.correctFields}/${result.total} 正解・入力内容を見直してください`;
   const resultClass = !result ? "pending" : result.correct ? "ok" : "ng";
+  const canShowSolution = !$("#hideSolutions").checked || Boolean(result);
+  const solutionButton = canShowSolution
+    ? `<button class="sub-solution-button ghost" type="button" data-open-solution="${subIndex}">解説を見る</button>`
+    : "";
   return `<article class="sub-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" data-sub="${subIndex}">
     <div class="sub-head">
       <div class="sub-label">${escapeHtml(sub.label)}</div>
@@ -754,6 +758,7 @@ function renderSubProblem(sub, subIndex) {
       <button class="sub-check-button ${result ? "ghost" : "primary"}" type="button" data-check-sub="${subIndex}" ${filled < fields.length ? "disabled" : ""}>
         ${result ? "もう一度確認" : "この小問を確認"}
       </button>
+      ${solutionButton}
     </div>
   </article>`;
 }
@@ -771,6 +776,7 @@ function renderProblem() {
   bindCells();
   bindHints();
   bindSubChecks();
+  bindSolutionButtons();
   renderMath($("#groupStem"));
   renderMath($("#subList"));
 }
@@ -871,7 +877,6 @@ function handleKey(key) {
   }
   renderProblem();
   renderScore(true);
-  renderSolutions();
   renderActiveLabel();
 }
 
@@ -945,6 +950,14 @@ function bindSubChecks() {
   });
 }
 
+function bindSolutionButtons() {
+  $("[data-open-solution]").forEach((button) => {
+    button.addEventListener("click", () => {
+      openSolutionModal(currentGroup, Number(button.dataset.openSolution));
+    });
+  });
+}
+
 function checkSubProblem(subIndex) {
   const result = gradeSubProblem(subIndex);
   if (!result) {
@@ -996,35 +1009,6 @@ function renderScore(forceBlank = false) {
   </div>`).join("");
 }
 
-function renderSolutions() {
-  const group = groups[currentGroup];
-  const visibleSubs = $("#hideSolutions").checked
-    ? (group.sub_problems || []).filter((_, subIndex) => isSubChecked(subIndex))
-    : (group.sub_problems || []);
-  if (!visibleSubs.length) {
-    $("#solutionList").classList.add("muted");
-    $("#solutionList").textContent = $("#hideSolutions").checked
-      ? "小問を確認すると、その小問の解説が表示されます。"
-      : "解説はありません。";
-    return;
-  }
-  $("#solutionList").classList.remove("muted");
-  $("#solutionList").innerHTML = visibleSubs.map((sub) => `
-    <button class="solution-card" type="button" data-solution="${currentGroup}-${group.sub_problems.indexOf(sub)}">
-      <h3>${escapeHtml(sub.label)} solution</h3>
-      <p>${mdLite(sub.solution_md || "")}</p>
-      <span class="open-note">クリックして詳細解説</span>
-    </button>
-  `).join("");
-  $$(".solution-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const [groupIndex, subIndex] = card.dataset.solution.split("-").map(Number);
-      openSolutionModal(groupIndex, subIndex);
-    });
-  });
-  renderMath($("#solutionList"));
-}
-
 function answerSummary(sub) {
   return (sub.answer_fields || []).flatMap((field) => {
     const boxes = field.boxes || [...(field.num_boxes || []), ...(field.den_boxes || [])];
@@ -1051,6 +1035,17 @@ function detailStepsHtml(group, sub) {
   return `<ol>${steps.map((step) => `<li>${mdLite(step)}</li>`).join("")}</ol>`;
 }
 
+function learningPointsHtml(sub) {
+  const points = Array.isArray(sub.learning_points) ? sub.learning_points.filter(Boolean) : [];
+  if (!points.length) return "";
+  return `
+    <section class="detail-section learning-section">
+      <h3>この問題から学べること</h3>
+      <ul>${points.map((point) => `<li>${mdLite(point)}</li>`).join("")}</ul>
+    </section>
+  `;
+}
+
 function openSolutionModal(groupIndex, subIndex) {
   const group = groups[groupIndex];
   const sub = group.sub_problems[subIndex];
@@ -1070,6 +1065,7 @@ function openSolutionModal(groupIndex, subIndex) {
         <h3>詳しい解き方</h3>
         ${detailStepsHtml(group, sub)}
       </section>
+      ${learningPointsHtml(sub)}
       <section class="detail-section">
         <h3>短い解説</h3>
         <p>${mdLite(sub.solution_md || "")}</p>
@@ -1208,7 +1204,7 @@ function bindStaticEvents() {
   $("#nextGroupBtn").addEventListener("click", () => moveGroup(1));
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#printBtn").addEventListener("click", () => window.print());
-  $("#hideSolutions").addEventListener("change", renderSolutions);
+  $("#hideSolutions").addEventListener("change", renderProblem);
   $("#hintMode").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
     const value = event.target.value;
@@ -1267,7 +1263,6 @@ function render() {
   renderKeypad();
   renderActiveLabel();
   renderScore(true);
-  renderSolutions();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

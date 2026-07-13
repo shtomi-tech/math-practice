@@ -36,6 +36,8 @@ https://shtomi-tech.github.io/teikyo-math-practice/
 
 3. 段階ヒント（詳しい解き方）を足すときは `window.MATH_DETAIL_TEXTS` にキー `"<group_number>-<label>"` の配列で登録する。
 
+   小問データに `learning_points` の配列を追加すると、詳細解説に「この問題から学べること」を表示できる。
+
 4. `index.html` の `<script defer>` に作成したデータファイルを追加する。
 
 - `exam.key` は DATASETS 内で一意にすること（進捗の保存キーを兼ねるため）。

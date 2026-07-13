@@ -34,7 +34,6 @@ input:focus-visible,
 select:focus-visible,
 .cell:focus-visible,
 .group-item:focus-visible,
-.solution-card:focus-visible,
 .modal-box:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
@@ -587,6 +586,10 @@ details.panel[open] summary,
   min-width: 150px;
 }
 
+.sub-solution-button {
+  min-width: 130px;
+}
+
 .check-result {
   font-family: var(--mono);
   font-size: 11px;
@@ -826,54 +829,6 @@ details.panel[open] summary,
   grid-column: span 2;
 }
 
-.solution-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.solution-card {
-  display: block;
-  width: 100%;
-  text-align: left;
-  color: var(--ink);
-  border-left: 4px solid var(--ink);
-  background: var(--parchment);
-  border-top: 1px solid var(--ink);
-  border-right: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding: 10px 12px;
-  font-size: 14px;
-  min-height: 0;
-  cursor: pointer;
-}
-
-.solution-card:hover {
-  background: var(--paper);
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.solution-card h3 {
-  margin-bottom: 4px;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-.solution-card .open-note {
-  display: block;
-  margin-top: 8px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
 .modal {
   position: fixed;
   inset: 0;
@@ -924,6 +879,11 @@ details.panel[open] summary,
   border: 1px solid var(--ink);
   background: var(--parchment);
   padding: 12px;
+}
+
+.learning-section {
+  grid-column: 1 / -1;
+  border-top: 3px solid var(--ink);
 }
 
 .detail-section h3 {
@@ -1036,5 +996,15 @@ details.panel[open] summary,
   .sub-card,
   .stem {
     border-color: #000;
+  }
+
+  .sub-checkbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sub-check-button,
+  .sub-solution-button {
+    width: 100%;
   }
 }
