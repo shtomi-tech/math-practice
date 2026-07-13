@@ -76,11 +76,11 @@ window.MATH_DETAIL_TEXTS.nichidai_2026_zengaku1 = {
     "合計は $5\\times10=50$ 通り。"
   ],
   "5-(1)": [
-    "$A(0,0),B(4,0)$、$D(p,h)$、$C(p+2,h)$ とおいて座標で考える（$AB\\parallel DC$、$DC=2$より）。",
-    "$DA=3$ から $p^{2}+h^{2}=9$。$BC=2$ から $(p-2)^{2}+h^{2}=4$。この2式を辺々引く。",
-    "$4p-4=5$ より $p=\\dfrac94$、$h^{2}=9-\\dfrac{81}{16}=\\dfrac{63}{16}$。",
-    "$E$ は $AB$ の中点 $(2,0)$ なので $DE^{2}=\\left(2-\\frac94\\right)^{2}+h^{2}=\\frac1{16}+\\frac{63}{16}=4$、$DE=2$。",
-    "$\\overrightarrow{AB}\\cdot\\overrightarrow{AD}=(4,0)\\cdot\\left(\\frac94,h\\right)=4\\cdot\\frac94=9$。"
+    "$\\overrightarrow{AB}=\\mathbf b$、$\\overrightarrow{AD}=\\mathbf d$ とおく。$AB\\parallel DC$、$AB=4$、$DC=2$ より $\\overrightarrow{DC}=\\frac12\\mathbf b$。",
+    "$\\overrightarrow{BC}=\\overrightarrow{AD}+\\overrightarrow{DC}-\\overrightarrow{AB}=\\mathbf d-\\frac12\\mathbf b$。",
+    "$E$ は $AB$ の中点なので $\\overrightarrow{DE}=\\frac12\\mathbf b-\\mathbf d=-\\overrightarrow{BC}$。したがって $DE=BC=2$。",
+    "$BC=2$ より $\\left|\\mathbf d-\\frac12\\mathbf b\\right|^2=4$。展開すると $|\\mathbf d|^2-\\mathbf b\\cdot\\mathbf d+\\frac14|\\mathbf b|^2=4$。",
+    "$AD=3$、$AB=4$ を代入して $9-\\overrightarrow{AB}\\cdot\\overrightarrow{AD}+4=4$。よって $\\overrightarrow{AB}\\cdot\\overrightarrow{AD}=9$。"
   ],
   "5-(2)": [
     "(1)の座標を使い、$\\triangle ABD$ の面積はベクトルの外積（成分の交差）で求められる。",
