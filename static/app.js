@@ -733,6 +733,7 @@ function renderSubProblem(sub, subIndex) {
   const result = subResult(subIndex);
   const isCorrect = result?.correct;
   const isWrong = result && !result.correct;
+  const hintSteps = stepsForSub(group, sub);
   const hintsUsed = progress[subKey(currentGroup, subIndex)]?.hintsUsed || 0;
   const noHintBadge = isCorrect && hintsUsed === 0 ? `<span class="no-hint-badge">ノーヒント正解</span>` : "";
   const resultText = !result
@@ -741,7 +742,9 @@ function renderSubProblem(sub, subIndex) {
       ? "正解です"
       : `${result.correctFields}/${result.total} 正解・入力内容を見直してください`;
   const resultClass = !result ? "pending" : result.correct ? "ok" : "ng";
-  const canShowSolution = !$("#hideSolutions").checked || Boolean(result);
+  const canShowSolution = !$("#hideSolutions").checked
+    || Boolean(result)
+    || hintsUsed >= hintSteps.length;
   const solutionButton = canShowSolution
     ? `<button class="sub-solution-button ghost" type="button" data-open-solution="${subIndex}">解説を見る</button>`
     : "";
