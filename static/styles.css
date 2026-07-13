@@ -844,7 +844,7 @@ details.panel[open] summary,
 }
 
 .modal-box {
-  width: min(860px, 100%);
+  width: min(1180px, 100%);
   max-height: min(82vh, 760px);
   overflow: auto;
   border: 2px solid var(--ink);

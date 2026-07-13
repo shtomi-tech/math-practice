@@ -1066,10 +1066,6 @@ function openSolutionModal(groupIndex, subIndex) {
         ${detailStepsHtml(group, sub)}
       </section>
       ${learningPointsHtml(sub)}
-      <section class="detail-section">
-        <h3>短い解説</h3>
-        <p>${mdLite(sub.solution_md || "")}</p>
-      </section>
     </div>
   `;
   modalReturnFocus = document.activeElement;
