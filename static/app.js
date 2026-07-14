@@ -880,10 +880,12 @@ function revealHint(subIndex) {
 }
 
 function renderKeypad() {
-  const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "⌫", "消去", "次へ"];
+  // 最頻出の「次へ」を右手親指の最良位置（右下・span3）に置き、
+  // 破壊的な「全部消す」は左上に隔離して誤タップ事故を防ぐ（フィッツの法則）。
+  const keys = ["消去", "7", "8", "9", "-", "4", "5", "6", "⌫", "1", "2", "3", "0", "次へ"];
   const keyLabels = { "消去": "全部消す" };
   $("#keypad").innerHTML = keys.map((key) => {
-    const wide = key === "消去" || key === "次へ" ? "wide" : "";
+    const wide = key === "次へ" ? "wide3" : "";
     return `<button class="${wide}" type="button" data-key="${key}">${keyLabels[key] || key}</button>`;
   }).join("");
   $$("[data-key]").forEach((button) => {
@@ -998,7 +1000,7 @@ function renderNextIssueBtn() {
   const button = $("#nextIssueBtn");
   const hasIssue = graded ? anyWrongField() : anyBlankField();
   button.disabled = !hasIssue;
-  button.textContent = graded ? "誤答へ" : "未入力へ";
+  button.textContent = graded ? "誤答のマスへ" : "未入力のマスへ";
 }
 
 function bindSubChecks() {
@@ -1045,7 +1047,7 @@ function renderScore(forceBlank = false) {
   if (!graded && forceBlank) {
     $("#scoreBox").innerHTML = `<span class="score-main">—</span><span class="score-sub">未採点</span>`;
     $("#resultList").innerHTML = "";
-    $("#gradeBtn").textContent = "採点する";
+    $("#gradeBtn").textContent = "この大問をまとめて採点";
     renderNextIssueBtn();
     return;
   }
@@ -1053,17 +1055,29 @@ function renderScore(forceBlank = false) {
   const correct = results.filter((r) => r.correct).length;
   const checked = results.filter((r) => r.checked).length;
   const total = results.length;
-  $("#gradeBtn").textContent = graded ? "再採点する" : "採点する";
+  $("#gradeBtn").textContent = graded ? "もう一度まとめて採点" : "この大問をまとめて採点";
   renderNextIssueBtn();
   const scoreLabel = checked < total
     ? `確認済み ${checked}/${total}小問`
     : `正答率 ${Math.round((correct / total) * 100)}%`;
   $("#scoreBox").innerHTML = `<span class="score-main">${correct}/${checked || 0}</span><span class="score-sub">${scoreLabel}</span>`;
-  $("#resultList").innerHTML = results.map((r) => `<div class="result-row">
+  // 個別の正誤は各小問カードが正とする（ゲシュタルト：閉合の重複を避ける）。
+  // ここは集計のみを示し、行クリックで該当カードへジャンプできるようにする。
+  $("#resultList").innerHTML = results.map((r) => `<button class="result-row" type="button" data-jump-sub="${r.subIndex}">
     <span>${escapeHtml(r.sub.label)}</span>
     <span class="${!r.checked ? "pending" : r.correct ? "ok" : "ng"}">${!r.checked ? "未確認" : r.correct ? "正解" : `${r.correctFields}/${r.total}`}</span>
     <small class="hint-log">ヒント${progress[subKey(currentGroup, r.subIndex)]?.hintsUsed || 0}回</small>
-  </div>`).join("");
+  </button>`).join("");
+  bindResultRows();
+}
+
+function bindResultRows() {
+  $$("[data-jump-sub]").forEach((row) => {
+    row.addEventListener("click", () => {
+      const card = document.querySelector(`[data-sub="${row.dataset.jumpSub}"]`);
+      card?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  });
 }
 
 function answerSummary(sub) {
@@ -1199,14 +1213,23 @@ function renderContinuePanel() {
   const done = completedCount();
   const total = totalCount();
   const hint = $("#continueHint");
+  const btn = $("#continueBtn");
   if (!total) {
     hint.textContent = "";
     return;
   }
+  // 初回訪問（進捗ゼロ）は「最初に選ぶべき行動」を明示する（ヒックの法則）。
+  if (done === 0) {
+    btn.textContent = "▶ 最初の問題から始める";
+    hint.textContent = "まずはここを押してください。";
+    return;
+  }
   if (done >= total) {
+    btn.textContent = "▶ 最初から解き直す";
     hint.textContent = "全問完了しました。好きな大問を選んで見直せます。";
     return;
   }
+  btn.textContent = "▶ つづきから解く";
   const target = groups[firstUnfinishedGroupIndex()];
   hint.textContent = target ? `次は [${target.group_number}] ${target.title} です。` : "";
 }

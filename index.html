@@ -26,7 +26,7 @@
     <div class="top-actions">
       <button id="printBtn" class="ghost" type="button">印刷</button>
       <details class="utility-menu">
-        <summary>その他</summary>
+        <summary>生徒・設定</summary>
         <div class="utility-menu-body">
           <section class="utility-section student-panel">
             <h2>生徒</h2>
@@ -38,8 +38,11 @@
                 <summary>生徒の管理…</summary>
                 <div class="student-actions">
                   <button id="renameStudentBtn" class="ghost" type="button">この生徒の名前を変える</button>
-                  <button id="deleteStudentBtn" class="ghost danger" type="button">この生徒の記録を削除</button>
-                  <button id="resetProgressBtn" class="ghost danger" type="button">この生徒の記録をすべて消す</button>
+                  <div class="danger-zone">
+                    <p class="danger-zone-label">取り消せない操作</p>
+                    <button id="resetProgressBtn" class="ghost danger" type="button">進捗をリセット（生徒は残す）</button>
+                    <button id="deleteStudentBtn" class="ghost danger" type="button">生徒を削除（記録ごと消える）</button>
+                  </div>
                 </div>
               </details>
             </div>
@@ -47,7 +50,7 @@
           <section class="utility-section settings-panel">
             <h2>詳細設定</h2>
             <div class="stack">
-              <label class="checkline"><input id="hintMode" type="checkbox" checked> ヒントモード（段階表示）</label>
+              <label class="checkline"><input id="hintMode" type="checkbox" checked> ヒントモード（段階表示・推奨）</label>
               <label class="checkline"><input id="instantCheck" type="checkbox"> 入力中に正誤を表示</label>
               <label class="checkline"><input id="hideSolutions" type="checkbox" checked> 採点前は解説ボタンを隠す</label>
             </div>
@@ -56,18 +59,23 @@
       </details>
     </div>
     <div class="contextbar" aria-label="演習条件">
-      <section class="context-item context-source">
+      <section class="context-source-card">
         <span class="eyebrow">SOURCE</span>
         <strong id="sourceTitle">2026 総合型選抜</strong>
         <span id="sourceText">薬・理工学部 数学</span>
-      </section>
-      <section class="context-item exam-panel" id="schoolPanel">
-        <span class="context-label">学校</span>
-        <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
-      </section>
-      <section class="context-item exam-panel">
-        <span class="context-label">方式・年度</span>
-        <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
+        <details class="source-switch-toggle">
+          <summary>出典を変える</summary>
+          <div class="source-switch-body">
+            <section class="exam-panel" id="schoolPanel">
+              <span class="context-label">学校</span>
+              <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
+            </section>
+            <section class="exam-panel">
+              <span class="context-label">方式・年度</span>
+              <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
+            </section>
+          </div>
+        </details>
       </section>
       <section class="context-progress" aria-label="全体の進捗">
         <span class="context-label">進捗</span>
@@ -121,9 +129,11 @@
           <span class="score-sub">未採点</span>
         </div>
         <div class="actions">
-          <button id="gradeBtn" class="primary" type="button">採点する</button>
-          <button id="nextIssueBtn" class="ghost" type="button">次のマスへ</button>
-          <button id="clearBtn" class="ghost" type="button">この大問をやり直す</button>
+          <button id="gradeBtn" class="ghost" type="button">この大問をまとめて採点</button>
+          <button id="nextIssueBtn" class="ghost" type="button">未入力のマスへ</button>
+        </div>
+        <div class="danger-zone">
+          <button id="clearBtn" class="ghost danger" type="button">入力を全部消してやり直す</button>
         </div>
         <div id="resultList" class="result-list"></div>
       </section>
