@@ -48,6 +48,8 @@
   function renderIntro() {
     $("#examTitle").textContent = EXAM.title;
     $("#examNote").textContent = EXAM.note;
+    $("#seriesInfo").textContent = `全${EXAM.seriesTotal}回予定（第${EXAM.seriesNumber}回公開中）`;
+    $("#unitList").textContent = EXAM.units.join(" ／ ");
     const active = readActive();
     if (active?.status === "active") {
       $("#startBtn").textContent = "続きから再開する";

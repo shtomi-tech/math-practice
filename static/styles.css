@@ -27,6 +27,9 @@ h2 { margin-bottom: 8px; font-size: clamp(20px, 3vw, 28px); line-height: 1.25; }
 .panel { border: 1px solid var(--ink); background: var(--paper); }
 .intro-panel { max-width: 760px; margin: 0 auto; padding: clamp(24px, 5vw, 48px); }
 .lead { font-size: 18px; color: var(--muted); }
+.scope-panel { display: grid; grid-template-columns: minmax(210px, .8fr) 1.6fr; gap: 16px; padding: 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.scope-panel strong { display: block; margin-top: 4px; font-size: 18px; }
+.scope-panel p { margin: 4px 0 0; color: var(--muted); }
 .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 24px 0; }
 .intro-grid > div { padding: 16px; border-right: 1px solid var(--line); }
 .intro-grid > div:last-child { border-right: 0; }
@@ -92,6 +95,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px 
   .intro-grid { grid-template-columns: 1fr; }
   .intro-grid > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .intro-grid > div:last-child { border-bottom: 0; }
+  .scope-panel { grid-template-columns: 1fr; gap: 8px; }
   .exam-toolbar { gap: 10px; padding: 10px; }
   .exam-toolbar strong { font-size: 18px; }
   .exam-toolbar .cta { padding-inline: 10px; }

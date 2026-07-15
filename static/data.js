@@ -2,6 +2,9 @@ window.MINI_EXAMS = {
   "mini_01": {
     id: "mini_01",
     title: "基礎ミックス 第1回",
+    seriesTotal: 6,
+    seriesNumber: 1,
+    units: ["式の展開・因数分解", "実数・1次不等式", "集合と論理", "場合の数"],
     durationMinutes: 30,
     totalPoints: 100,
     note: "4単元を組み合わせたオリジナル問題です。",
