@@ -7,6 +7,7 @@
   const TOTAL_SECONDS = EXAM.durationMinutes * 60;
   let state = null;
   let timerId = null;
+  let activeInput = null;
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -100,6 +101,7 @@
       </section>
     `).join("");
     bindQuestionEvents();
+    renderKeypad();
     renderMath($("#examSheet"));
   }
 
@@ -123,14 +125,26 @@
   }
 
   function bindQuestionEvents() {
-    $$('[data-question] input[data-answer-index]').forEach((input) => input.addEventListener("input", () => {
+    $$('[data-question] input[data-answer-index]').forEach((input) => {
+      input.addEventListener("focus", () => {
+        activeInput = { qid: input.closest("[data-question]").dataset.question, index: Number(input.dataset.answerIndex) };
+        renderKeypad();
+      });
+      input.addEventListener("click", () => {
+        activeInput = { qid: input.closest("[data-question]").dataset.question, index: Number(input.dataset.answerIndex) };
+        renderKeypad();
+      });
+      input.addEventListener("input", () => {
       const article = input.closest("[data-question]");
       const q = allQuestions().find(({ q }) => q.id === article.dataset.question).q;
+      activeInput = { qid: q.id, index: Number(input.dataset.answerIndex) };
       const values = q.prompts.map((_, index) => article.querySelector(`[data-answer-index="${index}"]`).value);
       state.answers[q.id] = values;
       saveActive();
       updateAnsweredCount();
-    }));
+      renderKeypad();
+      });
+    });
     $$('[data-question] .option').forEach((button) => button.addEventListener("click", () => {
       const article = button.closest("[data-question]");
       const q = allQuestions().find(({ q }) => q.id === article.dataset.question).q;
@@ -155,6 +169,69 @@
 
   function updateAnsweredCount() {
     $("#answeredCount").textContent = `${allQuestions().filter(({ q }) => isAnswered(q)).length} / ${questionCount()}`;
+  }
+
+  function activeNumericEntry() {
+    if (!activeInput) return null;
+    const found = allQuestions().find(({ q }) => q.id === activeInput.qid);
+    if (!found || found.q.type !== "numeric" || activeInput.index >= found.q.prompts.length) return null;
+    return { q: found.q, index: activeInput.index };
+  }
+
+  function firstNumericInput() {
+    for (const { q } of allQuestions()) {
+      if (q.type !== "numeric") continue;
+      const values = Array.isArray(state.answers[q.id]) ? state.answers[q.id] : [];
+      const index = q.prompts.findIndex((_, i) => normalize(values[i]) === "");
+      return { q, index: index >= 0 ? index : 0 };
+    }
+    return null;
+  }
+
+  function focusActiveInput() {
+    if (!activeInput) return;
+    const selector = `[data-question="${activeInput.qid}"] input[data-answer-index="${activeInput.index}"]`;
+    document.querySelector(selector)?.focus();
+  }
+
+  function renderKeypad() {
+    const entry = activeNumericEntry() || firstNumericInput();
+    if (entry && !activeInput) activeInput = { qid: entry.q.id, index: entry.index };
+    const current = activeNumericEntry();
+    $("#activeLabel").textContent = current ? `${current.q.label} / ${current.q.prompts[current.index].replace(/\$/g, "")}` : "数字欄を選択してください";
+    const keys = ["消去", "7", "8", "9", "−", "4", "5", "6", "⌫", "1", "2", "3", "0", "次へ"];
+    $("#keypad").innerHTML = keys.map((key) => `<button type="button" data-key="${key}" ${current ? "" : "disabled"}>${key}</button>`).join("");
+    $$('[data-key]').forEach((button) => button.addEventListener("click", () => handleKey(button.dataset.key)));
+  }
+
+  function handleKey(key) {
+    const entry = activeNumericEntry();
+    if (!entry) return;
+    const values = Array.isArray(state.answers[entry.q.id]) ? [...state.answers[entry.q.id]] : entry.q.prompts.map(() => "");
+    let value = String(values[entry.index] || "");
+    if (key === "消去") value = "";
+    else if (key === "⌫") value = value.slice(0, -1);
+    else if (key === "−") value = value.startsWith("-") ? value.slice(1) : `-${value}`;
+    else if (key === "次へ") {
+      const next = entry.index + 1 < entry.q.prompts.length ? entry.index + 1 : nextNumericInput(entry.q.id);
+      if (next) activeInput = { qid: next.q.id, index: next.index };
+      saveActive();
+      renderKeypad();
+      focusActiveInput();
+      return;
+    } else if (/^\d$/.test(key)) value += key;
+    values[entry.index] = value;
+    state.answers[entry.q.id] = values;
+    saveActive();
+    updateAnsweredCount();
+    renderExam();
+    focusActiveInput();
+  }
+
+  function nextNumericInput(currentQid) {
+    const items = allQuestions().filter(({ q }) => q.type === "numeric");
+    const index = items.findIndex(({ q }) => q.id === currentQid);
+    return index >= 0 && index + 1 < items.length ? { q: items[index + 1].q, index: 0 } : null;
   }
 
   function openSubmitDialog() {
