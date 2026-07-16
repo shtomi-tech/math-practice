@@ -75,6 +75,7 @@ let checkedSubs = {};
 let students = loadStudents();
 let currentStudentName = loadCurrentStudent();
 let progress = {};
+let cloud = null;
 
 const HINT_LEVELS = ["着眼点", "立式", "計算", "答え合わせ"];
 
@@ -296,11 +297,38 @@ function loadDraftsFor(name) {
 function saveProgress() {
   if (!currentStudentName) return;
   writeJson(progressKeyFor(currentStudentName), progress);
+  if (cloud) cloud.queueSave();
 }
 
 function saveDrafts() {
   if (!currentStudentName) return;
   writeJson(draftKeyFor(currentStudentName), answerDrafts);
+  if (cloud) cloud.queueSave();
+}
+
+function cloudPayload() {
+  const exams = {};
+  for (const examKey of AVAILABLE_EXAMS) {
+    const encodedName = encodeURIComponent(currentStudentName);
+    exams[examKey] = {
+      progress: readJson(`${PROGRESS_PREFIX}${examKey}:${encodedName}`, {}),
+      drafts: readJson(`${DRAFT_PREFIX}${examKey}:${encodedName}`, {}),
+    };
+  }
+  return { version: 1, exams };
+}
+
+function applyCloudPayload(payload) {
+  const exams = payload && typeof payload === "object" ? payload.exams : null;
+  const student = cloud?.getSession().student;
+  if (!student || !exams || typeof exams !== "object") return;
+  currentStudentName = normalizeStudentName(student.name);
+  const encodedName = encodeURIComponent(currentStudentName);
+  for (const [examKey, record] of Object.entries(exams)) {
+    if (!DATASETS[examKey] || !record || typeof record !== "object") continue;
+    writeJson(`${PROGRESS_PREFIX}${examKey}:${encodedName}`, record.progress || {});
+    writeJson(`${DRAFT_PREFIX}${examKey}:${encodedName}`, record.drafts || {});
+  }
 }
 
 function migrateLegacyProgress() {
@@ -536,6 +564,7 @@ function renderProgress() {
 
 function renderStudentMenu() {
   const sel = $("#studentSel");
+  const sharedMode = Boolean(cloud?.isEnabled());
   sel.innerHTML = [`<option value="">ゲスト（記録なし）</option>`]
     .concat(students.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`))
     .concat([`<option value="__add__">＋ 新しい生徒を追加…</option>`])
@@ -544,9 +573,13 @@ function renderStudentMenu() {
   if (sel.value !== currentStudentName) setCurrentStudent("");
 
   const hasStudent = Boolean(currentStudentName);
-  $("#renameStudentBtn").disabled = !hasStudent;
-  $("#deleteStudentBtn").disabled = !hasStudent;
-  $("#studentHint").textContent = hasStudent
+  sel.disabled = sharedMode;
+  $("#studentManage").hidden = sharedMode;
+  $("#renameStudentBtn").disabled = sharedMode || !hasStudent;
+  $("#deleteStudentBtn").disabled = sharedMode || !hasStudent;
+  $("#studentHint").textContent = sharedMode
+    ? `${currentStudentName} さんとして学習中です。進捗はクラウドに保存されます。`
+    : hasStudent
     ? `${currentStudentName} さんの進捗を保存中です。`
     : "ゲスト：記録は保存されません。生徒を選ぶと進捗が残ります。";
 }
@@ -1380,7 +1413,16 @@ function render() {
   renderScore(true);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  cloud = createCloud({
+    appId: "teikyo-kakomon",
+    getPayload: cloudPayload,
+    applyLoaded: applyCloudPayload,
+  });
+  await cloud.init();
+  if (cloud.isEnabled()) {
+    currentStudentName = normalizeStudentName(cloud.getSession().student.name);
+  }
   migrateLegacyProgress();
   if (currentStudentName && !students.includes(currentStudentName)) {
     students.push(currentStudentName);

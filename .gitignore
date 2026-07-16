@@ -1,2 +1,5 @@
 # Local Netlify folder
 .netlify
+
+# デプロイ時にSecretsから生成する実行時設定
+static/config.json
