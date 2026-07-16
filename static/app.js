@@ -1,21 +1,30 @@
 (() => {
   "use strict";
 
-  const EXAM_PARAM = new URLSearchParams(window.location.search).get("exam") || "mini_01";
-  const EXAM = window.MINI_EXAMS[EXAM_PARAM] || window.MINI_EXAMS.mini_01;
-  const STORAGE_KEY = `math-mini-exam:${EXAM.id}:active`;
-  const RESULT_KEY = `math-mini-exam:${EXAM.id}:last-result`;
-  // 第1回は従来のクラウド保存先（appId）を維持し、既存の生徒進捗と互換を保つ
-  const CLOUD_APP_ID = EXAM.id === "mini_01" ? "math-mini-exam" : `math-mini-exam:${EXAM.id}`;
-  const TOTAL_SECONDS = EXAM.durationMinutes * 60;
+  const EXAMS = window.MINI_EXAMS;
+  const AVAILABLE_EXAMS = Object.values(EXAMS).sort((a, b) => a.seriesNumber - b.seriesNumber);
+  const CURRENT_EXAM_KEY = "math-mini-exam:current-exam";
+
+  function loadCurrentExam() {
+    const requested = new URLSearchParams(window.location.search).get("exam");
+    if (requested && EXAMS[requested]) return EXAMS[requested];
+    const stored = localStorage.getItem(CURRENT_EXAM_KEY);
+    return EXAMS[stored] || EXAMS.mini_01 || AVAILABLE_EXAMS[0];
+  }
+
+  let EXAM = loadCurrentExam();
   let state = null;
   let timerId = null;
   let activeInput = null;
-  let cloud = null;
+  const clouds = new Map();
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
   const allQuestions = () => EXAM.groups.flatMap((group) => group.questions.map((q) => ({ group, q })));
+  const storageKey = (exam = EXAM) => `math-mini-exam:${exam.id}:active`;
+  const resultKey = (exam = EXAM) => `math-mini-exam:${exam.id}:last-result`;
+  const cloudAppId = (exam) => exam.id === "mini_01" ? "math-mini-exam" : `math-mini-exam:${exam.id}`;
+  const currentCloud = () => clouds.get(EXAM.id);
 
   function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
@@ -40,46 +49,71 @@
   }
 
   function readActive() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; }
+    try { return JSON.parse(localStorage.getItem(storageKey()) || "null"); } catch { return null; }
   }
 
   function saveActive() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    if (cloud) cloud.queueSave();
+    localStorage.setItem(storageKey(), JSON.stringify(state));
+    currentCloud()?.queueSave();
   }
 
-  function cloudPayload() {
+  function cloudPayload(exam) {
     let active = null;
     let result = null;
-    try { active = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { /* ignore */ }
-    try { result = JSON.parse(localStorage.getItem(RESULT_KEY) || "null"); } catch { /* ignore */ }
+    try { active = JSON.parse(localStorage.getItem(storageKey(exam)) || "null"); } catch { /* ignore */ }
+    try { result = JSON.parse(localStorage.getItem(resultKey(exam)) || "null"); } catch { /* ignore */ }
     return { version: 1, active, result };
   }
 
-  function applyCloudPayload(payload) {
+  function applyCloudPayload(exam, payload) {
     if (!payload || typeof payload !== "object") return;
     if (payload.active && typeof payload.active === "object") {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload.active));
+      localStorage.setItem(storageKey(exam), JSON.stringify(payload.active));
     } else {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(storageKey(exam));
     }
     if (payload.result && typeof payload.result === "object") {
-      localStorage.setItem(RESULT_KEY, JSON.stringify(payload.result));
+      localStorage.setItem(resultKey(exam), JSON.stringify(payload.result));
     }
   }
 
   function updateMode(label) { $("#modeLabel").textContent = label; }
 
-  function renderExamLinks() {
-    $("#examLinks").innerHTML = Object.values(window.MINI_EXAMS).map((exam) => {
-      const params = new URLSearchParams(window.location.search);
-      params.set("exam", exam.id);
+  function renderExamSwitch() {
+    $("#contextExamTitle").textContent = EXAM.title;
+    $("#contextExamText").textContent = `第${EXAM.seriesNumber}回・${EXAM.durationMinutes}分・${EXAM.totalPoints}点`;
+    $("#examSwitch").innerHTML = AVAILABLE_EXAMS.map((exam) => {
       const current = exam.id === EXAM.id;
-      return `<a class="exam-link" href="?${escapeHtml(params.toString())}" ${current ? 'aria-current="page"' : ""}><span>第${exam.seriesNumber}回</span><span class="exam-link-status">${current ? "選択中" : "開く"}</span></a>`;
+      const count = exam.groups.reduce((sum, group) => sum + group.questions.length, 0);
+      return `<button class="exam-option ${current ? "active" : ""}" type="button" role="tab" aria-selected="${current}" data-exam="${escapeHtml(exam.id)}"><span>第${exam.seriesNumber}回</span><small>${count}小問</small></button>`;
     }).join("");
+    $$('[data-exam]').forEach((button) => button.addEventListener("click", () => setCurrentExam(button.dataset.exam)));
+  }
+
+  function setCurrentExam(examId) {
+    const nextExam = EXAMS[examId];
+    if (!nextExam || nextExam.id === EXAM.id) return;
+    clearInterval(timerId);
+    if (state?.status === "active") saveActive();
+    state = null;
+    activeInput = null;
+    EXAM = nextExam;
+    localStorage.setItem(CURRENT_EXAM_KEY, EXAM.id);
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set("exam", EXAM.id);
+    window.history.replaceState(null, "", nextUrl);
+    document.title = `${EXAM.title}｜数学ミニ試験`;
+    $("#exam").classList.add("hidden");
+    $("#result").classList.add("hidden");
+    $("#intro").classList.remove("hidden");
+    document.body.classList.remove("result-mode");
+    updateMode("開始前");
+    renderExamSwitch();
+    renderIntro();
   }
 
   function renderIntro() {
+    document.title = `${EXAM.title}｜数学ミニ試験`;
     $("#examTitle").textContent = EXAM.title;
     $("#examNote").textContent = EXAM.note;
     $("#seriesInfo").textContent = `全${EXAM.seriesTotal}回予定（第${EXAM.seriesNumber}回公開中）`;
@@ -99,7 +133,7 @@
     if (existing?.status === "active" && existing.deadline > Date.now()) {
       state = existing;
     } else {
-      state = { status: "active", startedAt: Date.now(), deadline: Date.now() + TOTAL_SECONDS * 1000, name: $("#studentName").value.trim() || "ゲスト", answers: {} };
+      state = { status: "active", startedAt: Date.now(), deadline: Date.now() + EXAM.durationMinutes * 60 * 1000, name: $("#studentName").value.trim() || "ゲスト", answers: {} };
       saveActive();
     }
     $("#intro").classList.add("hidden");
@@ -297,9 +331,9 @@
     const results = allQuestions().map(({ group, q }) => ({ group, q, result: grade(q) }));
     const total = results.reduce((sum, item) => sum + item.result.points, 0);
     state = { ...state, status: "submitted", submittedAt: Date.now(), score: Math.round(total), results: results.map(({ q, result }) => ({ id: q.id, ...result })) };
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.setItem(RESULT_KEY, JSON.stringify(state));
-    if (cloud) cloud.queueSave();
+    localStorage.removeItem(storageKey());
+    localStorage.setItem(resultKey(), JSON.stringify(state));
+    currentCloud()?.queueSave();
     $("#submitDialog").classList.add("hidden");
     renderResult(auto);
   }
@@ -308,8 +342,8 @@
     if (!state || state.status !== "active") return;
     if (!window.confirm("試験を中断して、回答とタイマーをリセットしますか？")) return;
     clearInterval(timerId);
-    localStorage.removeItem(STORAGE_KEY);
-    if (cloud) cloud.queueSave();
+    localStorage.removeItem(storageKey());
+    currentCloud()?.queueSave();
     state = null;
     activeInput = null;
     $("#exam").classList.add("hidden");
@@ -384,18 +418,22 @@
   window.addEventListener("beforeunload", () => { if (state?.status === "active") saveActive(); });
 
   async function init() {
-    cloud = createCloud({
-      appId: CLOUD_APP_ID,
-      getPayload: cloudPayload,
-      applyLoaded: applyCloudPayload,
-    });
-    await cloud.init();
-    if (cloud.isEnabled()) {
-      $("#studentName").value = cloud.getSession().student.name;
+    for (const exam of AVAILABLE_EXAMS) {
+      const examCloud = createCloud({
+        appId: cloudAppId(exam),
+        getPayload: () => cloudPayload(exam),
+        applyLoaded: (payload) => applyCloudPayload(exam, payload),
+      });
+      clouds.set(exam.id, examCloud);
+      await examCloud.init();
+    }
+    const enabledCloud = AVAILABLE_EXAMS.map((exam) => clouds.get(exam.id)).find((examCloud) => examCloud.isEnabled());
+    if (enabledCloud) {
+      $("#studentName").value = enabledCloud.getSession().student.name;
       $("#studentName").readOnly = true;
       $("#saveMode").textContent = "生徒別クラウド";
     }
-    renderExamLinks();
+    renderExamSwitch();
     renderIntro();
     renderMath();
   }

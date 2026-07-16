@@ -23,17 +23,24 @@ h2 { margin-bottom: 8px; font-size: clamp(20px, 3vw, 28px); line-height: 1.25; }
 .eyebrow { margin-bottom: 4px; color: var(--muted); }
 .top-actions { display: flex; align-items: center; gap: 12px; }
 .mode-label { white-space: nowrap; }
+.contextbar { width: min(1100px, 90vw); margin: 16px auto 0; }
+.context-exam-card { display: flex; flex-direction: column; padding: 10px 14px; border: 1px solid var(--line); }
+.context-exam-card > strong { font-size: 16px; }
+.context-exam-card > span:last-of-type { color: var(--muted); font-size: 12px; }
 .shell { width: min(1100px, 90vw); margin: 32px auto 80px; }
 .panel { border: 1px solid var(--ink); background: var(--paper); }
 .intro-panel { max-width: 760px; margin: 0 auto; padding: clamp(24px, 5vw, 48px); }
 .lead { font-size: 18px; color: var(--muted); }
-.exam-switcher { margin: 24px 0; }
-.exam-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 8px; border: 1px solid var(--ink); }
-.exam-link { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 48px; padding: 10px 12px; border-right: 1px solid var(--ink); color: var(--ink); text-decoration: none; font-weight: 700; }
-.exam-link:last-child { border-right: 0; }
-.exam-link:hover, .exam-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
-.exam-link[aria-current="page"] { background: var(--ink); color: var(--paper); }
-.exam-link-status { font-family: Consolas, "Courier New", monospace; font-size: 11px; letter-spacing: .06em; }
+.exam-switch-toggle { margin-top: 8px; }
+.exam-switch-toggle > summary { width: fit-content; cursor: pointer; color: var(--clay); font-family: Consolas, "Courier New", monospace; font-size: 12px; letter-spacing: .06em; text-decoration: underline; text-underline-offset: 3px; list-style: none; }
+.exam-switch-toggle > summary::-webkit-details-marker { display: none; }
+.exam-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.exam-option { min-height: 58px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 0; background: var(--paper); color: var(--ink); text-align: left; }
+.exam-option:hover, .exam-option:focus-visible, .exam-option.active { border-color: var(--ink); background: #eeeae2; }
+.exam-option.active { border-left: 4px solid var(--ink); }
+.exam-option span, .exam-option small { display: block; }
+.exam-option span { font-weight: 700; line-height: 1.35; }
+.exam-option small { margin-top: 4px; color: var(--muted); font-family: Consolas, "Courier New", monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
 .scope-panel { display: grid; grid-template-columns: minmax(210px, .8fr) 1.6fr; gap: 16px; padding: 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .scope-panel strong { display: block; margin-top: 4px; font-size: 18px; }
 .scope-panel p { margin: 4px 0 0; color: var(--muted); }
@@ -92,20 +99,19 @@ input { border: 1px solid var(--ink); border-radius: 0; background: transparent;
 .dialog-box { width: min(440px, 100%); border: 1px solid var(--ink); background: var(--paper); padding: 24px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
-button:focus-visible, input:focus-visible, summary:focus-visible, .exam-link:focus-visible { outline: 3px solid var(--clay); outline-offset: 2px; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--clay); outline-offset: 2px; }
 
 @media (max-width: 640px) {
   .topbar { align-items: flex-start; flex-direction: column; gap: 12px; }
   .top-actions { width: 100%; justify-content: space-between; }
   .shell { width: min(94vw, 1100px); margin-top: 20px; }
+  .contextbar { width: min(94vw, 1100px); }
   .intro-panel, .exam-group, .result-group { padding: 16px; }
   .intro-grid { grid-template-columns: 1fr; }
   .intro-grid > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .intro-grid > div:last-child { border-bottom: 0; }
   .scope-panel { grid-template-columns: 1fr; gap: 8px; }
-  .exam-links { grid-template-columns: 1fr; }
-  .exam-link { border-right: 0; border-bottom: 1px solid var(--ink); }
-  .exam-link:last-child { border-bottom: 0; }
+  .exam-switch { grid-template-columns: 1fr; }
   .exam-toolbar { gap: 10px; padding: 10px; }
   .exam-toolbar strong { font-size: 18px; }
   .exam-toolbar .cta { padding-inline: 10px; }
@@ -117,7 +123,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, .exam-link:foc
 @media print {
   @page { size: A4 portrait; margin: 14mm; }
   html, body { background: #fff; }
-  .topbar, .intro-panel, .exam-toolbar, .keypad-panel, .result-hero, .dialog, #printBtn, .hint, details summary { display: none !important; }
+  .topbar, .contextbar, .intro-panel, .exam-toolbar, .keypad-panel, .result-hero, .dialog, #printBtn, .hint, details summary { display: none !important; }
   .shell { width: 100%; margin: 0; }
   body:not(.result-mode) #exam { display: block !important; }
   body:not(.result-mode) #result { display: none !important; }
