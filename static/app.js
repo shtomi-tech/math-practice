@@ -70,6 +70,15 @@
 
   function updateMode(label) { $("#modeLabel").textContent = label; }
 
+  function renderExamLinks() {
+    $("#examLinks").innerHTML = Object.values(window.MINI_EXAMS).map((exam) => {
+      const params = new URLSearchParams(window.location.search);
+      params.set("exam", exam.id);
+      const current = exam.id === EXAM.id;
+      return `<a class="exam-link" href="?${escapeHtml(params.toString())}" ${current ? 'aria-current="page"' : ""}><span>第${exam.seriesNumber}回</span><span class="exam-link-status">${current ? "選択中" : "開く"}</span></a>`;
+    }).join("");
+  }
+
   function renderIntro() {
     $("#examTitle").textContent = EXAM.title;
     $("#examNote").textContent = EXAM.note;
@@ -386,6 +395,7 @@
       $("#studentName").readOnly = true;
       $("#saveMode").textContent = "生徒別クラウド";
     }
+    renderExamLinks();
     renderIntro();
     renderMath();
   }

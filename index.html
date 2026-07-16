@@ -10,7 +10,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script defer src="./static/data.js"></script>
   <script defer src="./static/vendor/harness/cloud.js?v=0.1.0"></script>
-  <script defer src="./static/app.js?v=20260716-cloud"></script>
+  <script defer src="./static/app.js?v=20260716-exam-switcher"></script>
 </head>
 <body>
   <header class="topbar">
@@ -29,6 +29,10 @@
       <p class="eyebrow">30 MINUTES / 100 POINTS</p>
       <h2 id="examTitle"></h2>
       <p id="examNote" class="lead"></p>
+      <nav class="exam-switcher" aria-label="受験する回を選択">
+        <span class="label">受験する回</span>
+        <div id="examLinks" class="exam-links"></div>
+      </nav>
       <section class="scope-panel" aria-label="試験の前提情報">
         <div><span class="label">シリーズ</span><strong id="seriesInfo"></strong></div>
         <div><span class="label">対象単元</span><p id="unitList"></p></div>
