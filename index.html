@@ -9,7 +9,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script defer src="./static/data.js"></script>
-  <script defer src="./static/app.js"></script>
+  <script defer src="./static/vendor/harness/cloud.js?v=0.1.0"></script>
+  <script defer src="./static/app.js?v=20260716-cloud"></script>
 </head>
 <body>
   <header class="topbar">
@@ -35,7 +36,7 @@
       <div class="intro-grid">
         <div><span class="label">制限時間</span><strong>30分</strong></div>
         <div><span class="label">構成</span><strong>4単元・12小問</strong></div>
-        <div><span class="label">保存</span><strong>この端末のみ</strong></div>
+        <div><span class="label">保存</span><strong id="saveMode">この端末のみ</strong></div>
       </div>
       <label class="name-field">氏名（任意）<input id="studentName" type="text" maxlength="40" placeholder="ゲスト"></label>
       <ul class="rules">

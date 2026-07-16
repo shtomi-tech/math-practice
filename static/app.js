@@ -8,6 +8,7 @@
   let state = null;
   let timerId = null;
   let activeInput = null;
+  let cloud = null;
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -41,6 +42,27 @@
 
   function saveActive() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (cloud) cloud.queueSave();
+  }
+
+  function cloudPayload() {
+    let active = null;
+    let result = null;
+    try { active = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { /* ignore */ }
+    try { result = JSON.parse(localStorage.getItem(RESULT_KEY) || "null"); } catch { /* ignore */ }
+    return { version: 1, active, result };
+  }
+
+  function applyCloudPayload(payload) {
+    if (!payload || typeof payload !== "object") return;
+    if (payload.active && typeof payload.active === "object") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload.active));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+    if (payload.result && typeof payload.result === "object") {
+      localStorage.setItem(RESULT_KEY, JSON.stringify(payload.result));
+    }
   }
 
   function updateMode(label) { $("#modeLabel").textContent = label; }
@@ -265,6 +287,7 @@
     state = { ...state, status: "submitted", submittedAt: Date.now(), score: Math.round(total), results: results.map(({ q, result }) => ({ id: q.id, ...result })) };
     localStorage.removeItem(STORAGE_KEY);
     localStorage.setItem(RESULT_KEY, JSON.stringify(state));
+    if (cloud) cloud.queueSave();
     $("#submitDialog").classList.add("hidden");
     renderResult(auto);
   }
@@ -274,6 +297,7 @@
     if (!window.confirm("試験を中断して、回答とタイマーをリセットしますか？")) return;
     clearInterval(timerId);
     localStorage.removeItem(STORAGE_KEY);
+    if (cloud) cloud.queueSave();
     state = null;
     activeInput = null;
     $("#exam").classList.add("hidden");
@@ -347,6 +371,21 @@
   });
   window.addEventListener("beforeunload", () => { if (state?.status === "active") saveActive(); });
 
-  renderIntro();
-  renderMath();
+  async function init() {
+    cloud = createCloud({
+      appId: "math-mini-exam",
+      getPayload: cloudPayload,
+      applyLoaded: applyCloudPayload,
+    });
+    await cloud.init();
+    if (cloud.isEnabled()) {
+      $("#studentName").value = cloud.getSession().student.name;
+      $("#studentName").readOnly = true;
+      $("#saveMode").textContent = "生徒別クラウド";
+    }
+    renderIntro();
+    renderMath();
+  }
+
+  init();
 })();
