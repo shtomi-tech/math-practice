@@ -10,6 +10,8 @@ GitHub Pages公開版があります。
 https://shtomi-tech.github.io/teikyo-math-practice/
 ```
 
+ポータルで発行した生徒別共有URLでは、学校・方式ごとの進捗と解答下書きを共通Supabaseへ保存します。通常URLでは従来どおり端末内の生徒選択と `localStorage` を使います。
+
 ## 学校・方式の追加
 
 コード（`static/app.js`）を書き換えずに、データファイルを読み込むだけで出典を増やせます。
