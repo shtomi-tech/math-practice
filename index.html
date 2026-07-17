@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>数学過去問演習</title>
+  <title>数学演習</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="./static/styles.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -15,16 +15,18 @@
   <script defer src="./static/nichidai-data.js"></script>
   <script defer src="./static/nichidai-details.js"></script>
   <script defer src="./static/hint-strategies.js"></script>
+  <script defer src="./static/mini-data.js"></script>
   <script defer src="./static/vendor/harness/cloud.js?v=0.1.0"></script>
-  <script defer src="./static/app.js?v=20260716-cloud"></script>
+  <script defer src="./static/app.js?v=20260717-unified"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
       <p class="eyebrow">MATH / PAST EXAMS</p>
-      <h1 id="appTitle">数学過去問演習</h1>
+      <h1 id="appTitle">数学演習</h1>
     </div>
     <div class="top-actions">
+      <span id="modeLabel" class="mode-label hidden">開始前</span>
       <button id="printBtn" class="ghost" type="button">印刷</button>
       <details class="utility-menu">
         <summary>生徒・設定</summary>
@@ -86,7 +88,7 @@
     </div>
   </header>
 
-  <main class="shell">
+  <main class="shell" id="practiceMain">
     <aside class="sidebar">
       <section class="panel start-panel">
         <h2>演習</h2>
@@ -148,6 +150,56 @@
     </aside>
   </main>
 
+  <main class="exam-shell hidden" id="examMain">
+    <section id="intro" class="panel intro-panel">
+      <p class="eyebrow" id="introEyebrow">30 MINUTES / 100 POINTS</p>
+      <h2 id="examTitle"></h2>
+      <p id="examNote" class="lead"></p>
+      <section class="scope-panel" aria-label="試験の前提情報">
+        <div><span class="exam-label">シリーズ</span><strong id="seriesInfo"></strong></div>
+        <div><span class="exam-label">対象単元</span><p id="unitList"></p></div>
+      </section>
+      <div class="intro-grid">
+        <div><span class="exam-label">制限時間</span><strong id="durationInfo">30分</strong></div>
+        <div><span class="exam-label">構成</span><strong id="structureInfo">4単元・12小問</strong></div>
+        <div><span class="exam-label">保存</span><strong id="saveMode">この端末のみ</strong></div>
+      </div>
+      <label class="name-field">氏名（任意）<input id="studentName" type="text" maxlength="40" placeholder="ゲスト"></label>
+      <ul class="rules">
+        <li>試験中は正誤・解説・ヒントを表示しません。</li>
+        <li>回答は自動保存されます。制限時間が来たら自動提出します。</li>
+        <li>提出後に正答と解説を確認できます。</li>
+      </ul>
+      <button id="startBtn" class="cta" type="button">試験を開始する</button>
+      <p id="resumeHint" class="hint"></p>
+    </section>
+
+    <section id="exam" class="hidden">
+      <div class="exam-toolbar panel">
+        <div><span class="exam-label">残り時間</span><strong id="timer">30:00</strong></div>
+        <div><span class="exam-label">回答済み</span><strong id="answeredCount">0 / 12</strong></div>
+        <div class="exam-actions"><button id="resetBtn" class="ghost danger" type="button">中断してリセット</button><button id="submitBtn" class="cta" type="button">提出する</button></div>
+      </div>
+      <section class="exam-keypad-panel panel" aria-label="マウス入力">
+        <div><p class="eyebrow">INPUT</p><h2>クリック入力</h2></div>
+        <div id="examActiveLabel" class="hint">数字欄を選択してください</div>
+        <div id="examKeypad" class="exam-keypad"></div>
+      </section>
+      <div id="examSheet"></div>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="panel result-hero">
+        <p class="eyebrow">RESULT</p>
+        <h2>採点結果</h2>
+        <div class="result-score"><strong id="score"></strong><span id="scoreTotal">/ 100点</span></div>
+        <p id="resultSummary" class="lead"></p>
+        <button id="retryBtn" class="ghost" type="button">もう一度受験する</button>
+      </div>
+      <div id="resultSheet"></div>
+    </section>
+  </main>
+
   <div id="solutionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-box">
       <div class="modal-head">
@@ -158,6 +210,14 @@
         <button id="modalCloseBtn" class="ghost" type="button" aria-label="詳細解説を閉じる">閉じる</button>
       </div>
       <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="submitDialog" class="dialog hidden" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="dialog-box">
+      <h2 id="dialogTitle">提出しますか？</h2>
+      <p id="dialogText"></p>
+      <div class="dialog-actions"><button id="cancelSubmit" class="ghost" type="button">戻る</button><button id="confirmSubmit" class="cta" type="button">提出する</button></div>
     </div>
   </div>
 </body>
