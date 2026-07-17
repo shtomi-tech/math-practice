@@ -120,19 +120,21 @@ p {
   flex-wrap: wrap;
 }
 
-/* logo-pill: white bg / brand-red text / フルピル。Nintendo.comのロゴタブを踏襲 */
+/* nav-bar見出し: carbon地にnav-gold文字。学校名など可変長の日本語文でも読みやすい
+   command-slab仕立て（白ピル+赤字のlogo-pillは短い固定ロゴ向けで、可変長の見出しには
+   不向きだったため変更）。 */
 .brand h1 {
   display: inline-block;
   margin-top: 6px;
-  padding: 7px 16px;
-  background: var(--paper);
-  color: #e60012;
-  border-radius: 9999px;
-  box-shadow: var(--bevel-plate);
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--nav-gold);
+  border-radius: 2px;
+  box-shadow: var(--bevel-dark);
   font-family: var(--serif);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
-  font-style: italic;
+  letter-spacing: .01em;
 }
 
 .top-actions {
