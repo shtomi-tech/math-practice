@@ -10,7 +10,7 @@
 GitHub Pages公開版があります。
 
 ```text
-https://shtomi-tech.github.io/teikyo-math-practice/
+https://shtomi-tech.github.io/math-practice/
 ```
 
 URLパラメータで直接開けます。`?exam=sougou` などの過去問キーに加え、`?exam=mini_01` で第1回ミニ試験、`?exam=mini_02` で第2回を表示します。旧 math-mini-exam のURLからは転送されます。
