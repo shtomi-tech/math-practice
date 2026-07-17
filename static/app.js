@@ -529,7 +529,7 @@ function renderExamShell() {
     return `<button class="exam-option ${active ? "active" : ""}" type="button" role="tab"
       aria-selected="${active ? "true" : "false"}" data-school="${escapeHtml(s.id)}">
       <span>${escapeHtml(s.name)}</span>
-      <small>${examCountForSchool(s)}方式</small>
+      <small>${examCountForSchool(s)}${s.id === "mini" ? "回" : "方式"}</small>
     </button>`;
   }).join("");
   $$("[data-school]").forEach((button) => {
