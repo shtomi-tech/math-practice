@@ -1145,7 +1145,7 @@ details.panel[open] summary,
 body.exam-flow .context-progress { display: none; }
 body.exam-flow .utility-menu { display: none; }
 
-.intro-panel { max-width: 760px; margin: 0 auto; padding: clamp(24px, 5vw, 48px); }
+.intro-panel { width: min(760px, 90vw); margin: 32px auto 80px; padding: clamp(24px, 5vw, 48px); }
 .lead { font-size: 18px; color: var(--muted); }
 
 .scope-panel {
@@ -1168,7 +1168,7 @@ body.exam-flow .utility-menu { display: none; }
 }
 .intro-grid > div { padding: 16px; border-right: 1px solid var(--line); }
 .intro-grid > div:last-child { border-right: 0; }
-.intro-grid strong, .exam-toolbar strong { display: block; font-size: 22px; margin-top: 4px; }
+.intro-grid strong { display: block; font-size: 22px; margin-top: 4px; }
 
 .name-field { display: grid; gap: 4px; margin: 20px 0; font-weight: 700; }
 .name-field input {
@@ -1183,46 +1183,7 @@ body.exam-flow .utility-menu { display: none; }
 .rules { padding-left: 24px; color: var(--muted); }
 .rules li { margin-bottom: 4px; }
 
-.exam-toolbar {
-  position: sticky;
-  z-index: 5;
-  top: 0;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 12px 16px;
-  margin-bottom: 24px;
-  border-top: 4px solid var(--ink);
-}
-.exam-toolbar > div:first-child { margin-right: auto; }
-.exam-actions { display: flex; align-items: center; gap: 8px; }
 #timer.urgent { color: var(--ng); }
-
-.exam-keypad-panel {
-  position: sticky;
-  top: 82px;
-  z-index: 4;
-  display: grid;
-  grid-template-columns: minmax(150px, 1fr) minmax(180px, 1.4fr) minmax(280px, 360px);
-  align-items: center;
-  gap: 16px;
-  padding: 12px 16px;
-  margin-bottom: 24px;
-  background: var(--parchment);
-}
-.exam-keypad-panel h2 { margin: 0; font-size: 18px; }
-
-.exam-keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.exam-keypad button {
-  min-height: 42px;
-  padding: 4px;
-  border: 1px solid var(--ink);
-  border-radius: 0;
-  background: transparent;
-  color: var(--ink);
-}
-.exam-keypad button:hover, .exam-keypad button:focus-visible { background: var(--ink); color: var(--parchment); }
-.exam-keypad button:disabled { opacity: .45; cursor: not-allowed; }
 
 .exam-group, .result-group { padding: 24px; margin-bottom: 24px; }
 .group-heading {
@@ -1243,8 +1204,10 @@ body.exam-flow .utility-menu { display: none; }
 .question-stem { margin-bottom: 16px; font-size: 17px; }
 
 .numeric-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-.numeric-fields label { display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
+.numeric-fields label { display: grid; gap: 4px; min-width: 0; color: var(--muted); font-size: 14px; }
 .numeric-fields input {
+  width: 100%;
+  min-width: 0;
   border: 1px solid var(--ink);
   border-radius: 0;
   background: transparent;
@@ -1312,9 +1275,6 @@ body.exam-flow .utility-menu { display: none; }
   .intro-grid > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .intro-grid > div:last-child { border-bottom: 0; }
   .scope-panel { grid-template-columns: 1fr; gap: 8px; }
-  .exam-toolbar { gap: 10px; padding: 10px; }
-  .exam-toolbar strong { font-size: 18px; }
-  .exam-keypad-panel { top: 78px; grid-template-columns: 1fr; gap: 8px; }
   .group-heading { flex-direction: column; }
   .question-stem { font-size: 16px; }
 }
@@ -1323,15 +1283,14 @@ body.exam-flow .utility-menu { display: none; }
   body.exam-flow .topbar,
   body.exam-flow .contextbar,
   body.exam-flow #intro,
-  body.exam-flow .exam-toolbar,
-  body.exam-flow .exam-keypad-panel,
+  body.exam-flow #exam,
   body.exam-flow .result-hero,
   body.exam-flow .dialog,
   body.exam-flow .hint { display: none !important; }
   body.exam-flow .exam-shell { width: 100%; margin: 0; }
-  body.exam-flow:not(.result-mode) #exam { display: block !important; }
+  body.exam-flow:not(.result-mode) #printSheet { display: block !important; }
   body.exam-flow:not(.result-mode) #result { display: none !important; }
-  body.exam-flow.result-mode #exam { display: none !important; }
+  body.exam-flow.result-mode #printSheet { display: none !important; }
   body.exam-flow.result-mode #result { display: block !important; }
   body.exam-flow .exam-group, body.exam-flow .result-group { border: 0; padding: 0; margin: 0 0 14mm; }
   body.exam-flow .question, body.exam-flow .review { border-color: #777; }

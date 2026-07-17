@@ -17,7 +17,7 @@
   <script defer src="./static/hint-strategies.js"></script>
   <script defer src="./static/mini-data.js"></script>
   <script defer src="./static/vendor/harness/cloud.js?v=0.1.0"></script>
-  <script defer src="./static/app.js?v=20260717-unified"></script>
+  <script defer src="./static/app.js?v=20260717-examui"></script>
 </head>
 <body>
   <header class="topbar">
@@ -150,7 +150,7 @@
     </aside>
   </main>
 
-  <main class="exam-shell hidden" id="examMain">
+  <main class="hidden" id="examMain">
     <section id="intro" class="panel intro-panel">
       <p class="eyebrow" id="introEyebrow">30 MINUTES / 100 POINTS</p>
       <h2 id="examTitle"></h2>
@@ -174,21 +174,60 @@
       <p id="resumeHint" class="hint"></p>
     </section>
 
-    <section id="exam" class="hidden">
-      <div class="exam-toolbar panel">
-        <div><span class="exam-label">残り時間</span><strong id="timer">30:00</strong></div>
-        <div><span class="exam-label">回答済み</span><strong id="answeredCount">0 / 12</strong></div>
-        <div class="exam-actions"><button id="resetBtn" class="ghost danger" type="button">中断してリセット</button><button id="submitBtn" class="cta" type="button">提出する</button></div>
-      </div>
-      <section class="exam-keypad-panel panel" aria-label="マウス入力">
-        <div><p class="eyebrow">INPUT</p><h2>クリック入力</h2></div>
-        <div id="examActiveLabel" class="hint">数字欄を選択してください</div>
-        <div id="examKeypad" class="exam-keypad"></div>
+    <section id="exam" class="shell hidden">
+      <aside class="sidebar">
+        <section class="panel">
+          <div class="section-head">
+            <h2>大問</h2>
+            <span class="muted" id="examGroupCount"></span>
+          </div>
+          <nav id="examGroupList" class="group-list" aria-label="大問一覧"></nav>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="panel problem-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow" id="examGroupMeta">QUESTION</p>
+              <h2 id="examGroupTitle"></h2>
+            </div>
+            <span class="badge" id="examGroupTag"></span>
+          </div>
+          <div id="examSheet" class="sub-list"></div>
+          <nav class="problem-nav" aria-label="大問の移動">
+            <button id="examPrevBtn" class="ghost" type="button">← 前の大問</button>
+            <span id="examPosition" class="muted"></span>
+            <button id="examNextBtn" class="ghost" type="button">次の大問 →</button>
+          </nav>
+        </section>
       </section>
-      <div id="examSheet"></div>
+
+      <aside class="resultbar">
+        <section class="panel">
+          <h2>試験</h2>
+          <div class="score">
+            <span class="score-main" id="timer">30:00</span>
+            <span class="score-sub">残り時間</span>
+          </div>
+          <p class="muted" id="answeredCount">0 / 12 回答</p>
+          <div class="actions">
+            <button id="submitBtn" class="cta" type="button">提出する</button>
+          </div>
+          <div class="danger-zone">
+            <button id="resetBtn" class="ghost danger" type="button">中断してリセット</button>
+          </div>
+        </section>
+
+        <section class="panel keypad-panel">
+          <h2>入力</h2>
+          <div id="examActiveLabel" class="muted">数字欄を選択してください</div>
+          <div class="keypad" id="examKeypad"></div>
+        </section>
+      </aside>
     </section>
 
-    <section id="result" class="hidden">
+    <section id="result" class="exam-shell hidden">
       <div class="panel result-hero">
         <p class="eyebrow">RESULT</p>
         <h2>採点結果</h2>
@@ -198,6 +237,8 @@
       </div>
       <div id="resultSheet"></div>
     </section>
+
+    <div id="printSheet" class="hidden" aria-hidden="true"></div>
   </main>
 
   <div id="solutionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
