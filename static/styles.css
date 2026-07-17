@@ -1278,26 +1278,3 @@ body.exam-flow .utility-menu { display: none; }
   .group-heading { flex-direction: column; }
   .question-stem { font-size: 16px; }
 }
-
-@media print {
-  body.exam-flow .topbar,
-  body.exam-flow .contextbar,
-  body.exam-flow #intro,
-  body.exam-flow #exam,
-  body.exam-flow .result-hero,
-  body.exam-flow .dialog,
-  body.exam-flow .hint { display: none !important; }
-  body.exam-flow .exam-shell { width: 100%; margin: 0; }
-  body.exam-flow:not(.result-mode) #printSheet { display: block !important; }
-  body.exam-flow:not(.result-mode) #result { display: none !important; }
-  body.exam-flow.result-mode #printSheet { display: none !important; }
-  body.exam-flow.result-mode #result { display: block !important; }
-  body.exam-flow .exam-group, body.exam-flow .result-group { border: 0; padding: 0; margin: 0 0 14mm; }
-  body.exam-flow .question, body.exam-flow .review { border-color: #777; }
-  body.exam-flow .numeric-fields input { border: 0; border-bottom: 1px solid #000; min-height: 20px; }
-  body.exam-flow .option { border-color: #777; }
-  body.exam-flow .solution { background: #f5f5f5; }
-  body.exam-flow .review details { display: block; }
-  body.exam-flow .review details:not([open]) > *:not(summary) { display: block; }
-  body.exam-flow .review details[open] summary { display: none; }
-}

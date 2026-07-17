@@ -1387,10 +1387,6 @@ function bindStaticEvents() {
   $("#prevGroupBtn").addEventListener("click", () => moveGroup(-1));
   $("#nextGroupBtn").addEventListener("click", () => moveGroup(1));
   $("#resetProgressBtn").addEventListener("click", resetProgress);
-  $("#printBtn").addEventListener("click", () => {
-    if (isMiniKey(currentExamKey)) examFlow.print();
-    else window.print();
-  });
   $("#hideSolutions").addEventListener("change", renderProblem);
   $("#hintMode").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
@@ -1492,7 +1488,6 @@ document.addEventListener("DOMContentLoaded", async () => {
    - localStorage キーと Supabase appId（math-mini-exam / math-mini-exam:<id>）は
      旧アプリと完全互換。既存の受験データ・生徒別クラウド進捗をそのまま引き継ぐ。
    - 受験画面は演習モードと同じ3カラム構成（大問ナビ／問題カード／採点レール）。
-   - 印刷は #printSheet に全大問を展開して試験用紙として出力する。
    ============================================================ */
 const examFlow = (() => {
   let EXAM = null;
@@ -1859,22 +1854,6 @@ const examFlow = (() => {
     renderMath($("#resultSheet"));
   }
 
-  // 印刷: 全大問を #printSheet に展開し、試験用紙として出力する（画面には表示しない）。
-  function print() {
-    if (document.body.classList.contains("result-mode")) { window.print(); return; }
-    const saved = state;
-    if (!state) state = { answers: {} };
-    $("#printSheet").innerHTML = EXAM.groups.map((group) => `
-      <section class="exam-group panel">
-        <div class="group-heading"><div><p class="eyebrow">QUESTION ${escapeHtml(group.number)}</p><h2>${escapeHtml(group.title)}</h2></div><span class="tag">${escapeHtml(group.tag)}</span></div>
-        <div class="question-list">${group.questions.map(renderQuestion).join("")}</div>
-      </section>
-    `).join("");
-    renderMath($("#printSheet"));
-    state = saved;
-    window.print();
-  }
-
   function enter(examId) {
     const nextExam = MINI_EXAMS[examId];
     if (!nextExam) return;
@@ -1930,5 +1909,5 @@ const examFlow = (() => {
   $("#examNextBtn").addEventListener("click", () => setExamGroup(currentGroupIndex + 1));
   window.addEventListener("beforeunload", () => { if (state?.status === "active") saveActive(); });
 
-  return { enter, leave, initClouds, print };
+  return { enter, leave, initClouds };
 })();
