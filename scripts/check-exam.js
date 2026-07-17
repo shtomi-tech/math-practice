@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const source = fs.readFileSync(path.join(__dirname, "..", "static", "data.js"), "utf8");
+const source = fs.readFileSync(path.join(__dirname, "..", "static", "mini-data.js"), "utf8");
 const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(source, context);
