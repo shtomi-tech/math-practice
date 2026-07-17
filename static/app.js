@@ -1491,12 +1491,15 @@ document.addEventListener("DOMContentLoaded", async () => {
    - データ: window.MINI_EXAMS（static/mini-data.js）
    - localStorage キーと Supabase appId（math-mini-exam / math-mini-exam:<id>）は
      旧アプリと完全互換。既存の受験データ・生徒別クラウド進捗をそのまま引き継ぐ。
+   - 受験画面は演習モードと同じ3カラム構成（大問ナビ／問題カード／採点レール）。
+   - 印刷は #printSheet に全大問を展開して試験用紙として出力する。
    ============================================================ */
 const examFlow = (() => {
   let EXAM = null;
   let state = null;
   let timerId = null;
   let activeInput = null;
+  let currentGroupIndex = 0;
   const clouds = new Map();
 
   const storageKey = (exam = EXAM) => `math-mini-exam:${exam.id}:active`;
@@ -1505,6 +1508,7 @@ const examFlow = (() => {
   const currentCloud = () => (EXAM ? clouds.get(EXAM.id) : null);
   const allQuestions = () => EXAM.groups.flatMap((group) => group.questions.map((q) => ({ group, q })));
   const questionCount = () => allQuestions().length;
+  const currentQuestions = () => EXAM.groups[currentGroupIndex]?.questions || [];
 
   function readActive() {
     try { return JSON.parse(localStorage.getItem(storageKey()) || "null"); } catch { return null; }
@@ -1577,12 +1581,14 @@ const examFlow = (() => {
       state = { status: "active", startedAt: Date.now(), deadline: Date.now() + EXAM.durationMinutes * 60 * 1000, name: $("#studentName").value.trim() || "ゲスト", answers: {} };
       saveActive();
     }
+    currentGroupIndex = 0;
+    activeInput = null;
     $("#intro").classList.add("hidden");
     $("#result").classList.add("hidden");
     $("#exam").classList.remove("hidden");
     document.body.classList.remove("result-mode");
     updateMode("試験中");
-    renderExamSheet();
+    renderExamGroup();
     startTimer();
   }
 
@@ -1598,14 +1604,41 @@ const examFlow = (() => {
     timerId = setInterval(tick, 1000);
   }
 
-  function renderExamSheet() {
-    $("#answeredCount").textContent = `${allQuestions().filter(({ q }) => isAnswered(q)).length} / ${questionCount()}`;
-    $("#examSheet").innerHTML = EXAM.groups.map((group) => `
-      <section class="exam-group panel">
-        <div class="group-heading"><div><p class="eyebrow">QUESTION ${escapeHtml(group.number)}</p><h2>${escapeHtml(group.title)}</h2></div><span class="tag">${escapeHtml(group.tag)}</span></div>
-        <div class="question-list">${group.questions.map(renderQuestion).join("")}</div>
-      </section>
-    `).join("");
+  function setExamGroup(index) {
+    if (index < 0 || index >= EXAM.groups.length || index === currentGroupIndex) return;
+    currentGroupIndex = index;
+    activeInput = null;
+    renderExamGroup();
+    $("#examGroupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderExamGroupList() {
+    $("#examGroupCount").textContent = `${EXAM.groups.length}題`;
+    $("#examGroupList").innerHTML = EXAM.groups.map((group, index) => {
+      const answered = group.questions.filter((q) => isAnswered(q)).length;
+      return `<button class="group-item ${index === currentGroupIndex ? "active" : ""}" data-exam-group="${index}" type="button">
+        <span class="num">[${escapeHtml(group.number)}]</span>
+        <span class="name">${escapeHtml(group.title)}</span>
+        <span class="mini">${answered}/${group.questions.length} 回答</span>
+      </button>`;
+    }).join("");
+    $$("[data-exam-group]").forEach((button) => {
+      button.addEventListener("click", () => setExamGroup(Number(button.dataset.examGroup)));
+    });
+  }
+
+  function renderExamGroup() {
+    const group = EXAM.groups[currentGroupIndex];
+    if (!group) return;
+    $("#examGroupMeta").textContent = `QUESTION ${group.number} / ${group.points}点`;
+    $("#examGroupTitle").textContent = group.title;
+    $("#examGroupTag").textContent = group.tag;
+    $("#examPosition").textContent = `大問 ${currentGroupIndex + 1} / ${EXAM.groups.length}`;
+    $("#examPrevBtn").disabled = currentGroupIndex <= 0;
+    $("#examNextBtn").disabled = currentGroupIndex >= EXAM.groups.length - 1;
+    $("#examSheet").innerHTML = group.questions.map(renderQuestion).join("");
+    renderExamGroupList();
+    updateAnsweredCount();
     bindQuestionEvents();
     renderExamKeypad();
     renderMath($("#examSheet"));
@@ -1615,16 +1648,22 @@ const examFlow = (() => {
     const current = state.answers[q.id];
     if (q.type === "numeric") {
       const values = Array.isArray(current) ? current : [];
-      return `<article class="question" data-question="${q.id}">
-        <div class="question-head"><span class="question-number">${escapeHtml(q.label)}</span><span>${q.points}点</span></div>
-        <div class="question-stem">${q.stem}</div>
+      return `<article class="sub-card" data-question="${q.id}">
+        <div class="sub-head">
+          <div class="sub-label">${escapeHtml(q.label)}</div>
+          <div class="sub-meta">${q.points}点</div>
+        </div>
+        <div class="sub-stem">${q.stem}</div>
         <div class="numeric-fields">${q.prompts.map((prompt, index) => `<label><span>${prompt}</span><input inputmode="numeric" autocomplete="off" data-answer-index="${index}" value="${escapeHtml(values[index] || "")}" aria-label="${escapeHtml(prompt.replace(/\$/g, ""))}"></label>`).join("")}</div>
       </article>`;
     }
     const selected = Array.isArray(current) ? current : (typeof current === "number" ? [current] : []);
-    return `<article class="question" data-question="${q.id}">
-      <div class="question-head"><span class="question-number">${escapeHtml(q.label)}</span><span>${q.points}点</span></div>
-      <div class="question-stem">${q.stem}</div>
+    return `<article class="sub-card" data-question="${q.id}">
+      <div class="sub-head">
+        <div class="sub-label">${escapeHtml(q.label)}</div>
+        <div class="sub-meta">${q.points}点</div>
+      </div>
+      <div class="sub-stem">${q.stem}</div>
       <div class="options ${q.type === "multi" ? "multi-options" : ""}">${q.options.map((option, index) => `<button type="button" class="option ${selected.includes(index) ? "selected" : ""}" data-option-index="${index}" aria-pressed="${selected.includes(index)}"><span class="option-mark">${String.fromCharCode(65 + index)}</span><span>${option}</span></button>`).join("")}</div>
       ${q.type === "multi" ? '<p class="hint">複数選択</p>' : ""}
     </article>`;
@@ -1648,6 +1687,7 @@ const examFlow = (() => {
         state.answers[q.id] = values;
         saveActive();
         updateAnsweredCount();
+        renderExamGroupList();
         renderExamKeypad();
       });
     });
@@ -1663,7 +1703,7 @@ const examFlow = (() => {
         state.answers[q.id] = current;
       } else state.answers[q.id] = index;
       saveActive();
-      renderExamSheet();
+      renderExamGroup();
     }));
   }
 
@@ -1674,18 +1714,18 @@ const examFlow = (() => {
   }
 
   function updateAnsweredCount() {
-    $("#answeredCount").textContent = `${allQuestions().filter(({ q }) => isAnswered(q)).length} / ${questionCount()}`;
+    $("#answeredCount").textContent = `${allQuestions().filter(({ q }) => isAnswered(q)).length} / ${questionCount()} 回答`;
   }
 
   function activeNumericEntry() {
     if (!activeInput) return null;
-    const found = allQuestions().find(({ q }) => q.id === activeInput.qid);
-    if (!found || found.q.type !== "numeric" || activeInput.index >= found.q.prompts.length) return null;
-    return { q: found.q, index: activeInput.index };
+    const q = currentQuestions().find((item) => item.id === activeInput.qid);
+    if (!q || q.type !== "numeric" || activeInput.index >= q.prompts.length) return null;
+    return { q, index: activeInput.index };
   }
 
   function firstNumericInput() {
-    for (const { q } of allQuestions()) {
+    for (const q of currentQuestions()) {
       if (q.type !== "numeric") continue;
       const values = Array.isArray(state.answers[q.id]) ? state.answers[q.id] : [];
       const index = q.prompts.findIndex((_, i) => normalize(values[i]) === "");
@@ -1696,7 +1736,7 @@ const examFlow = (() => {
 
   function focusActiveInput() {
     if (!activeInput) return;
-    const selector = `[data-question="${activeInput.qid}"] input[data-answer-index="${activeInput.index}"]`;
+    const selector = `#examSheet [data-question="${activeInput.qid}"] input[data-answer-index="${activeInput.index}"]`;
     document.querySelector(selector)?.focus();
   }
 
@@ -1705,8 +1745,13 @@ const examFlow = (() => {
     if (entry && !activeInput) activeInput = { qid: entry.q.id, index: entry.index };
     const current = activeNumericEntry();
     $("#examActiveLabel").textContent = current ? `${current.q.label} / ${current.q.prompts[current.index].replace(/\$/g, "")}` : "数字欄を選択してください";
+    // 演習モードと同じ配列（次へ＝右下span3、全部消す＝左上隔離）
     const keys = ["消去", "7", "8", "9", "−", "4", "5", "6", "⌫", "1", "2", "3", "0", "次へ"];
-    $("#examKeypad").innerHTML = keys.map((key) => `<button type="button" data-exam-key="${key}" ${current ? "" : "disabled"}>${key}</button>`).join("");
+    const keyLabels = { "消去": "全部消す" };
+    $("#examKeypad").innerHTML = keys.map((key) => {
+      const wide = key === "次へ" ? "wide3" : "";
+      return `<button class="${wide}" type="button" data-exam-key="${key}" ${current ? "" : "disabled"}>${keyLabels[key] || key}</button>`;
+    }).join("");
     $$('[data-exam-key]').forEach((button) => button.addEventListener("click", () => handleExamKey(button.dataset.examKey)));
   }
 
@@ -1729,15 +1774,14 @@ const examFlow = (() => {
     values[entry.index] = value;
     state.answers[entry.q.id] = values;
     saveActive();
-    updateAnsweredCount();
-    renderExamSheet();
+    renderExamGroup();
     focusActiveInput();
   }
 
   function nextNumericInput(currentQid) {
-    const items = allQuestions().filter(({ q }) => q.type === "numeric");
-    const index = items.findIndex(({ q }) => q.id === currentQid);
-    return index >= 0 && index + 1 < items.length ? { q: items[index + 1].q, index: 0 } : null;
+    const items = currentQuestions().filter((q) => q.type === "numeric");
+    const index = items.findIndex((q) => q.id === currentQid);
+    return index >= 0 && index + 1 < items.length ? { q: items[index + 1], index: 0 } : null;
   }
 
   function openSubmitDialog() {
@@ -1815,22 +1859,19 @@ const examFlow = (() => {
     renderMath($("#resultSheet"));
   }
 
+  // 印刷: 全大問を #printSheet に展開し、試験用紙として出力する（画面には表示しない）。
   function print() {
-    const examVisible = !$("#exam").classList.contains("hidden");
-    const resultVisible = !$("#result").classList.contains("hidden");
-    if (examVisible || resultVisible) { window.print(); return; }
-    const previousState = state;
-    state = { answers: {} };
-    renderExamSheet();
-    $("#intro").classList.add("hidden");
-    $("#exam").classList.remove("hidden");
-    const restore = () => {
-      state = previousState;
-      $("#exam").classList.add("hidden");
-      $("#intro").classList.remove("hidden");
-      renderIntro();
-    };
-    window.addEventListener("afterprint", restore, { once: true });
+    if (document.body.classList.contains("result-mode")) { window.print(); return; }
+    const saved = state;
+    if (!state) state = { answers: {} };
+    $("#printSheet").innerHTML = EXAM.groups.map((group) => `
+      <section class="exam-group panel">
+        <div class="group-heading"><div><p class="eyebrow">QUESTION ${escapeHtml(group.number)}</p><h2>${escapeHtml(group.title)}</h2></div><span class="tag">${escapeHtml(group.tag)}</span></div>
+        <div class="question-list">${group.questions.map(renderQuestion).join("")}</div>
+      </section>
+    `).join("");
+    renderMath($("#printSheet"));
+    state = saved;
     window.print();
   }
 
@@ -1841,6 +1882,7 @@ const examFlow = (() => {
     if (state?.status === "active") saveActive();
     state = null;
     activeInput = null;
+    currentGroupIndex = 0;
     EXAM = nextExam;
     showIntro();
   }
@@ -1884,6 +1926,8 @@ const examFlow = (() => {
     state = null;
     showIntro();
   });
+  $("#examPrevBtn").addEventListener("click", () => setExamGroup(currentGroupIndex - 1));
+  $("#examNextBtn").addEventListener("click", () => setExamGroup(currentGroupIndex + 1));
   window.addEventListener("beforeunload", () => { if (state?.status === "active") saveActive(); });
 
   return { enter, leave, initClouds, print };
