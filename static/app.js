@@ -522,6 +522,12 @@ function renderExamShell() {
   $("#sourceText").textContent = exam.sourceText;
   $(".brand .eyebrow").textContent = exam.eyebrow || school.eyebrow || "MATH / PAST EXAMS";
 
+  // ミニ試験は選択肢が少なく「回を変える」動線への到達性が重要なため、
+  // ラベルを言い換えた上でパネルを開いた状態にする（閉じる操作自体は妨げない）。
+  const sourceToggle = $(".source-switch-toggle");
+  $(".source-switch-toggle > summary").textContent = isMiniKey(currentExamKey) ? "回を変える" : "出典を変える";
+  if (isMiniKey(currentExamKey)) sourceToggle.open = true;
+
   // 学校が1つだけのときは学校切替パネルを隠す
   $("#schoolPanel").classList.toggle("hidden", AVAILABLE_SCHOOLS.length <= 1);
   $("#schoolSwitch").innerHTML = AVAILABLE_SCHOOLS.map((s) => {
