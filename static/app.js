@@ -630,6 +630,9 @@ function renderStudentMenu() {
     : hasStudent
     ? `${currentStudentName} さんの進捗を保存中です。`
     : "ゲスト：記録は保存されません。生徒を選ぶと進捗が残ります。";
+  // 折りたたみ内のstudentHintだけだと初見の生徒が気づかず進捗を失うため、
+  // トップバーに常設のゲスト通知も出す（開かなくても見える）。
+  $("#guestNotice").classList.toggle("hidden", sharedMode || hasStudent);
 }
 
 function refreshStudentView() {
@@ -703,8 +706,10 @@ function renderField(field) {
     const checked = isSubChecked(subIndex);
     const state = checked ? (isFieldCorrect(field) ? "correct" : "wrong") : "";
     const isActive = active && active.uid === field.uid && active.cellIndex === cellIndex;
+    // 正誤は枠線・背景色だけでなくaria-labelにも反映し、色に頼らず伝わるようにする。
+    const stateLabel = state === "correct" ? "・正解" : state === "wrong" ? "・不正解" : "";
     return `<button class="cell ${state} ${isActive ? "active" : ""}" type="button"
-      data-cell="${field.uid}" data-cell-index="${cellIndex}" aria-label="${escapeHtml(field.title)} ${cellIndex + 1}マス目">${escapeHtml(value)}</button>`;
+      data-cell="${field.uid}" data-cell-index="${cellIndex}" aria-label="${escapeHtml(field.title)} ${cellIndex + 1}マス目${stateLabel}">${escapeHtml(value)}</button>`;
   }).join("");
   return `<div class="field">
     <div class="flabel">${escapeHtml(field.title || "空欄")}</div>
@@ -1563,9 +1568,14 @@ const examFlow = (() => {
     $("#durationInfo").textContent = `${EXAM.durationMinutes}分`;
     $("#structureInfo").textContent = `${EXAM.units.length}単元・${questionCount()}小問`;
     const active = readActive();
-    if (active?.status === "active") {
+    // begin() の再開条件（期限内かどうか）とここの表示条件を一致させる。
+    // ずれていると「残り00:00」と表示した直後にフルタイムで新規開始してしまう。
+    if (active?.status === "active" && active.deadline > Date.now()) {
       $("#startBtn").textContent = "続きから再開する";
       $("#resumeHint").textContent = `前回の受験を保存しています。残り ${formatTime(Math.max(0, Math.ceil((active.deadline - Date.now()) / 1000)))}。`;
+    } else if (active?.status === "active") {
+      $("#startBtn").textContent = "試験を開始する";
+      $("#resumeHint").textContent = "前回の受験は時間切れのため保存されませんでした。新しく開始します。";
     } else {
       $("#startBtn").textContent = "試験を開始する";
       $("#resumeHint").textContent = "";

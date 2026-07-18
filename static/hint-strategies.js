@@ -55,6 +55,24 @@
     ],
   };
 
+  // 複数単元が1つの大問に混在する「融合」「小問集合」大問では、大問名だけで方針を決めると
+  // 無関係な単元のテンプレートが全小問に適用されてしまう（例: 因数分解の小問に微積分の方針）。
+  // そのため、まず小問自身の問題文でマッチングし、それでも決まらない場合だけ大問名を見る。
+  // ただし融合大問では大問名のマッチングも小問ごとに食い違うため使わず、汎用文言に留める。
+  function isFusionGroup(group) {
+    const tag = `${group.title || ""} ${group.topic_tag || ""}`;
+    if (/融合|小問集合/.test(tag)) return true;
+    return (group.title || "").split(/[・･]/).filter(Boolean).length >= 3;
+  }
+
+  function matchTemplate(group, sub) {
+    const bySub = templates.find((candidate) => candidate.test.test(sub.stem_md || ""));
+    if (bySub) return bySub;
+    if (isFusionGroup(group)) return fallback;
+    const groupTopic = `${group.title || ""} ${group.topic_tag || ""}`;
+    return templates.find((candidate) => candidate.test.test(groupTopic)) || fallback;
+  }
+
   const registry = window.MATH_HINT_STRATEGIES || {};
   Object.entries(datasets).forEach(([examKey, dataset]) => {
     const entries = registry[examKey] || {};
@@ -63,8 +81,7 @@
         const key = `${group.group_number}-${sub.label}`;
         const explicit = sub.hint_strategy || {};
         const points = Array.isArray(sub.learning_points) ? sub.learning_points.filter(Boolean) : [];
-        const topic = `${group.title || ""} ${group.topic_tag || ""}`;
-        const template = templates.find((candidate) => candidate.test.test(topic)) || fallback;
+        const template = matchTemplate(group, sub);
         const roadmap = explicit.roadmap?.length >= 3
           ? explicit.roadmap
           : points.length >= 3

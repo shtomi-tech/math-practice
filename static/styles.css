@@ -163,6 +163,18 @@ p {
   color: var(--paper);
 }
 
+.guest-notice {
+  display: inline-block;
+  border: 1px solid var(--line);
+  background: var(--ice);
+  color: var(--ink);
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
 .utility-menu {
   position: relative;
 }
@@ -771,6 +783,7 @@ details.panel[open] summary,
 }
 
 .cell {
+  position: relative;
   width: 38px;
   height: 48px;
   display: inline-flex;
@@ -799,6 +812,33 @@ details.panel[open] summary,
 .cell.wrong {
   border-color: var(--ng);
   background: rgba(230, 0, 18, .10);
+}
+
+/* 色だけで正誤を伝えないよう、枠線色に加えて記号バッジも表示する（色弱ユーザー対策）。 */
+.cell.correct::after,
+.cell.wrong::after {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 11px;
+  text-align: center;
+  color: var(--paper);
+}
+
+.cell.correct::after {
+  content: "✓";
+  background: var(--ok);
+}
+
+.cell.wrong::after {
+  content: "✗";
+  background: var(--ng);
 }
 
 .hint-box {
@@ -1163,7 +1203,10 @@ details.panel[open] summary,
   }
 
   .shell {
-    padding-bottom: 260px;
+    /* keypad-panel の実測高さ（約298px、ラベル込み）+ 余裕。safe-area分は
+       keypad-panel側にも足されているのでここでも同じ分を加算し、採点結果の
+       最終行がキーパッドの下に隠れて押せなくなるのを防ぐ。 */
+    padding-bottom: calc(320px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -1221,6 +1264,7 @@ details.panel[open] summary,
 
 body.exam-flow .context-progress { display: none; }
 body.exam-flow .utility-menu { display: none; }
+body.exam-flow .guest-notice { display: none; }
 
 .intro-panel { width: min(760px, 90vw); margin: 32px auto 80px; padding: clamp(24px, 5vw, 48px); }
 .lead { font-size: 18px; color: var(--muted); }
