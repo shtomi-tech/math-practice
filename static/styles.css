@@ -255,12 +255,13 @@ p {
 .source-switch-toggle > summary {
   cursor: pointer;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--line);
   font-weight: 700;
   text-decoration: underline;
+  text-underline-offset: 3px;
   list-style: none;
 }
 
