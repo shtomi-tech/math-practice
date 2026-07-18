@@ -42,6 +42,13 @@ const DEFAULT_SCHOOLS = [
         sourceText: "薬・理工学部 数学",
         legacyProgressKey: "teikyo_2026_recommend_math_practice_v1",
       },
+      {
+        key: "recommend2024",
+        label: "学校推薦型選抜(2024)",
+        shortLabel: "学校推薦 2024",
+        sourceTitle: "2024 学校推薦型選抜",
+        sourceText: "薬・理工学部 数学",
+      },
     ],
   },
 ];
