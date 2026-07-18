@@ -1,3 +1,12 @@
+.chamfer {
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+.panel.chamfer,
+.stem.chamfer,
+.score.chamfer {
+  border: none;
+}
+
 :root {
   /* Nintendo.com (2001) 準拠パレット。--ink/--parchment/--line/--muted/--clay の
      変数名は据え置き、値だけをY2Kコンソール調に差し替えている。 */
@@ -11,6 +20,10 @@
   --signal: #f68d1f;       /* signal orange: 提出・強調系のアクション色 */
   --amber: #ecab37;        /* amber: ユーティリティチップ・タブ */
   --nav-gold: #e48600;     /* nav gold: ダーク面専用のナビ文字色 */
+  --canvas-soft: #9fbee7;  /* pale sky: サブナビ帯・ライトな差し込みパネル */
+  --periwinkle-light: #8ba1d4; /* light periwinkle: 一段浮いた中間パネル */
+  --platinum: #dedede;     /* platinum gray: リスト行の地色 */
+  --hairline: #5a5f8c;     /* hairline: 入力欄の縁取り・ドット罫線 */
   --ok: #16a34a;
   --ng: #e60012;           /* Nintendo Red を危険色に採用 */
   --sans: Arial, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
@@ -96,7 +109,7 @@ select,
 input[type="text"] {
   width: 100%;
   min-height: 42px;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--hairline);
   border-radius: 2px;
   background: var(--paper);
   color: var(--ink);
@@ -115,26 +128,27 @@ p {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 24px 28px 18px;
-  border-bottom: 2px solid var(--line);
+  padding: 18px 28px;
+  background: var(--ink);
+  background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
+  background-size: 5px 5px;
   flex-wrap: wrap;
 }
 
-/* nav-bar見出し: carbon地にnav-gold文字。学校名など可変長の日本語文でも読みやすい
-   command-slab仕立て（白ピル+赤字のlogo-pillは短い固定ロゴ向けで、可変長の見出しには
-   不向きだったため変更）。 */
+/* nav-bar: carbon地の一段目（primary bar）。見出しはnav-gold文字を直接載せる
+   （画面ごとに変わる可変長の学校名・回タイトルなので、固定ロゴ用のlogo-pillは使わない）。 */
 .brand h1 {
   display: inline-block;
-  margin-top: 6px;
-  padding: 8px 16px;
-  background: var(--ink);
+  margin-top: 4px;
   color: var(--nav-gold);
-  border-radius: 2px;
-  box-shadow: var(--bevel-dark);
   font-family: var(--serif);
   font-size: 20px;
   font-weight: 900;
   letter-spacing: .01em;
+}
+
+.brand .eyebrow {
+  color: rgba(255, 255, 255, .58);
 }
 
 .top-actions {
@@ -145,6 +159,10 @@ p {
   align-items: center;
 }
 
+.top-actions .mode-label {
+  color: var(--paper);
+}
+
 .utility-menu {
   position: relative;
 }
@@ -153,7 +171,10 @@ p {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--amber);
+  background: var(--amber);
+  color: var(--ink);
+  box-shadow: var(--bevel-plate);
   padding: 8px 14px;
   cursor: pointer;
   list-style: none;
@@ -163,8 +184,9 @@ p {
 
 .utility-menu[open] > summary,
 .utility-menu > summary:hover {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--nav-gold);
+  border-color: var(--nav-gold);
+  color: var(--ink);
 }
 
 .utility-menu-body {
@@ -181,7 +203,7 @@ p {
 
 .utility-section + .utility-section {
   margin-top: 16px;
-  border-top: 1px solid var(--line);
+  border-top: 1px dotted var(--hairline);
   padding-top: 16px;
 }
 
@@ -197,8 +219,11 @@ p {
   grid-template-columns: minmax(260px, 2fr) minmax(160px, 1fr);
   gap: 16px;
   align-items: stretch;
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
+  background: var(--canvas-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 2px 0 var(--line);
+  padding: 12px 16px;
+  margin: 12px -28px -18px;
+  width: calc(100% + 56px);
 }
 
 .context-progress {
@@ -341,7 +366,7 @@ p {
 }
 
 .panel {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--line);
   background: var(--paper);
   box-shadow: var(--bevel-plate);
   padding: 16px;
@@ -464,7 +489,7 @@ p {
   width: 100%;
   min-height: 76px;
   text-align: left;
-  background: var(--paper);
+  background: var(--platinum);
   color: var(--ink);
   border: 1px solid var(--line);
   padding: 12px;
@@ -532,7 +557,7 @@ p {
 /* 取り消しにくい操作は、通常の操作から明確に離して置く（フィッツの法則：破壊的操作の隔離）。 */
 .danger-zone {
   margin-top: 16px;
-  border-top: 1px solid var(--line);
+  border-top: 1px dotted var(--hairline);
   padding-top: 12px;
   display: flex;
   flex-direction: column;
@@ -924,10 +949,9 @@ details.panel[open] summary,
   width: 100%;
   min-height: 0;
   border: 0;
-  border-bottom: 1px solid var(--line);
   border-radius: 0;
-  padding: 5px 0;
-  background: transparent;
+  padding: 6px 8px;
+  background: var(--platinum);
   color: var(--ink);
   font-size: 13px;
   text-align: left;
@@ -1225,7 +1249,7 @@ body.exam-flow .utility-menu { display: none; }
 
 .name-field { display: grid; gap: 4px; margin: 20px 0; font-weight: 700; }
 .name-field input {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--hairline);
   border-radius: 0;
   background: transparent;
   color: var(--ink);
@@ -1272,7 +1296,7 @@ body.exam-flow .utility-menu { display: none; }
 .numeric-fields input {
   width: 100%;
   min-width: 0;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--hairline);
   border-radius: 0;
   background: transparent;
   color: var(--ink);
