@@ -13,6 +13,7 @@ vm.createContext(context);
   "static/recommend-details.js",
   "static/nichidai-data.js",
   "static/nichidai-details.js",
+  "static/rikaido2507-data.js",
   "static/hint-strategies.js",
 ].forEach((relative) => {
   const file = path.join(root, relative);
