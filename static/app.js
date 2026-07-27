@@ -97,6 +97,7 @@ let answerDrafts = {};
 let graded = false;
 let active = null;
 let modalReturnFocus = null;
+let modalDetailShown = 0;
 let checkedSubs = {};
 let students = loadStudents();
 let currentStudentName = loadCurrentStudent();
@@ -1189,7 +1190,24 @@ function fallbackDetail(sub) {
 
 function detailStepsHtml(group, sub) {
   const steps = stepsForSub(group, sub);
-  return `<ol>${steps.map((step) => `<li>${mdLite(step)}</li>`).join("")}</ol>`;
+  const shown = Math.min(modalDetailShown, steps.length);
+  const nextNumber = Math.min(shown + 1, steps.length);
+  const revealed = steps.slice(0, shown).map((step, stepIndex) => `
+    <li>
+      <span class="hint-level">L${Math.min(stepIndex + 1, 4)} ${escapeHtml(hintLevelLabel(stepIndex, steps.length))}</span>
+      <p>${mdLite(step)}</p>
+    </li>
+  `).join("");
+  const buttonLabel = shown >= steps.length
+    ? "最後まで表示しました"
+    : `${shown === 0 ? "最初のステップを見る" : "次のステップを見る"} (${nextNumber}/${steps.length})`;
+  return `
+    <div class="hint-toolbar">
+      <button class="hint-button" type="button" data-reveal-detail ${shown >= steps.length ? "disabled" : ""}>${buttonLabel}</button>
+      <span class="hint-status">${shown}/${steps.length} 段階表示中</span>
+    </div>
+    <div class="hint-steps">${revealed || `<p class="hint-empty">ボタンを押すと、詳しい解き方を1段階ずつ確認できます。</p>`}</div>
+  `;
 }
 
 function learningPointsFor(group, sub) {
@@ -1242,9 +1260,7 @@ function learningPointsHtml(group, sub) {
   `;
 }
 
-function openSolutionModal(groupIndex, subIndex) {
-  const group = groups[groupIndex];
-  const sub = group.sub_problems[subIndex];
+function renderSolutionModalBody(group, sub) {
   $("#modalMeta").textContent = `GROUP ${group.group_number} / ${sub.label}`;
   $("#modalTitle").textContent = `${group.title} ${sub.label}`;
   $("#modalBody").innerHTML = `
@@ -1264,10 +1280,21 @@ function openSolutionModal(groupIndex, subIndex) {
       ${learningPointsHtml(group, sub)}
     </div>
   `;
+  $("[data-reveal-detail]")?.addEventListener("click", () => {
+    modalDetailShown += 1;
+    renderSolutionModalBody(group, sub);
+  });
+  renderMath($("#solutionModal"));
+}
+
+function openSolutionModal(groupIndex, subIndex) {
+  const group = groups[groupIndex];
+  const sub = group.sub_problems[subIndex];
+  modalDetailShown = 0;
+  renderSolutionModalBody(group, sub);
   modalReturnFocus = document.activeElement;
   $("#solutionModal").classList.remove("hidden");
   $("#modalCloseBtn").focus();
-  renderMath($("#solutionModal"));
 }
 
 function closeSolutionModal() {
