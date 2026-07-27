@@ -126,33 +126,33 @@ window.MATH_DATASETS.rikaido_2507_beta = {
         },
         {
           "label": "(3)",
-          "stem_md": "点$(2,1)$を中心とし，原点を通る円の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $(x-2)^{2}+(y-1)^{2}=5$\n\n② $(x-2)^{2}+(y-1)^{2}=25$\n\n③ $(x+2)^{2}+(y+1)^{2}=5$\n\n④ $(x-1)^{2}+(y-2)^{2}=5$",
+          "stem_md": "点$(2,1)$を中心とし，原点を通る円の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $(x-1)^{2}+(y-2)^{2}=5$\n\n② $(x+2)^{2}+(y+1)^{2}=5$\n\n③ $(x-2)^{2}+(y-1)^{2}=5$\n\n④ $(x-2)^{2}+(y-1)^{2}=25$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "3", "boxes": ["番号"]}
           ],
-          "solution_md": "中心$(2,1)$、半径$r$の円は $(x-2)^2+(y-1)^2=r^2$。原点を通るので $r^2=(0-2)^2+(0-1)^2=5$。①が正しい。",
+          "solution_md": "中心$(2,1)$、半径$r$の円は $(x-2)^2+(y-1)^2=r^2$。原点を通るので $r^2=(0-2)^2+(0-1)^2=5$。③が正しい。",
           "learning_points": [
             "円の方程式は「中心と半径」で決まる。半径そのものではなく半径の2乗を右辺に置く。"
           ]
         },
         {
           "label": "(4)",
-          "stem_md": "不等式 $\\left(\\dfrac{1}{9}\\right)^{x}>\\left(\\dfrac{1}{3}\\right)^{-x+1}$ を解け。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $x<\\dfrac{1}{3}$\n\n② $x>\\dfrac{1}{3}$\n\n③ $x<1$\n\n④ $x<-\\dfrac{1}{3}$",
+          "stem_md": "不等式 $\\left(\\dfrac{1}{9}\\right)^{x}>\\left(\\dfrac{1}{3}\\right)^{-x+1}$ を解け。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $x<1$\n\n② $x>\\dfrac{1}{3}$\n\n③ $x<-\\dfrac{1}{3}$\n\n④ $x<\\dfrac{1}{3}$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "4", "boxes": ["番号"]}
           ],
-          "solution_md": "左辺を $\\left(\\frac13\\right)^{2x}$ に変形すると $\\left(\\frac13\\right)^{2x}>\\left(\\frac13\\right)^{-x+1}$。底 $\\frac13$ は1より小さいので不等号の向きが反転し $2x<-x+1$、$3x<1$、$x<\\dfrac13$。①が正しい。",
+          "solution_md": "左辺を $\\left(\\frac13\\right)^{2x}$ に変形すると $\\left(\\frac13\\right)^{2x}>\\left(\\frac13\\right)^{-x+1}$。底 $\\frac13$ は1より小さいので不等号の向きが反転し $2x<-x+1$、$3x<1$、$x<\\dfrac13$。④が正しい。",
           "learning_points": [
             "指数関数 $y=a^x$ は、底 $0<a<1$ のとき減少関数なので、指数を比べるときに不等号の向きが反転する。"
           ]
         },
         {
           "label": "(5)",
-          "stem_md": "曲線 $y=x^{2}-3x+1$ 上の点$(2,-1)$における接線の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $y=x-3$\n\n② $y=-x+3$\n\n③ $y=x+3$\n\n④ $y=2x-3$",
+          "stem_md": "曲線 $y=x^{2}-3x+1$ 上の点$(2,-1)$における接線の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $y=-x+3$\n\n② $y=x-3$\n\n③ $y=2x-3$\n\n④ $y=x+3$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "2", "boxes": ["番号"]}
           ],
-          "solution_md": "$y'=2x-3$ より、$x=2$ での傾きは $2\\cdot2-3=1$。接線は $y-(-1)=1\\cdot(x-2)$ より $y=x-3$。①が正しい。",
+          "solution_md": "$y'=2x-3$ より、$x=2$ での傾きは $2\\cdot2-3=1$。接線は $y-(-1)=1\\cdot(x-2)$ より $y=x-3$。②が正しい。",
           "learning_points": [
             "接線の傾きは、接点の$x$座標を導関数に代入して求める。"
           ]
@@ -204,33 +204,33 @@ window.MATH_DATASETS.rikaido_2507_beta = {
         },
         {
           "label": "(3)",
-          "stem_md": "点$(2,1)$を中心とし，原点を通る円の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $(x-2)^{2}+(y-1)^{2}=5$\n\n② $(x-2)^{2}+(y-1)^{2}=25$\n\n③ $(x+2)^{2}+(y+1)^{2}=5$\n\n④ $(x-1)^{2}+(y-2)^{2}=5$",
+          "stem_md": "点$(2,1)$を中心とし，原点を通る円の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $(x-1)^{2}+(y-2)^{2}=5$\n\n② $(x+2)^{2}+(y+1)^{2}=5$\n\n③ $(x-2)^{2}+(y-1)^{2}=5$\n\n④ $(x-2)^{2}+(y-1)^{2}=25$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "3", "boxes": ["番号"]}
           ],
-          "solution_md": "中心$(2,1)$、半径$r$の円は $(x-2)^2+(y-1)^2=r^2$。原点を通るので $r^2=(0-2)^2+(0-1)^2=5$。①が正しい。",
+          "solution_md": "中心$(2,1)$、半径$r$の円は $(x-2)^2+(y-1)^2=r^2$。原点を通るので $r^2=(0-2)^2+(0-1)^2=5$。③が正しい。",
           "learning_points": [
             "円の方程式は「中心と半径」で決まる。半径そのものではなく半径の2乗を右辺に置く。"
           ]
         },
         {
           "label": "(4)",
-          "stem_md": "不等式 $\\left(\\dfrac{1}{9}\\right)^{x}>\\left(\\dfrac{1}{3}\\right)^{-x+1}$ を解け。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $x<\\dfrac{1}{3}$\n\n② $x>\\dfrac{1}{3}$\n\n③ $x<1$\n\n④ $x<-\\dfrac{1}{3}$",
+          "stem_md": "不等式 $\\left(\\dfrac{1}{9}\\right)^{x}>\\left(\\dfrac{1}{3}\\right)^{-x+1}$ を解け。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $x<1$\n\n② $x>\\dfrac{1}{3}$\n\n③ $x<-\\dfrac{1}{3}$\n\n④ $x<\\dfrac{1}{3}$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "4", "boxes": ["番号"]}
           ],
-          "solution_md": "左辺を $\\left(\\frac13\\right)^{2x}$ に変形すると $\\left(\\frac13\\right)^{2x}>\\left(\\frac13\\right)^{-x+1}$。底 $\\frac13$ は1より小さいので不等号の向きが反転し $2x<-x+1$、$3x<1$、$x<\\dfrac13$。①が正しい。",
+          "solution_md": "左辺を $\\left(\\frac13\\right)^{2x}$ に変形すると $\\left(\\frac13\\right)^{2x}>\\left(\\frac13\\right)^{-x+1}$。底 $\\frac13$ は1より小さいので不等号の向きが反転し $2x<-x+1$、$3x<1$、$x<\\dfrac13$。④が正しい。",
           "learning_points": [
             "指数関数 $y=a^x$ は、底 $0<a<1$ のとき減少関数なので、指数を比べるときに不等号の向きが反転する。"
           ]
         },
         {
           "label": "(5)",
-          "stem_md": "曲線 $y=x^{2}-3x+1$ 上の点$(2,-1)$における接線の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $y=x-3$\n\n② $y=-x+3$\n\n③ $y=x+3$\n\n④ $y=2x-3$",
+          "stem_md": "曲線 $y=x^{2}-3x+1$ 上の点$(2,-1)$における接線の方程式を求めよ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $y=-x+3$\n\n② $y=x-3$\n\n③ $y=2x-3$\n\n④ $y=x+3$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "2", "boxes": ["番号"]}
           ],
-          "solution_md": "$y'=2x-3$ より、$x=2$ での傾きは $2\\cdot2-3=1$。接線は $y-(-1)=1\\cdot(x-2)$ より $y=x-3$。①が正しい。",
+          "solution_md": "$y'=2x-3$ より、$x=2$ での傾きは $2\\cdot2-3=1$。接線は $y-(-1)=1\\cdot(x-2)$ より $y=x-3$。②が正しい。",
           "learning_points": [
             "接線の傾きは、接点の$x$座標を導関数に代入して求める。"
           ]
@@ -266,11 +266,11 @@ window.MATH_DATASETS.rikaido_2507_beta = {
         },
         {
           "label": "(2)",
-          "stem_md": "方程式 $f(x)=-4$ を解け。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $x=-1\\pm\\sqrt{2}$\n\n② $x=1\\pm\\sqrt{2}$\n\n③ $x=-1\\pm\\sqrt{3}$\n\n④ $x=-2\\pm2\\sqrt{2}$",
+          "stem_md": "方程式 $f(x)=-4$ を解け。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $x=1\\pm\\sqrt{2}$\n\n② $x=-1\\pm\\sqrt{3}$\n\n③ $x=-2\\pm2\\sqrt{2}$\n\n④ $x=-1\\pm\\sqrt{2}$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "4", "boxes": ["番号"]}
           ],
-          "solution_md": "$t^2-2t-3=-4$ より $t^2-2t+1=0$、$(t-1)^2=0$ で $t=1$（$t\\geqq-1$ を満たす）。$x^2+2x=1$ より $x^2+2x-1=0$、$x=-1\\pm\\sqrt2$。①が正しい。",
+          "solution_md": "$t^2-2t-3=-4$ より $t^2-2t+1=0$、$(t-1)^2=0$ で $t=1$（$t\\geqq-1$ を満たす）。$x^2+2x=1$ より $x^2+2x-1=0$、$x=-1\\pm\\sqrt2$。④が正しい。",
           "learning_points": [
             "$t$ について解いたら、$t\\geqq-1$ の条件を満たすか必ず確認する。",
             "$t$ の値から $x$ に戻すときは、もとの置き換え式 $t=x^2+2x$ に代入して2次方程式を解く。"
@@ -390,11 +390,11 @@ window.MATH_DATASETS.rikaido_2507_beta = {
         },
         {
           "label": "(3)",
-          "stem_md": "$S$を$\\theta$を用いて表せ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $S=\\dfrac{1}{2}(\\sin\\theta-\\cos\\theta+1)$\n\n② $S=\\dfrac{1}{2}(\\sin\\theta+\\cos\\theta+1)$\n\n③ $S=\\dfrac{1}{2}(\\sin\\theta-\\cos\\theta-1)$\n\n④ $S=\\dfrac{1}{2}(\\cos\\theta-\\sin\\theta+1)$",
+          "stem_md": "$S$を$\\theta$を用いて表せ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $S=\\dfrac{1}{2}(\\sin\\theta+\\cos\\theta+1)$\n\n② $S=\\dfrac{1}{2}(\\cos\\theta-\\sin\\theta+1)$\n\n③ $S=\\dfrac{1}{2}(\\sin\\theta-\\cos\\theta+1)$\n\n④ $S=\\dfrac{1}{2}(\\sin\\theta-\\cos\\theta-1)$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "3", "boxes": ["番号"]}
           ],
-          "solution_md": "$0<\\theta\\leqq\\frac\\pi2$ と $\\frac\\pi2<\\theta\\leqq\\pi$ で場合分けして $\\triangle OAB+\\triangle OCA$（または $-\\triangle OCA$）を計算すると、どちらの場合も同じ式 $S=\\frac12(\\sin\\theta-\\cos\\theta+1)$ に一致する。①が正しい。",
+          "solution_md": "$0<\\theta\\leqq\\frac\\pi2$ と $\\frac\\pi2<\\theta\\leqq\\pi$ で場合分けして $\\triangle OAB+\\triangle OCA$（または $-\\triangle OCA$）を計算すると、どちらの場合も同じ式 $S=\\frac12(\\sin\\theta-\\cos\\theta+1)$ に一致する。③が正しい。",
           "learning_points": [
             "$C$ が $y$ 軸のどちら側にあるかで面積の足し引きが変わるように見えるが、場合分けしても最終的に同じ1つの式にまとまることがある。"
           ]
@@ -466,11 +466,11 @@ window.MATH_DATASETS.rikaido_2507_beta = {
         },
         {
           "label": "(4)",
-          "stem_md": "$\\displaystyle\\sum_{k=1}^{n}\\dfrac{1}{S_{2k-1}}$ を$n$を用いて表せ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $-\\dfrac{n}{2n-1}$\n\n② $\\dfrac{n}{2n-1}$\n\n③ $-\\dfrac{n}{2n+1}$\n\n④ $-\\dfrac{2n-1}{n}$",
+          "stem_md": "$\\displaystyle\\sum_{k=1}^{n}\\dfrac{1}{S_{2k-1}}$ を$n$を用いて表せ。次の①〜④から正しいものを1つ選び，番号をマスに入れよ。\n\n① $\\dfrac{n}{2n-1}$\n\n② $-\\dfrac{n}{2n+1}$\n\n③ $-\\dfrac{2n-1}{n}$\n\n④ $-\\dfrac{n}{2n-1}$",
           "answer_fields": [
-            {"format": "integer", "value": "1", "boxes": ["番号"]}
+            {"format": "integer", "value": "4", "boxes": ["番号"]}
           ],
-          "solution_md": "$a_n=2n-3$ より $S_{2k-1}=a_ka_{k+1}=(2k-3)(2k-1)$。部分分数分解 $\\dfrac{1}{(2k-3)(2k-1)}=\\dfrac12\\left(\\dfrac{1}{2k-3}-\\dfrac{1}{2k-1}\\right)$ を使って和を取ると、途中が打ち消し合い $\\dfrac12\\left(-1-\\dfrac{1}{2n-1}\\right)=-\\dfrac{n}{2n-1}$。①が正しい。",
+          "solution_md": "$a_n=2n-3$ より $S_{2k-1}=a_ka_{k+1}=(2k-3)(2k-1)$。部分分数分解 $\\dfrac{1}{(2k-3)(2k-1)}=\\dfrac12\\left(\\dfrac{1}{2k-3}-\\dfrac{1}{2k-1}\\right)$ を使って和を取ると、途中が打ち消し合い $\\dfrac12\\left(-1-\\dfrac{1}{2n-1}\\right)=-\\dfrac{n}{2n-1}$。④が正しい。",
           "learning_points": [
             "分数の数列の和は、部分分数分解して途中の項が打ち消し合う形（望遠鏡和）を作れないか考える。"
           ]
