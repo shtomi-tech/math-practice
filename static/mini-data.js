@@ -223,9 +223,125 @@ window.MINI_EXAMS = {
           },
           {
             id: "m02-4-3", label: "(3)", points: 10, type: "numeric",
-            stem: "$72$ の正の約数は全部で何個あるか。",
-            prompts: ["個数"], answers: ["12"],
-            solution: "$72=2^3\\cdot3^2$ なので、約数の個数は $(3+1)(2+1)=12$ 個。"
+            stem: "$180$ の正の約数の総和を求めよ。",
+            prompts: ["総和"], answers: ["546"],
+            solution: "$180=2^2\\cdot3^2\\cdot5$ である。正の約数の総和は $(1+2+4)(1+3+9)(1+5)=7\\cdot13\\cdot6=546$。"
+          }
+        ]
+      }
+    ]
+  },
+  "mini_03": {
+    id: "mini_03",
+    title: "基礎ミックス 第3回",
+    seriesTotal: 6,
+    seriesNumber: 3,
+    units: ["式の展開・因数分解", "実数・1次不等式", "集合と論理", "場合の数"],
+    durationMinutes: 30,
+    totalPoints: 100,
+    note: "4単元を組み合わせたオリジナル問題です。",
+    groups: [
+      {
+        number: "1",
+        title: "式の展開・因数分解",
+        tag: "ALGEBRA",
+        points: 25,
+        questions: [
+          {
+            id: "m03-1-1", label: "(1)", points: 12, type: "numeric",
+            stem: "次の式を $t$ について整理して降べきの順に並べたとき、最高次の次数、$t$ の係数、定数項をそれぞれ答えよ。\\[ 5-3t^2+7t^3-t+2t^2 \\]",
+            prompts: ["最高次の次数", "$t$ の係数", "定数項"], answers: ["3", "-1", "5"],
+            solution: "$t^2$ の項をまとめると $-3t^2+2t^2=-t^2$。よって $7t^3-t^2-t+5$。最高次は3次、$t$ の係数は$-1$、定数項は$5$。"
+          },
+          {
+            id: "m03-1-2", label: "(2)", points: 8, type: "choice",
+            stem: "$(x+3)^2-(x+3)(x-3)$ を計算した結果として正しいものを選べ。",
+            options: ["$6x$", "$6x-18$", "$6x+18$", "$6x+9$"], answer: 2,
+            solution: "$(x+3)^2=x^2+6x+9$、$(x+3)(x-3)=x^2-9$ なので、差は $(x^2+6x+9)-(x^2-9)=6x+18$。"
+          },
+          {
+            id: "m03-1-3", label: "(3)", points: 5, type: "numeric",
+            stem: "$x^2+kx+12$ が $(x+3)(x+a)$ の形に因数分解できるとき、$k$ と $a$ の値を求めよ。",
+            prompts: ["$k$", "$a$"], answers: ["7", "4"],
+            solution: "$(x+3)(x+a)=x^2+(3+a)x+3a$。定数項を比較して $3a=12$ より $a=4$。よって $k=3+a=7$。"
+          }
+        ]
+      },
+      {
+        number: "2",
+        title: "実数・1次不等式",
+        tag: "REAL / INEQUALITY",
+        points: 25,
+        questions: [
+          {
+            id: "m03-2-1", label: "(1)", points: 8, type: "numeric",
+            stem: "$\\sqrt{45}-\\sqrt{20}+\\sqrt{12}-\\sqrt{27}=a\\sqrt5+b\\sqrt3$ と表せるとき、$a$ と $b$ を答えよ。",
+            prompts: ["$a$", "$b$"], answers: ["1", "-1"],
+            solution: "$\\sqrt{45}=3\\sqrt5$、$\\sqrt{20}=2\\sqrt5$、$\\sqrt{12}=2\\sqrt3$、$\\sqrt{27}=3\\sqrt3$。よって $(3\\sqrt5-2\\sqrt5)+(2\\sqrt3-3\\sqrt3)=\\sqrt5-\\sqrt3$。"
+          },
+          {
+            id: "m03-2-2", label: "(2)", points: 9, type: "choice",
+            stem: "$-3\\lt x\\le5$ のとき、$-2x+1$ の取りうる値の範囲として正しいものを選べ。",
+            options: ["$7\\lt-2x+1\\le-9$", "$-9\\le-2x+1\\lt7$", "$-9\\lt-2x+1\\le7$", "$7\\le-2x+1\\lt-9$"], answer: 1,
+            solution: "負の数 $-2$ を掛けると不等号の向きが反転するので、$-3\\lt x\\le5$ より $-10\\le-2x\\lt6$。さらに $1$ を加えて $-9\\le-2x+1\\lt7$。"
+          },
+          {
+            id: "m03-2-3", label: "(3)", points: 8, type: "numeric",
+            stem: "$\\dfrac{2x-1}{3}\\le\\dfrac{x+2}{2}-1$ の解を $x\\le c$ と表すとき、境界値 $c$ を求めよ。",
+            prompts: ["境界値"], answers: ["2"],
+            solution: "両辺を6倍すると $2(2x-1)\\le3(x+2)-6$。左辺は $4x-2$、右辺は $3x$ となるので $4x-2\\le3x$、$x\\le2$。"
+          }
+        ]
+      },
+      {
+        number: "3",
+        title: "集合と論理",
+        tag: "SETS / LOGIC",
+        points: 20,
+        questions: [
+          {
+            id: "m03-3-1", label: "(1)", points: 8, type: "choice",
+            stem: "$U=\\{1,2,\\ldots,20\\}$ とし、$A=\\{n\\in U\\mid n=3k+1,\\ k\\text{は自然数}\\}$ とする。$A$ を正しく表しているものを選べ。",
+            options: ["$\\{1,4,7,10,13,16,19\\}$", "$\\{3,6,9,12,15,18\\}$", "$\\{4,7,10,13,16\\}$", "$\\{4,7,10,13,16,19\\}$"], answer: 3,
+            solution: "$k=1,2,\\ldots,6$ のとき $n=4,7,10,13,16,19$ で、$k=7$ では $n=22$ となり $U$ を超える。よって $A=\\{4,7,10,13,16,19\\}$。"
+          },
+          {
+            id: "m03-3-2", label: "(2)", points: 8, type: "multi",
+            stem: "$A=\\{1,3,5,7\\}$、$B=\\{x\\mid x\\text{は10以下の正の奇数}\\}$ とする。正しい記述をすべて選べ。",
+            options: ["$A\\subset B$", "$A=B$", "$B\\subset A$", "$n(B)=5$"], answer: [0, 3],
+            solution: "$B=\\{1,3,5,7,9\\}$。$A$ の要素はすべて $B$ に含まれ、かつ $9$ は $A$ にないので $A\\subset B$ かつ $A\\ne B$。$n(B)=5$ も正しい。"
+          },
+          {
+            id: "m03-3-3", label: "(3)", points: 4, type: "choice",
+            stem: "$U=\\{1,2,\\ldots,9\\}$、$A=\\{2,4,6,8\\}$、$B=\\{1,2,3,4\\}$ とする。$\\overline{A}\\cap B$ を求めよ。",
+            options: ["$\\{1,3\\}$", "$\\{2,4\\}$", "$\\{5,7,9\\}$", "$\\{1,3,5,7,9\\}$"], answer: 0,
+            solution: "$\\overline{A}=\\{1,3,5,7,9\\}$。$B=\\{1,2,3,4\\}$ との共通部分は $\\{1,3\\}$。"
+          }
+        ]
+      },
+      {
+        number: "4",
+        title: "場合の数",
+        tag: "COUNTING",
+        points: 30,
+        questions: [
+          {
+            id: "m03-4-1", label: "(1)", points: 10, type: "numeric",
+            stem: "大中小3個のさいころを1回ずつ投げる。出た目の和が5以下になる場合は何通りあるか。",
+            prompts: ["通り"], answers: ["10"],
+            solution: "和が3のとき$(1,1,1)$の1通り、和が4のとき$(1,1,2)$の並べ替えで3通り、和が5のとき$(1,1,3)$と$(1,2,2)$の並べ替えで各3通り計6通り。和の法則で $1+3+6=10$ 通り。"
+          },
+          {
+            id: "m03-4-2", label: "(2)", points: 10, type: "numeric",
+            stem: "数字 $0,1,2,3,4$ から異なる3個を使って3桁の整数を作る。奇数は何個できるか。",
+            prompts: ["個数"], answers: ["18"],
+            solution: "一の位は1か3の2通り。百の位は残りから0を除いた3通り、十の位は残った3個から3通り。積の法則で $2\\cdot3\\cdot3=18$ 個。"
+          },
+          {
+            id: "m03-4-3", label: "(3)", points: 10, type: "numeric",
+            stem: "赤・青・黄・緑・白・黒の6色のペンから、赤を必ず含めて3本を選ぶ方法は何通りあるか。",
+            prompts: ["通り"], answers: ["10"],
+            solution: "赤はすでに選ばれているので、残り5色から2本を選べばよい。$\\binom52=10$ 通り。"
           }
         ]
       }
