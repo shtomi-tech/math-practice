@@ -3,3 +3,8 @@
 
 # デプロイ時にSecretsから生成する実行時設定
 static/config.json
+
+# 問題集PDF本体（著作権保護資料）
+# docs/problem-source-map.md「生成・採用ルール 7」に従い、
+# git・GitHub Pages へ含めない。ローカルの data/ にのみ置くこと。
+data/
