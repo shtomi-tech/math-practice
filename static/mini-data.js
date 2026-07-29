@@ -255,9 +255,9 @@ window.MINI_EXAMS = {
           },
           {
             id: "m03-1-2", label: "(2)", points: 8, type: "numeric",
-            stem: "$Q=(a+b+2)(a+b-3)+4(a+b)$ とする。$a+b=t$ と置き換え、$a=2,b=1$ のときの $Q$ の値を求めよ。",
-            prompts: ["$Q$ の値"], answers: ["12"],
-            solution: "$a+b=t$ とおくと、$Q=(t+2)(t-3)+4t=t^2+3t-6$。$a=2,b=1$ では $t=3$ なので、$Q=3^2+3\cdot3-6=12$。"
+            stem: "$Q=(a+b+2)(a+b-3)+4(a+b)$ とする。$Q=12$、かつ $a+b>0$ のとき、$a+b$ の値を求めよ。",
+            prompts: ["$a+b$ の値"], answers: ["3"],
+            solution: "$t=a+b$ とおくと、$Q=(t+2)(t-3)+4t=t^2+3t-6$。$Q=12$ より $t^2+3t-18=0$、すなわち $(t+6)(t-3)=0$。$t=a+b>0$ なので $t=3$。したがって $a+b=3$。"
           },
           {
             id: "m03-1-3", label: "(3)", points: 5, type: "numeric",
