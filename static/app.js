@@ -1597,14 +1597,12 @@ const examFlow = (() => {
     $("#durationInfo").textContent = `${EXAM.durationMinutes}分`;
     $("#structureInfo").textContent = `${EXAM.units.length}単元・${questionCount()}小問`;
     const active = readActive();
-    // begin() の再開条件（期限内かどうか）とここの表示条件を一致させる。
-    // ずれていると「残り00:00」と表示した直後にフルタイムで新規開始してしまう。
-    if (active?.status === "active" && active.deadline > Date.now()) {
+    if (active?.status === "active") {
       $("#startBtn").textContent = "続きから再開する";
-      $("#resumeHint").textContent = `前回の受験を保存しています。残り ${formatTime(Math.max(0, Math.ceil((active.deadline - Date.now()) / 1000)))}。`;
-    } else if (active?.status === "active") {
-      $("#startBtn").textContent = "試験を開始する";
-      $("#resumeHint").textContent = "前回の受験は時間切れのため保存されませんでした。新しく開始します。";
+      const remaining = Math.max(0, Math.ceil((active.deadline - Date.now()) / 1000));
+      $("#resumeHint").textContent = remaining > 0
+        ? `前回の受験を保存しています。残り ${formatTime(remaining)}。`
+        : "制限時間を過ぎています。回答は保存されています。提出するまで採点されません。";
     } else {
       $("#startBtn").textContent = "試験を開始する";
       $("#resumeHint").textContent = "";
@@ -1622,7 +1620,7 @@ const examFlow = (() => {
 
   function begin() {
     const existing = readActive();
-    if (existing?.status === "active" && existing.deadline > Date.now()) {
+    if (existing?.status === "active") {
       state = existing;
     } else {
       state = { status: "active", startedAt: Date.now(), deadline: Date.now() + EXAM.durationMinutes * 60 * 1000, name: $("#studentName").value.trim() || "ゲスト", answers: {} };
@@ -1645,7 +1643,6 @@ const examFlow = (() => {
       const remaining = Math.max(0, Math.ceil((state.deadline - Date.now()) / 1000));
       $("#timer").textContent = formatTime(remaining);
       $("#timer").classList.toggle("urgent", remaining <= 300);
-      if (remaining <= 0) submit(true);
     };
     tick();
     timerId = setInterval(tick, 1000);
