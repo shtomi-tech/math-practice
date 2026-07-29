@@ -245,25 +245,19 @@ window.MINI_EXAMS = {
         number: "1",
         title: "式の展開・因数分解",
         tag: "ALGEBRA",
-        points: 20,
+        points: 12,
         questions: [
           {
-            id: "m03-1-1", label: "(1)", points: 8, type: "numeric",
-            stem: "次の式を整理したとき、$x^2$、$x$、定数項の係数をそれぞれ答えよ。\\[ (x+3)(x-2)+(2x-1)(x+1) \\]",
-            prompts: ["$x^2$ の係数", "$x$ の係数", "定数項"], answers: ["3", "2", "-7"],
-            solution: "$(x+3)(x-2)=x^2+x-6$、$(2x-1)(x+1)=2x^2+x-1$ なので、全体は $3x^2+2x-7$。"
+            id: "m03-1-2", label: "(1)", points: 6, type: "choice",
+            stem: "$x^4-13x^2+36$ を因数分解した式として正しいものを選べ。",
+            options: ["$(x-2)(x+2)(x-3)(x+3)$", "$(x-2)(x+2)(x^2+9)$", "$(x-4)(x+4)(x^2-9)$", "$(x^2-6)^2$"], answer: 0,
+            solution: "$t=x^2$ とおくと、$t^2-13t+36=(t-4)(t-9)$。したがって、$(x^2-4)(x^2-9)=(x-2)(x+2)(x-3)(x+3)$。"
           },
           {
-            id: "m03-1-2", label: "(2)", points: 6, type: "choice",
-            stem: "$9a^2-24ab+16b^2$ を因数分解した式として正しいものを選べ。",
-            options: ["$(3a-4b)^2$", "$(3a+4b)^2$", "$(3a-4b)(3a+4b)$", "$(9a-16b)^2$"], answer: 0,
-            solution: "$9a^2=(3a)^2$、$16b^2=(4b)^2$ であり、中央項は $-2\cdot3a\cdot4b=-24ab$。したがって平方の公式より $(3a-4b)^2$。"
-          },
-          {
-            id: "m03-1-3", label: "(3)", points: 6, type: "choice",
-            stem: "$2x^2+x-6$ を因数分解した式として正しいものを選べ。",
-            options: ["$(2x-3)(x+2)$", "$(2x+3)(x-2)$", "$(2x-2)(x+3)$", "$(x-3)(2x+2)$"], answer: 0,
-            solution: "積が $-6$、和が $1$ になる組を考えると、$-3$ と $2$。したがって $2x^2+x-6=(2x-3)(x+2)$。"
+            id: "m03-1-3", label: "(2)", points: 6, type: "choice",
+            stem: "$6a^2+7ab-3b^2$ を因数分解した式として正しいものを選べ。",
+            options: ["$(3a-b)(2a+3b)$", "$(3a+b)(2a-3b)$", "$(3a-3b)(2a+b)$", "$(2a-b)(3a+3b)$"], answer: 0,
+            solution: "$(3a-b)(2a+3b)$ とすると、交差項は $3a\cdot3b+(-b)\cdot2a=9ab-2ab=7ab$。したがって、$6a^2+7ab-3b^2=(3a-b)(2a+3b)$。"
           }
         ]
       },
@@ -291,12 +285,12 @@ window.MINI_EXAMS = {
         number: "3",
         title: "2次関数",
         tag: "QUADRATIC FUNCTION",
-        points: 20,
+        points: 28,
         questions: [
           {
             id: "m03-3-1", label: "(1)", points: 10, type: "numeric",
             stem: "2次関数 $y=x^2-4x+1$ のグラフの軸の方程式と最小値を答えよ。",
-            prompts: ["軸 $x=", "最小値"], answers: ["2", "-3"],
+            prompts: ["軸のx座標", "最小値"], answers: ["2", "-3"],
             solution: "$y=x^2-4x+1=(x-2)^2-3$。したがって軸は $x=2$、頂点の $y$ 座標が最小値なので最小値は $-3$。"
           },
           {
@@ -304,6 +298,12 @@ window.MINI_EXAMS = {
             stem: "2次関数 $y=-x^2+4x+1$ について、正しいものを選べ。",
             options: ["軸は $x=2$、最大値は $5$", "軸は $x=-2$、最大値は $5$", "軸は $x=2$、最小値は $5$", "軸は $x=-2$、最小値は $5$"], answer: 0,
             solution: "$y=-(x-2)^2+5$ なので、軸は $x=2$、頂点の $y$ 座標である最大値は $5$。"
+          },
+          {
+            id: "m03-3-3", label: "(3)", points: 8, type: "numeric",
+            stem: "2次関数 $y=x^2-4x+3$ のグラフと $x$ 軸との共有点の $x$ 座標を、小さい順に答えよ。",
+            prompts: ["小さい方の $x$ 座標", "大きい方の $x$ 座標"], answers: ["1", "3"],
+            solution: "$x$ 軸上では $y=0$ なので、$x^2-4x+3=0$。$(x-1)(x-3)=0$ より、$x$ 座標は $1,3$。"
           }
         ]
       },
@@ -314,10 +314,10 @@ window.MINI_EXAMS = {
         points: 20,
         questions: [
           {
-            id: "m03-4-1", label: "(1)", points: 8, type: "numeric",
-            stem: "$A=\\{1,2,4,7\\}$、$B=\\{2,3,5,7\\}$ とする。$n(A\\cap B)$ と $n(A\\cup B)$ をそれぞれ答えよ。",
-            prompts: ["$n(A\\cap B)$", "$n(A\\cup B)$"], answers: ["2", "6"],
-            solution: "$A\\cap B=\\{2,7\\}$ なので $n(A\\cap B)=2$。また、$A\\cup B=\\{1,2,3,4,5,7\\}$ なので $n(A\\cup B)=6$。"
+            id: "m03-4-1", label: "(1)", points: 8, type: "choice",
+            stem: "$n$ を整数とする。命題「$n$ が偶数ならば、$n^2$ は偶数である」の対偶として正しいものを選べ。",
+            options: ["$n^2$ が偶数ならば、$n$ は偶数である", "$n$ が偶数でないならば、$n^2$ は偶数でない", "$n^2$ が偶数でないならば、$n$ は偶数でない", "$n$ が偶数でないならば、$n^2$ は偶数である"], answer: 2,
+            solution: "「pならばq」の対偶は「qでないならばpでない」。ここでは p が「$n$ は偶数」、q が「$n^2$ は偶数」なので、対偶は「$n^2$ が偶数でないならば、$n$ は偶数でない」。"
           },
           {
             id: "m03-4-2", label: "(2)", points: 12, type: "choice",
@@ -335,9 +335,9 @@ window.MINI_EXAMS = {
         questions: [
           {
             id: "m03-5-1", label: "(1)", points: 7, type: "numeric",
-            stem: "シャツが3種類、ズボンが2種類、靴が2種類ある。この中からシャツ・ズボン・靴を1つずつ選ぶ方法は何通りあるか。",
+            stem: "異なる4人A、B、C、Dを一列に並べる。AとBが隣り合う並べ方は何通りあるか。",
             prompts: ["通り"], answers: ["12"],
-            solution: "シャツ、ズボン、靴の選び方はそれぞれ $3$ 通り、$2$ 通り、$2$ 通りなので、積の法則より $3\\cdot2\\cdot2=12$ 通り。"
+            solution: "AとBをひとかたまりとみると、ひとかたまりとC、Dの並べ方は $3!$ 通り。ひとかたまりの中のA、Bの順序は $2$ 通りなので、$3!\\cdot2=12$ 通り。"
           },
           {
             id: "m03-5-2", label: "(2)", points: 7, type: "numeric",
