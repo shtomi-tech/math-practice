@@ -281,7 +281,7 @@ window.MINI_EXAMS = {
           },
           {
             id: "m03-2-2", label: "(2)", points: 12, type: "numeric",
-            stem: "$\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}<1$ の解を $x<c$ と表すとき、$c$ の値を答えよ。",
+            stem: "$\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}<1$ の解を $x\\lt c$ と表すとき、$c$ の値を答えよ。",
             prompts: ["$c$"], answers: ["14"],
             solution: "両辺を6倍すると $2(2x-1)-3(x+2)<6$。整理して $x-8<6$、したがって $x<14$。"
           }
