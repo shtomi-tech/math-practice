@@ -269,15 +269,15 @@ window.MINI_EXAMS = {
         questions: [
           {
             id: "m03-2-1", label: "(1)", points: 8, type: "numeric",
-            stem: "$\\dfrac{4}{\\sqrt3-1}+\\sqrt{12}$ を $a+b\\sqrt3$ の形に表すとき、$a,b$ の値を答えよ。",
-            prompts: ["$a$", "$b$"], answers: ["2", "4"],
-            solution: "分母を有理化すると、$\\dfrac{4}{\\sqrt3-1}=\\dfrac{4(\\sqrt3+1)}{3-1}=2\\sqrt3+2$。また、$\\sqrt{12}=2\\sqrt3$ なので、全体は $2+4\\sqrt3$。したがって、$a=2$、$b=4$。"
+            stem: "$\\sqrt{13+4\\sqrt3}$ を $a+b\\sqrt3$ の形に表すとき、正の整数 $a,b$ の値を答えよ。",
+            prompts: ["$a$", "$b$"], answers: ["1", "2"],
+            solution: "$(a+b\\sqrt3)^2=a^2+3b^2+2ab\\sqrt3$ とおく。$2ab=4$ より $ab=2$。正の整数の組を調べると $a=1,b=2$ であり、$1^2+3\\cdot2^2=13$。したがって、$\\sqrt{13+4\\sqrt3}=1+2\\sqrt3$。"
           },
           {
             id: "m03-2-2", label: "(2)", points: 12, type: "numeric",
-            stem: "$-2\\leq\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}<1$ を満たす整数 $x$ は何個あるか。",
-            prompts: ["個"], answers: ["18"],
-            solution: "中央の式を通分すると、$\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}=\\dfrac{x-8}{6}$。したがって、$-12\\leq x-8<6$ より $-4\\leq x<14$。整数は $-4,-3,\\ldots,13$ の18個。"
+            stem: "$|3x-4|\\leq2x+1$ を満たす整数 $x$ は何個あるか。",
+            prompts: ["個"], answers: ["5"],
+            solution: "$3x-4\\geq0$ と $3x-4<0$ に場合分けする。前者では $3x-4\\leq2x+1$ より $\\dfrac43\\leq x\\leq5$。後者では $-(3x-4)\\leq2x+1$ より $\\dfrac35\\leq x<\\dfrac43$。合わせて $\\dfrac35\\leq x\\leq5$ なので、整数は $1,2,3,4,5$ の5個。"
           }
         ]
       },
