@@ -1590,7 +1590,9 @@ const examFlow = (() => {
     $("#introEyebrow").textContent = `${EXAM.durationMinutes} MINUTES / ${EXAM.totalPoints} POINTS`;
     $("#examTitle").textContent = EXAM.title;
     $("#examNote").textContent = EXAM.note;
-    $("#seriesInfo").textContent = `全${EXAM.seriesTotal}回予定（第${EXAM.seriesNumber}回公開中）`;
+    $("#seriesInfo").textContent = Number.isInteger(EXAM.seriesTotal)
+      ? `全${EXAM.seriesTotal}回予定（第${EXAM.seriesNumber}回公開中）`
+      : `第${EXAM.seriesNumber}回公開中（第4回以降は未定）`;
     $("#unitList").textContent = EXAM.units.join(" ／ ");
     $("#durationInfo").textContent = `${EXAM.durationMinutes}分`;
     $("#structureInfo").textContent = `${EXAM.units.length}単元・${questionCount()}小問`;

@@ -2,7 +2,7 @@ window.MINI_EXAMS = {
   "mini_01": {
     id: "mini_01",
     title: "基礎ミックス 第1回",
-    seriesTotal: 6,
+    seriesTotal: null,
     seriesNumber: 1,
     units: ["式の展開・因数分解", "実数・1次不等式", "集合と論理", "場合の数"],
     durationMinutes: 30,
@@ -118,7 +118,7 @@ window.MINI_EXAMS = {
   "mini_02": {
     id: "mini_02",
     title: "基礎ミックス 第2回",
-    seriesTotal: 6,
+    seriesTotal: null,
     seriesNumber: 2,
     units: ["式の展開・因数分解", "実数・1次不等式", "集合と論理", "場合の数"],
     durationMinutes: 30,
@@ -234,36 +234,36 @@ window.MINI_EXAMS = {
   "mini_03": {
     id: "mini_03",
     title: "基礎ミックス 第3回",
-    seriesTotal: 6,
+    seriesTotal: null,
     seriesNumber: 3,
-    units: ["式の展開・因数分解", "実数・1次不等式", "集合と論理", "場合の数"],
+    units: ["式の展開・因数分解", "実数・1次不等式", "2次関数", "集合と論理", "場合の数"],
     durationMinutes: 30,
     totalPoints: 100,
-    note: "4単元を組み合わせ、2段階の処理と条件判断を確認するオリジナル問題です。",
+    note: "高校1年生の基礎事項を5単元から確認する、30分のオリジナル問題です。",
     groups: [
       {
         number: "1",
         title: "式の展開・因数分解",
         tag: "ALGEBRA",
-        points: 25,
+        points: 20,
         questions: [
           {
-            id: "m03-1-1", label: "(1)", points: 12, type: "numeric",
-            stem: "$P=(x-2y+3)(2x+y-1)$ を整理したとき、$x^2$ の係数と $y$ の係数をそれぞれ答えよ。",
-            prompts: ["$x^2$ の係数", "$y$ の係数"], answers: ["2", "5"],
-            solution: "$P=2x^2+xy-x-4xy-2y^2+2y+6x+3y-3=2x^2-3xy-2y^2+5x+5y-3$。したがって、$x^2$ の係数は $2$、$y$ の係数は $5$。"
+            id: "m03-1-1", label: "(1)", points: 8, type: "numeric",
+            stem: "次の式を整理したとき、$x^2$、$x$、定数項の係数をそれぞれ答えよ。\\[ (x+3)(x-2)+(2x-1)(x+1) \\]",
+            prompts: ["$x^2$ の係数", "$x$ の係数", "定数項"], answers: ["3", "2", "-7"],
+            solution: "$(x+3)(x-2)=x^2+x-6$、$(2x-1)(x+1)=2x^2+x-1$ なので、全体は $3x^2+2x-7$。"
           },
           {
-            id: "m03-1-2", label: "(2)", points: 8, type: "numeric",
-            stem: "$Q=(a+b+2)(a+b-3)+4(a+b)$ とする。$Q=12$、かつ $a+b>0$ のとき、$a+b$ の値を求めよ。",
-            prompts: ["$a+b$ の値"], answers: ["3"],
-            solution: "$t=a+b$ とおくと、$Q=(t+2)(t-3)+4t=t^2+3t-6$。$Q=12$ より $t^2+3t-18=0$、すなわち $(t+6)(t-3)=0$。$t=a+b>0$ なので $t=3$。したがって $a+b=3$。"
+            id: "m03-1-2", label: "(2)", points: 6, type: "choice",
+            stem: "$9a^2-24ab+16b^2$ を因数分解した式として正しいものを選べ。",
+            options: ["$(3a-4b)^2$", "$(3a+4b)^2$", "$(3a-4b)(3a+4b)$", "$(9a-16b)^2$"], answer: 0,
+            solution: "$9a^2=(3a)^2$、$16b^2=(4b)^2$ であり、中央項は $-2\cdot3a\cdot4b=-24ab$。したがって平方の公式より $(3a-4b)^2$。"
           },
           {
-            id: "m03-1-3", label: "(3)", points: 5, type: "numeric",
-            stem: "$6x^2+xy-2y^2$ を $(3x+ay)(2x+by)$ の形に因数分解するとき、$a$ と $b$ の値を求めよ。ただし $a$、$b$ は整数とする。",
-            prompts: ["$a$", "$b$"], answers: ["2", "-1"],
-            solution: "$(3x+ay)(2x+by)=6x^2+(3b+2a)xy+ab y^2$。$ab=-2$、$3b+2a=1$ を満たす整数は $a=2,b=-1$。よって $(3x+2y)(2x-y)$。"
+            id: "m03-1-3", label: "(3)", points: 6, type: "choice",
+            stem: "$2x^2+x-6$ を因数分解した式として正しいものを選べ。",
+            options: ["$(2x-3)(x+2)$", "$(2x+3)(x-2)$", "$(2x-2)(x+3)$", "$(x-3)(2x+2)$"], answer: 0,
+            solution: "積が $-6$、和が $1$ になる組を考えると、$-3$ と $2$。したがって $2x^2+x-6=(2x-3)(x+2)$。"
           }
         ]
       },
@@ -271,77 +271,85 @@ window.MINI_EXAMS = {
         number: "2",
         title: "実数・1次不等式",
         tag: "REAL / INEQUALITY",
-        points: 25,
+        points: 20,
         questions: [
           {
             id: "m03-2-1", label: "(1)", points: 8, type: "numeric",
-            stem: "$\\sqrt5(\\sqrt{45}-\\sqrt{20})+\\dfrac{5}{\\sqrt5}=a+b\\sqrt5$ と表せるとき、$a$ と $b$ を答えよ。",
-            prompts: ["$a$", "$b$"], answers: ["5", "1"],
-            solution: "$\\sqrt{45}=3\\sqrt5$、$\\sqrt{20}=2\\sqrt5$ より、$\\sqrt5(\\sqrt{45}-\\sqrt{20})=5$。また、$\\dfrac5{\\sqrt5}=\\sqrt5$。したがって全体は $5+\\sqrt5$。"
+            stem: "$\\sqrt{12}+\\sqrt{27}-\\sqrt3$ を $a\\sqrt3$ の形に表すとき、$a$ の値を答えよ。",
+            prompts: ["$a$"], answers: ["4"],
+            solution: "$\\sqrt{12}=2\\sqrt3$、$\\sqrt{27}=3\\sqrt3$ なので、$2\\sqrt3+3\\sqrt3-\\sqrt3=4\\sqrt3$。"
           },
           {
-            id: "m03-2-2", label: "(2)", points: 9, type: "choice",
-            stem: "連立不等式 $\\begin{cases} -2x+3\\le7 \\\\ x-4\\lt2 \\end{cases}$ を満たす $x$ の範囲として正しいものを選べ。",
-            options: ["$-2\\lt x\\lt6$", "$-2\\le x\\lt6$", "$x\\le-2$ または $x\\ge6$", "$-6\\le x\\lt2$"], answer: 1,
-            solution: "1つ目は $-2x\\le4$ なので $x\\ge-2$。2つ目は $x\\lt6$。したがって共通範囲は $-2\\le x\\lt6$。負の数で割るときに不等号が反転する。"
-          },
-          {
-            id: "m03-2-3", label: "(3)", points: 8, type: "numeric",
-            stem: "$|3x+2|=x+6$ を満たす $x$ の値の積を答えよ。",
-            prompts: ["解の積"], answers: ["-4"],
-            solution: "$3x+2\\ge0$ のとき $3x+2=x+6$ より $x=2$。$3x+2\\lt0$ のとき $-(3x+2)=x+6$ より $x=-2$。どちらも場合の条件を満たすので、解の積は $2\\cdot(-2)=-4$。"
+            id: "m03-2-2", label: "(2)", points: 12, type: "numeric",
+            stem: "$\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}<1$ の解を $x<c$ と表すとき、$c$ の値を答えよ。",
+            prompts: ["$c$"], answers: ["14"],
+            solution: "両辺を6倍すると $2(2x-1)-3(x+2)<6$。整理して $x-8<6$、したがって $x<14$。"
           }
         ]
       },
       {
         number: "3",
-        title: "集合と論理",
-        tag: "SETS / LOGIC",
+        title: "2次関数",
+        tag: "QUADRATIC FUNCTION",
         points: 20,
         questions: [
           {
-            id: "m03-3-1", label: "(1)", points: 8, type: "choice",
-            stem: "実数 $x$ について、命題「$x^2>4$ ならば $x>2$ である」の真偽と、偽の場合の反例の組合せとして正しいものを選べ。",
-            options: ["真", "偽、反例 $x=1$", "偽、反例 $x=-3$", "偽、反例 $x=2$"], answer: 2,
-            solution: "$x=-3$ ならば $x^2=9>4$ だが、$x>2$ ではない。したがってこの命題は偽で、$x=-3$ は反例である。"
+            id: "m03-3-1", label: "(1)", points: 10, type: "numeric",
+            stem: "2次関数 $y=x^2-4x+1$ のグラフの軸の方程式と最小値を答えよ。",
+            prompts: ["軸 $x=", "最小値"], answers: ["2", "-3"],
+            solution: "$y=x^2-4x+1=(x-2)^2-3$。したがって軸は $x=2$、頂点の $y$ 座標が最小値なので最小値は $-3$。"
           },
           {
-            id: "m03-3-2", label: "(2)", points: 8, type: "multi",
-            stem: "命題「$n$ が正の整数のとき、$n^2+1$ は素数である」は偽である。次の選択肢のうち、反例となる $n$ の値をすべて選べ。",
-            options: ["$n=2$", "$n=3$", "$n=4$", "$n=5$"], answer: [1, 3],
-            solution: "$n=2$ のとき $5$、$n=4$ のとき $17$ で素数。一方、$n=3$ のとき $10$、$n=5$ のとき $26$ で合成数。したがって反例は $n=3,5$。"
-          },
-          {
-            id: "m03-3-3", label: "(3)", points: 4, type: "choice",
-            stem: "$n$ を整数とする。条件「$n$ が6の倍数」は、条件「$n$ が3の倍数」であるための何条件か。",
-            options: ["必要条件", "十分条件", "必要十分条件", "必要条件でも十分条件でもない"], answer: 1,
-            solution: "$n$ が6の倍数ならば必ず3の倍数なので十分条件。一方、$n=3$ は3の倍数だが6の倍数ではないため、必要条件ではない。"
+            id: "m03-3-2", label: "(2)", points: 10, type: "choice",
+            stem: "2次関数 $y=-x^2+4x+1$ について、正しいものを選べ。",
+            options: ["軸は $x=2$、最大値は $5$", "軸は $x=-2$、最大値は $5$", "軸は $x=2$、最小値は $5$", "軸は $x=-2$、最小値は $5$"], answer: 0,
+            solution: "$y=-(x-2)^2+5$ なので、軸は $x=2$、頂点の $y$ 座標である最大値は $5$。"
           }
         ]
       },
       {
         number: "4",
-        title: "場合の数",
-        tag: "COUNTING",
-        points: 30,
+        title: "集合と論理",
+        tag: "SETS / LOGIC",
+        points: 20,
         questions: [
           {
-            id: "m03-4-1", label: "(1)", points: 10, type: "numeric",
-            stem: "6人が円卓に着席する。特定の2人A、Bが隣り合わない並び方は何通りあるか。",
-            prompts: ["通り"], answers: ["72"],
-            solution: "全体は $(6-1)!=120$ 通り。A、Bが隣り合う場合は、A、Bをひとかたまりとみて $(5-1)!\\times2=48$ 通り。したがって、隣り合わない並び方は $120-48=72$ 通り。"
+            id: "m03-4-1", label: "(1)", points: 8, type: "numeric",
+            stem: "$A=\\{1,2,4,7\\}$、$B=\\{2,3,5,7\\}$ とする。$n(A\\cap B)$ と $n(A\\cup B)$ をそれぞれ答えよ。",
+            prompts: ["$n(A\\cap B)$", "$n(A\\cup B)$"], answers: ["2", "6"],
+            solution: "$A\\cap B=\\{2,7\\}$ なので $n(A\\cap B)=2$。また、$A\\cup B=\\{1,2,3,4,5,7\\}$ なので $n(A\\cup B)=6$。"
           },
           {
-            id: "m03-4-2", label: "(2)", points: 10, type: "numeric",
-            stem: "異なる4枚のカードを、A、B、Cの3つの箱に入れる。空の箱があってもよいとき、入れ方は何通りあるか。",
-            prompts: ["通り"], answers: ["81"],
-            solution: "各カードはA、B、Cの3通りから独立に入れる箱を選べる。したがって、入れ方は $3^4=81$ 通り。"
+            id: "m03-4-2", label: "(2)", points: 12, type: "choice",
+            stem: "$n$ を整数とする。条件「$n$ が6の倍数」は、条件「$n$ が2の倍数」であるための何条件か。",
+            options: ["必要条件", "十分条件", "必要十分条件", "必要条件でも十分条件でもない"], answer: 1,
+            solution: "$n$ が6の倍数ならば必ず2の倍数なので十分条件。$n=2$ は2の倍数だが6の倍数ではないので、必要条件ではない。"
+          }
+        ]
+      },
+      {
+        number: "5",
+        title: "場合の数",
+        tag: "COUNTING",
+        points: 20,
+        questions: [
+          {
+            id: "m03-5-1", label: "(1)", points: 7, type: "numeric",
+            stem: "シャツが3種類、ズボンが2種類、靴が2種類ある。この中からシャツ・ズボン・靴を1つずつ選ぶ方法は何通りあるか。",
+            prompts: ["通り"], answers: ["12"],
+            solution: "シャツ、ズボン、靴の選び方はそれぞれ $3$ 通り、$2$ 通り、$2$ 通りなので、積の法則より $3\\cdot2\\cdot2=12$ 通り。"
           },
           {
-            id: "m03-4-3", label: "(3)", points: 10, type: "numeric",
-            stem: "6人を2人ずつ3つの組に分ける。組どうしの区別がないとき、分け方は何通りあるか。",
-            prompts: ["通り"], answers: ["15"],
-            solution: "最初の組、次の組、最後の組を順に選ぶと $\\binom62\\binom42\\binom22$ 通り。ただし組の順序を3!通り重複して数えているので、$\\dfrac{\\binom62\\binom42\\binom22}{3!}=15$ 通り。"
+            id: "m03-5-2", label: "(2)", points: 7, type: "numeric",
+            stem: "異なる5冊の本から2冊を選ぶ方法は何通りあるか。",
+            prompts: ["通り"], answers: ["10"],
+            solution: "順序を区別しない選び方なので、$\\binom52=\\dfrac{5\\cdot4}{2\\cdot1}=10$ 通り。"
+          },
+          {
+            id: "m03-5-3", label: "(3)", points: 6, type: "choice",
+            stem: "4人の中から委員長1人と書記1人を選ぶ。1人が両方を兼ねないとき、選び方は何通りか。",
+            options: ["8通り", "10通り", "12通り", "16通り"], answer: 2,
+            solution: "委員長の選び方が $4$ 通り、その後の書記の選び方が $3$ 通りなので、$4\\cdot3=12$ 通り。役割が異なるため順序を区別する。"
           }
         ]
       }
