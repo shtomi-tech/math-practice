@@ -269,15 +269,15 @@ window.MINI_EXAMS = {
         questions: [
           {
             id: "m03-2-1", label: "(1)", points: 8, type: "numeric",
-            stem: "$\\sqrt{12}+\\sqrt{27}-\\sqrt3$ を $a\\sqrt3$ の形に表すとき、$a$ の値を答えよ。",
-            prompts: ["$a$"], answers: ["4"],
-            solution: "$\\sqrt{12}=2\\sqrt3$、$\\sqrt{27}=3\\sqrt3$ なので、$2\\sqrt3+3\\sqrt3-\\sqrt3=4\\sqrt3$。"
+            stem: "$\\dfrac{4}{\\sqrt3-1}+\\sqrt{12}$ を $a+b\\sqrt3$ の形に表すとき、$a,b$ の値を答えよ。",
+            prompts: ["$a$", "$b$"], answers: ["2", "4"],
+            solution: "分母を有理化すると、$\\dfrac{4}{\\sqrt3-1}=\\dfrac{4(\\sqrt3+1)}{3-1}=2\\sqrt3+2$。また、$\\sqrt{12}=2\\sqrt3$ なので、全体は $2+4\\sqrt3$。したがって、$a=2$、$b=4$。"
           },
           {
             id: "m03-2-2", label: "(2)", points: 12, type: "numeric",
-            stem: "$\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}<1$ の解を $x\\lt c$ と表すとき、$c$ の値を答えよ。",
-            prompts: ["$c$"], answers: ["14"],
-            solution: "両辺を6倍すると $2(2x-1)-3(x+2)<6$。整理して $x-8<6$、したがって $x<14$。"
+            stem: "$-2\\leq\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}<1$ を満たす整数 $x$ は何個あるか。",
+            prompts: ["個"], answers: ["18"],
+            solution: "中央の式を通分すると、$\\dfrac{2x-1}{3}-\\dfrac{x+2}{2}=\\dfrac{x-8}{6}$。したがって、$-12\\leq x-8<6$ より $-4\\leq x<14$。整数は $-4,-3,\\ldots,13$ の18個。"
           }
         ]
       },
