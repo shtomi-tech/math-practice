@@ -275,9 +275,9 @@ window.MINI_EXAMS = {
           },
           {
             id: "m03-2-2", label: "(2)", points: 12, type: "numeric",
-            stem: "$|3x-4|\\leq2x+1$ を満たす整数 $x$ は何個あるか。",
-            prompts: ["個"], answers: ["5"],
-            solution: "$3x-4\\geq0$ と $3x-4<0$ に場合分けする。前者では $3x-4\\leq2x+1$ より $\\dfrac43\\leq x\\leq5$。後者では $-(3x-4)\\leq2x+1$ より $\\dfrac35\\leq x<\\dfrac43$。合わせて $\\dfrac35\\leq x\\leq5$ なので、整数は $1,2,3,4,5$ の5個。"
+            stem: "$|x-1|+|2x-3|\\leq4$ を満たす整数 $x$ は何個あるか。",
+            prompts: ["個"], answers: ["3"],
+            solution: "絶対値の中身が0になる $x=1,\\dfrac32$ で場合分けする。$x<1$ では $4-3x\\leq4$ より $0\\leq x<1$。$1\\leq x<\\dfrac32$ では $2-x\\leq4$ なのでこの範囲のすべて。$x\\geq\\dfrac32$ では $3x-4\\leq4$ より $\\dfrac32\\leq x\\leq\\dfrac83$。合わせて $0\\leq x\\leq\\dfrac83$ なので、整数は $0,1,2$ の3個。"
           }
         ]
       },
