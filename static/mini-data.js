@@ -354,5 +354,129 @@ window.MINI_EXAMS = {
         ]
       }
     ]
+  },
+  "mini_04": {
+    id: "mini_04",
+    title: "基礎ミックス 第4回",
+    seriesTotal: null,
+    seriesNumber: 4,
+    units: ["数と式", "2次関数", "集合と論理", "場合の数", "確率"],
+    durationMinutes: 30,
+    totalPoints: 100,
+    note: "高校1年生の基礎事項を5分野から確認する、30分のオリジナル問題です。",
+    groups: [
+      {
+        number: "1",
+        title: "数と式",
+        tag: "ALGEBRA",
+        points: 20,
+        questions: [
+          {
+            id: "m04-1-1", label: "(1)", points: 10, type: "numeric",
+            stem: "$x\\ne0$、$x+\\dfrac{1}{x}=3$ のとき、$x^2+\\dfrac{1}{x^2}$ の値を答えよ。",
+            prompts: ["値"], answers: ["7"],
+            solution: "$\\left(x+\\dfrac1x\\right)^2=x^2+2+\\dfrac1{x^2}$ より、$9=x^2+2+\\dfrac1{x^2}$。したがって、$x^2+\\dfrac1{x^2}=7$。"
+          },
+          {
+            id: "m04-1-2", label: "(2)", points: 10, type: "choice",
+            stem: "$x^3-4x^2-x+4$ を因数分解した式として正しいものを選べ。",
+            options: ["$(x-4)(x-1)(x+1)$", "$(x+4)(x-1)(x+1)$", "$(x-4)(x^2+1)$", "$(x-1)(x^2-4)$"], answer: 0,
+            solution: "$x^3-4x^2-x+4=x^2(x-4)-1(x-4)=(x^2-1)(x-4)=(x-1)(x+1)(x-4)$。"
+          }
+        ]
+      },
+      {
+        number: "2",
+        title: "2次関数",
+        tag: "QUADRATIC FUNCTION",
+        points: 20,
+        questions: [
+          {
+            id: "m04-2-1", label: "(1)", points: 7, type: "numeric",
+            stem: "頂点が $(2,-3)$ で、点 $(0,5)$ を通る2次関数を $y=a(x-2)^2-3$ と表す。$a$ の値を答えよ。",
+            prompts: ["$a$"], answers: ["2"],
+            solution: "点 $(0,5)$ を代入すると、$5=a(0-2)^2-3=4a-3$。よって $4a=8$ から $a=2$。"
+          },
+          {
+            id: "m04-2-2", label: "(2)", points: 7, type: "numeric",
+            stem: "$-1\\leq x\\leq4$ における $y=-x^2+4x+5$ の最大値と最小値を答えよ。",
+            prompts: ["最大値", "最小値"], answers: ["9", "0"],
+            solution: "$y=-(x-2)^2+9$。頂点 $x=2$ は定義域内なので最大値は $9$。端点では $y(-1)=0$、$y(4)=5$ だから、最小値は $0$。"
+          },
+          {
+            id: "m04-2-3", label: "(3)", points: 6, type: "numeric",
+            stem: "放物線 $y=x^2-2x-3$ と直線 $y=x+1$ の共有点の $x$ 座標を、小さい順に答えよ。",
+            prompts: ["小さい方", "大きい方"], answers: ["-1", "4"],
+            solution: "$x^2-2x-3=x+1$ より、$x^2-3x-4=0$。$(x+1)(x-4)=0$ なので、$x=-1,4$。"
+          }
+        ]
+      },
+      {
+        number: "3",
+        title: "集合と論理",
+        tag: "SETS / LOGIC",
+        points: 20,
+        questions: [
+          {
+            id: "m04-3-1", label: "(1)", points: 10, type: "numeric",
+            stem: "$U=\\{-5,-4,\\ldots,4,5\\}$ を全体集合とする。$A=\\{x\\in U\\mid -2\\leq x\\leq3\\}$、$B=\\{x\\in U\\mid x は奇数\\}$ のとき、$n(A\\cap\\overline{B})$ を答えよ。",
+            prompts: ["個数"], answers: ["3"],
+            solution: "$A=\\{-2,-1,0,1,2,3\\}$。$\\overline B$ は偶数の集合なので、$A\\cap\\overline B=\\{-2,0,2\\}$。よって個数は $3$。"
+          },
+          {
+            id: "m04-3-2", label: "(2)", points: 10, type: "choice",
+            stem: "$n$ を整数とする。「$n^2$ が3の倍数ならば、$n$ は3の倍数である」を対偶を用いて証明する。次のうち、この証明で最初に示すべきこととして正しいものを選べ。",
+            options: ["$n$ が3の倍数ならば、$n^2$ は3の倍数である", "$n$ が3の倍数でないならば、$n^2$ は3の倍数でない", "$n^2$ が3の倍数でないならば、$n$ は3の倍数でない", "$n^2$ が3の倍数ならば、$n$ は3の倍数である"], answer: 1,
+            solution: "命題「pならばq」の対偶は「qでないならばpでない」。ここでは p が「$n^2$ は3の倍数」、q が「$n$ は3の倍数」なので、対偶は「$n$ が3の倍数でないならば、$n^2$ は3の倍数でない」。"
+          }
+        ]
+      },
+      {
+        number: "4",
+        title: "場合の数",
+        tag: "COUNTING",
+        points: 20,
+        questions: [
+          {
+            id: "m04-4-1", label: "(1)", points: 6, type: "numeric",
+            stem: "数字 $0,1,2,3,4,5$ から異なる4個を使って4桁の5の倍数を作る。できる数は何個あるか。",
+            prompts: ["個数"], answers: ["108"],
+            solution: "一の位が $0$ のとき、千の位は $5$ 通り、残りは $4\\cdot3$ 通りで $60$ 通り。一の位が $5$ のとき、千の位は $0$ 以外の $4$ 通り、残りは $4\\cdot3$ 通りで $48$ 通り。合計 $60+48=108$ 通り。"
+          },
+          {
+            id: "m04-4-2", label: "(2)", points: 7, type: "numeric",
+            stem: "異なる6人を一列に並べる。AとBが隣り合わない並べ方は何通りあるか。",
+            prompts: ["通り"], answers: ["480"],
+            solution: "全体は $6!=720$ 通り。AとBが隣り合う並べ方は、A、Bを1つのかたまりとみて $5!\\cdot2=240$ 通り。したがって $720-240=480$ 通り。"
+          },
+          {
+            id: "m04-4-3", label: "(3)", points: 7, type: "numeric",
+            stem: "男子5人、女子4人の中から4人を選ぶ。女子が少なくとも2人含まれる選び方は何通りあるか。",
+            prompts: ["通り"], answers: ["81"],
+            solution: "女子が2人のときは $\\binom42\\binom52=6\\cdot10=60$ 通り、3人のときは $\\binom43\\binom51=4\\cdot5=20$ 通り、4人のときは $\\binom44=1$ 通り。合計 $60+20+1=81$ 通り。"
+          }
+        ]
+      },
+      {
+        number: "5",
+        title: "確率",
+        tag: "PROBABILITY",
+        points: 20,
+        questions: [
+          {
+            id: "m04-5-1", label: "(1)", points: 10, type: "numeric",
+            stem: "赤玉3個、青玉2個が入った袋から、玉を同時に2個取り出す。2個の色が異なる確率を既約分数で答えよ。",
+            prompts: ["分子", "分母"], answers: ["3", "5"],
+            solution: "全体の取り出し方は $\\binom52=10$ 通り。色が異なる取り出し方は $3\\cdot2=6$ 通りなので、確率は $\\dfrac6{10}=\\dfrac35$。"
+          },
+          {
+            id: "m04-5-2", label: "(2)", points: 10, type: "numeric",
+            stem: "区別できる2個のサイコロを同時に投げる。1個目の出た目が偶数であったとき、2個の目の和が8である条件付き確率を既約分数で答えよ。",
+            prompts: ["分子", "分母"], answers: ["1", "6"],
+            solution: "1個目が偶数のとき、起こりうる場合は $3\\cdot6=18$ 通り。和が8となるのは $(2,6),(4,4),(6,2)$ の3通りなので、確率は $\\dfrac3{18}=\\dfrac16$。"
+          }
+        ]
+      }
+    ]
   }
 };
