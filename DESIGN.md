@@ -13,6 +13,10 @@ typography:
   h1:
     fontFamily: "Arial Black"
     fontSize: 1.375rem
+  cta:
+    fontFamily: "Arial"
+    fontSize: 1rem
+    minHeight: 48px
   body-md:
     fontFamily: "Arial"
     fontSize: 1rem
@@ -64,11 +68,14 @@ CSS変数名は元の意味役割を保ったまま値だけ差し替えてい�
 - **Nav Gold `--nav-gold` (#e48600):** ダーク面（carbon背景）専用のナビ文字色・ボタンのpressed状態。白地では使わない（コントラスト不足のため）
 - **White `--paper` (#ffffff):** カード・入力欄、ダーク面の上のテキスト
 - **Success `--ok` (#16a34a):** 正解・完了
+- **Success text `--ok-text` (#0f7a35):** 白地上の正解・完了文字。`--ok`は背景と罫線に限定する
 - **Nintendo Red `--ng` (#e60012):** 誤答・危険操作・警告
 
 ## Layout
 
 - **二段ナビ**: `.topbar`がcarbon地・halftone・nav-gold文字の一段目（primary bar）。直下の`.contextbar`が`--canvas-soft`のサブナビ帯（二段目）で、負のマージンで筐体の余白いっぱいにブリードする。
+- **共有グリッド**: 外側余白は16px、最大コンテナ幅は通常演習1280px・試験結果1100px、列間隔は16px。デスクトップは`280px minmax(0, 1fr) 320px`、1080px以下は`240px minmax(0, 1fr)`、760px以下は1列にする。試験導入・結果も`calc(100% - 32px)`で同じ左右レールに乗せる。
+- **共有タイポグラフィ**: 本文16px、構造ラベル11px mono、見出しは16/20/22px、CTAは16px・700・最小48px。結果の得点56pxだけは表示専用の例外とする。
 - **チャンファー角**: `.chamfer`ユーティリティ（`clip-path`で対角2隅を14px面取り）を、最大級のパネルだけに適用する（大問パネル・問題文ボックス・得点/タイマーパネル）。チャンファーした要素は`border`を外し、ベゼルの影線だけで縁を表現する（斜め辺に沿ってborderが引けないCSSの制約のため）。
 - **リスト行はplatinum**: 大問一覧・採点結果一覧などの「行」はplatinum地、hover/activeで`--ice`に変わる。読み物の平面（`--ice`）・カード（`--paper`）・リスト行（`--platinum`）を役割で描き分ける。
 

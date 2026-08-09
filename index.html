@@ -96,6 +96,7 @@
       <section class="panel start-panel">
         <h2>演習</h2>
         <button id="continueBtn" class="cta" type="button">▶ つづきから解く</button>
+        <button id="nextLearningBtn" class="ghost hidden" type="button">次の学習を選ぶ</button>
         <p class="hint" id="continueHint"></p>
       </section>
 
@@ -144,8 +145,9 @@
         <div id="resultList" class="result-list"></div>
       </section>
 
-      <section class="panel keypad-panel">
+      <section class="panel keypad-panel collapsed" id="practiceKeypadPanel">
         <h2>入力</h2>
+        <button id="keypadToggle" class="ghost keypad-toggle" type="button" aria-expanded="false">入力キーパッドを開く</button>
         <div id="activeLabel" class="muted">マスを選択してください</div>
         <div class="keypad" id="keypad"></div>
       </section>
@@ -222,8 +224,9 @@
           </div>
         </section>
 
-        <section class="panel keypad-panel">
+        <section class="panel keypad-panel collapsed" id="examKeypadPanel">
           <h2>入力</h2>
+          <button id="examKeypadToggle" class="ghost keypad-toggle" type="button" aria-expanded="false">入力キーパッドを開く</button>
           <div id="examActiveLabel" class="muted">数字欄を選択してください</div>
           <div class="keypad" id="examKeypad"></div>
         </section>
@@ -233,10 +236,14 @@
     <section id="result" class="exam-shell hidden">
       <div class="panel result-hero">
         <p class="eyebrow">RESULT</p>
-        <h2>採点結果</h2>
+        <h2 id="resultTitle" tabindex="-1">採点結果</h2>
         <div class="result-score"><strong id="score"></strong><span id="scoreTotal">/ 100点</span></div>
         <p id="resultSummary" class="lead"></p>
-        <button id="retryBtn" class="ghost" type="button">もう一度受験する</button>
+        <div class="result-actions">
+          <button id="nextExamBtn" class="cta hidden" type="button"></button>
+          <button id="retryBtn" class="ghost" type="button">もう一度受験する</button>
+          <button id="chooseExamBtn" class="ghost" type="button">別の演習を選ぶ</button>
+        </div>
       </div>
       <div id="resultSheet"></div>
     </section>

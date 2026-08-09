@@ -96,6 +96,7 @@ let answers = {};
 let answerDrafts = {};
 let graded = false;
 let active = null;
+let keypadOpen = false;
 let modalReturnFocus = null;
 let modalDetailShown = 0;
 let checkedSubs = {};
@@ -260,6 +261,7 @@ function setCurrentExam(key) {
     return;
   }
   if (wasMini) examFlow.leave();
+  keypadOpen = false;
   DATA = DATASETS[currentExamKey] || { problem_groups: [] };
   groups = DATA.problem_groups || [];
   currentGroup = 0;
@@ -916,7 +918,9 @@ function bindCells() {
   $$(".cell").forEach((cell) => {
     cell.addEventListener("click", () => {
       active = { uid: cell.dataset.cell, cellIndex: Number(cell.dataset.cellIndex) };
+      keypadOpen = true;
       renderProblem();
+      renderKeypad();
       renderActiveLabel();
       focusActiveCell();
     });
@@ -925,6 +929,8 @@ function bindCells() {
 
 function focusActiveCell() {
   if (!active) return;
+  keypadOpen = true;
+  renderKeypad();
   const cell = document.querySelector(`[data-cell="${CSS.escape(active.uid)}"][data-cell-index="${active.cellIndex}"]`);
   cell?.focus();
 }
@@ -978,6 +984,14 @@ function renderKeypad() {
   $$("[data-key]").forEach((button) => {
     button.addEventListener("click", () => handleKey(button.dataset.key));
   });
+  const panel = $("#practiceKeypadPanel");
+  const toggle = $("#keypadToggle");
+  panel?.classList.toggle("collapsed", !keypadOpen);
+  $("#practiceMain")?.classList.toggle("keypad-open", keypadOpen);
+  if (toggle) {
+    toggle.setAttribute("aria-expanded", String(keypadOpen));
+    toggle.textContent = keypadOpen ? "入力キーパッドを閉じる" : "入力キーパッドを開く";
+  }
 }
 
 function activeEntry() {
@@ -1317,9 +1331,20 @@ function firstUnfinishedGroupIndex() {
 }
 
 function continueStudying() {
+  const hasUnfinished = completedCount() < totalCount();
   currentGroup = firstUnfinishedGroupIndex();
   ensureAnswersForGroup();
   render();
+  if (hasUnfinished) focusFirstBlank();
+  else $("#groupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function openLearningPicker() {
+  const toggle = $(".source-switch-toggle");
+  if (!toggle) return;
+  toggle.open = true;
+  toggle.scrollIntoView({ behavior: "smooth", block: "start" });
+  toggle.querySelector('[data-exam][aria-selected="true"]')?.focus();
 }
 
 function renderContinuePanel() {
@@ -1327,19 +1352,22 @@ function renderContinuePanel() {
   const total = totalCount();
   const hint = $("#continueHint");
   const btn = $("#continueBtn");
+  const nextBtn = $("#nextLearningBtn");
+  if (nextBtn) nextBtn.classList.add("hidden");
   if (!total) {
     hint.textContent = "";
     return;
   }
   // 初回訪問（進捗ゼロ）は「最初に選ぶべき行動」を明示する（ヒックの法則）。
   if (done === 0) {
-    btn.textContent = "▶ 最初の問題から始める";
-    hint.textContent = "まずはここを押してください。";
+    btn.textContent = "▶ 最初の問題へ進む";
+    hint.textContent = "最初の入力欄へ移動します。";
     return;
   }
   if (done >= total) {
-    btn.textContent = "▶ 最初から解き直す";
-    hint.textContent = "全問完了しました。好きな大問を選んで見直せます。";
+    btn.textContent = "▶ 最初の大問を見直す";
+    hint.textContent = "全問完了しました。次の学習を選ぶか、好きな大問を見直せます。";
+    nextBtn?.classList.remove("hidden");
     return;
   }
   btn.textContent = "▶ つづきから解く";
@@ -1364,6 +1392,7 @@ function focusFirstBlank() {
   active = { uid: blank.field.uid, cellIndex: blank.cellIndex };
   renderProblem();
   renderActiveLabel();
+  focusActiveCell();
 }
 
 function focusFirstWrong() {
@@ -1373,6 +1402,7 @@ function focusFirstWrong() {
   active = { uid: wrong.field.uid, cellIndex: wrong.cellIndex };
   renderProblem();
   renderActiveLabel();
+  focusActiveCell();
 }
 
 function focusNextIssue() {
@@ -1429,6 +1459,12 @@ function bindStaticEvents() {
   $("#clearBtn").addEventListener("click", clearCurrent);
   $("#nextIssueBtn").addEventListener("click", focusNextIssue);
   $("#continueBtn").addEventListener("click", continueStudying);
+  $("#nextLearningBtn").addEventListener("click", openLearningPicker);
+  $("#keypadToggle").addEventListener("click", () => {
+    keypadOpen = !keypadOpen;
+    renderKeypad();
+    if (keypadOpen) focusActiveCell();
+  });
   $("#prevGroupBtn").addEventListener("click", () => moveGroup(-1));
   $("#nextGroupBtn").addEventListener("click", () => moveGroup(1));
   $("#resetProgressBtn").addEventListener("click", resetProgress);
@@ -1539,6 +1575,7 @@ const examFlow = (() => {
   let state = null;
   let timerId = null;
   let activeInput = null;
+  let keypadOpen = false;
   let currentGroupIndex = 0;
   const clouds = new Map();
 
@@ -1549,6 +1586,9 @@ const examFlow = (() => {
   const allQuestions = () => EXAM.groups.flatMap((group) => group.questions.map((q) => ({ group, q })));
   const questionCount = () => allQuestions().length;
   const currentQuestions = () => EXAM.groups[currentGroupIndex]?.questions || [];
+  const nextExam = () => Object.values(MINI_EXAMS)
+    .filter((exam) => exam.seriesNumber > EXAM.seriesNumber)
+    .sort((a, b) => a.seriesNumber - b.seriesNumber)[0] || null;
 
   function readActive() {
     try { return JSON.parse(localStorage.getItem(storageKey()) || "null"); } catch { return null; }
@@ -1590,9 +1630,12 @@ const examFlow = (() => {
     $("#introEyebrow").textContent = `${EXAM.durationMinutes} MINUTES / ${EXAM.totalPoints} POINTS`;
     $("#examTitle").textContent = EXAM.title;
     $("#examNote").textContent = EXAM.note;
-    $("#seriesInfo").textContent = Number.isInteger(EXAM.seriesTotal)
-      ? `全${EXAM.seriesTotal}回予定（第${EXAM.seriesNumber}回公開中）`
-      : `第${EXAM.seriesNumber}回公開中（次回以降は未定）`;
+    const seriesTotal = Number.isInteger(EXAM.seriesTotal)
+      ? EXAM.seriesTotal
+      : Object.keys(MINI_EXAMS).length;
+    $("#seriesInfo").textContent = seriesTotal
+      ? `全${seriesTotal}回公開中（第${EXAM.seriesNumber}回）`
+      : `第${EXAM.seriesNumber}回公開中`;
     $("#unitList").textContent = EXAM.units.join(" ／ ");
     $("#durationInfo").textContent = `${EXAM.durationMinutes}分`;
     $("#structureInfo").textContent = `${EXAM.units.length}単元・${questionCount()}小問`;
@@ -1623,11 +1666,16 @@ const examFlow = (() => {
     if (existing?.status === "active") {
       state = existing;
     } else {
-      state = { status: "active", startedAt: Date.now(), deadline: Date.now() + EXAM.durationMinutes * 60 * 1000, name: $("#studentName").value.trim() || "ゲスト", answers: {} };
+      state = { status: "active", startedAt: Date.now(), deadline: Date.now() + EXAM.durationMinutes * 60 * 1000, name: $("#studentName").value.trim() || "ゲスト", answers: {}, groupIndex: 0 };
       saveActive();
     }
-    currentGroupIndex = 0;
+    const savedGroupIndex = Number.isInteger(state.groupIndex) ? state.groupIndex : 0;
+    const lastGroupIndex = Math.max(0, EXAM.groups.length - 1);
+    currentGroupIndex = Math.min(Math.max(savedGroupIndex, 0), lastGroupIndex);
+    state.groupIndex = currentGroupIndex;
+    saveActive();
     activeInput = null;
+    keypadOpen = false;
     $("#intro").classList.add("hidden");
     $("#result").classList.add("hidden");
     $("#exam").classList.remove("hidden");
@@ -1651,7 +1699,12 @@ const examFlow = (() => {
   function setExamGroup(index) {
     if (index < 0 || index >= EXAM.groups.length || index === currentGroupIndex) return;
     currentGroupIndex = index;
+    if (state?.status === "active") {
+      state.groupIndex = currentGroupIndex;
+      saveActive();
+    }
     activeInput = null;
+    keypadOpen = false;
     renderExamGroup();
     $("#examGroupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -1717,10 +1770,12 @@ const examFlow = (() => {
     $$('#examSheet [data-question] input[data-answer-index]').forEach((input) => {
       input.addEventListener("focus", () => {
         activeInput = { qid: input.closest("[data-question]").dataset.question, index: Number(input.dataset.answerIndex) };
+        keypadOpen = true;
         renderExamKeypad();
       });
       input.addEventListener("click", () => {
         activeInput = { qid: input.closest("[data-question]").dataset.question, index: Number(input.dataset.answerIndex) };
+        keypadOpen = true;
         renderExamKeypad();
       });
       input.addEventListener("input", () => {
@@ -1747,6 +1802,7 @@ const examFlow = (() => {
         state.answers[q.id] = current;
       } else state.answers[q.id] = index;
       saveActive();
+      keypadOpen = false;
       renderExamGroup();
     }));
   }
@@ -1797,6 +1853,14 @@ const examFlow = (() => {
       return `<button class="${wide}" type="button" data-exam-key="${key}" ${current ? "" : "disabled"}>${keyLabels[key] || key}</button>`;
     }).join("");
     $$('[data-exam-key]').forEach((button) => button.addEventListener("click", () => handleExamKey(button.dataset.examKey)));
+    const panel = $("#examKeypadPanel");
+    const toggle = $("#examKeypadToggle");
+    panel?.classList.toggle("collapsed", !keypadOpen);
+    $("#exam")?.classList.toggle("keypad-open", keypadOpen);
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", String(keypadOpen));
+      toggle.textContent = keypadOpen ? "入力キーパッドを閉じる" : "入力キーパッドを開く";
+    }
   }
 
   function handleExamKey(key) {
@@ -1870,6 +1934,7 @@ const examFlow = (() => {
     currentCloud()?.queueSave();
     state = null;
     activeInput = null;
+    keypadOpen = false;
     showIntro();
   }
 
@@ -1891,6 +1956,7 @@ const examFlow = (() => {
     $("#exam").classList.add("hidden");
     $("#result").classList.remove("hidden");
     document.body.classList.add("result-mode");
+    $(".source-switch-toggle")?.removeAttribute("open");
     updateMode("採点済み");
     $("#score").textContent = state.score;
     $("#scoreTotal").textContent = `/ ${EXAM.totalPoints}点`;
@@ -1901,6 +1967,14 @@ const examFlow = (() => {
       return `<article class="review ${ok ? "correct" : "incorrect"}"><div class="question-head"><span class="question-number">${escapeHtml(q.label)}</span><strong>${ok ? "正解" : "確認"} ${result.points}/${q.points}点</strong></div><div class="question-stem">${q.stem}</div><p><span class="exam-label">あなたの回答</span> ${escapeHtml(displayAnswer(q))}　<span class="exam-label">正答</span> ${escapeHtml(expectedAnswer(q))}</p><details><summary>解説を表示</summary><div class="solution">${q.solution}</div></details></article>`;
     }).join("")}</section>`).join("");
     renderMath($("#resultSheet"));
+    const next = nextExam();
+    const nextButton = $("#nextExamBtn");
+    if (nextButton) {
+      nextButton.classList.toggle("hidden", !next);
+      nextButton.textContent = next ? `第${next.seriesNumber}回へ進む` : "";
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
+    $("#resultTitle")?.focus({ preventScroll: true });
   }
 
   function enter(examId) {
@@ -1910,6 +1984,7 @@ const examFlow = (() => {
     if (state?.status === "active") saveActive();
     state = null;
     activeInput = null;
+    keypadOpen = false;
     currentGroupIndex = 0;
     EXAM = nextExam;
     showIntro();
@@ -1921,6 +1996,7 @@ const examFlow = (() => {
     if (state?.status === "active") saveActive();
     state = null;
     activeInput = null;
+    keypadOpen = false;
     document.body.classList.remove("result-mode");
     showIntro();
   }
@@ -1952,7 +2028,18 @@ const examFlow = (() => {
   $("#confirmSubmit").addEventListener("click", () => submit(false));
   $("#retryBtn").addEventListener("click", () => {
     state = null;
+    keypadOpen = false;
     showIntro();
+  });
+  $("#nextExamBtn").addEventListener("click", () => {
+    const next = nextExam();
+    if (next) setCurrentExam(next.id);
+  });
+  $("#chooseExamBtn").addEventListener("click", openLearningPicker);
+  $("#examKeypadToggle").addEventListener("click", () => {
+    keypadOpen = !keypadOpen;
+    renderExamKeypad();
+    if (keypadOpen) focusActiveInput();
   });
   $("#examPrevBtn").addEventListener("click", () => setExamGroup(currentGroupIndex - 1));
   $("#examNextBtn").addEventListener("click", () => setExamGroup(currentGroupIndex + 1));

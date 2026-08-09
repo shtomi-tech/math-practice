@@ -25,6 +25,7 @@
   --platinum: #dedede;     /* platinum gray: リスト行の地色 */
   --hairline: #5a5f8c;     /* hairline: 入力欄の縁取り・ドット罫線 */
   --ok: #16a34a;
+  --ok-text: #0f7a35;      /* 白地上の成功文字。#16a34aは本文コントラスト不足 */
   --ng: #e60012;           /* Nintendo Red を危険色に採用 */
   --sans: Arial, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   --serif: "Arial Black", Arial, "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
@@ -67,7 +68,7 @@ select:focus-visible,
 }
 
 button {
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 14px;
   border: 1px solid var(--ink);
   border-radius: 2px;
@@ -101,6 +102,9 @@ button.cta {
   color: var(--ink);
   border-color: var(--signal);
   box-shadow: var(--bevel-plate);
+  min-height: 48px;
+  font-size: 16px;
+  font-weight: 700;
 }
 button.cta:hover { background: var(--nav-gold); border-color: var(--nav-gold); }
 button.cta:active { box-shadow: none; }
@@ -108,7 +112,7 @@ button.cta:active { box-shadow: none; }
 select,
 input[type="text"] {
   width: 100%;
-  min-height: 42px;
+  min-height: 44px;
   border: 1px solid var(--hairline);
   border-radius: 2px;
   background: var(--paper);
@@ -124,11 +128,18 @@ p {
   margin: 0;
 }
 
+h2 {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
 .topbar {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 18px 28px;
+  padding: 18px 16px;
   background: var(--ink);
   background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
   background-size: 5px 5px;
@@ -142,7 +153,7 @@ p {
   margin-top: 4px;
   color: var(--nav-gold);
   font-family: var(--serif);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
   letter-spacing: .01em;
 }
@@ -234,8 +245,8 @@ p {
   background: var(--canvas-soft);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 2px 0 var(--line);
   padding: 12px 16px;
-  margin: 12px -28px -18px;
-  width: calc(100% + 56px);
+  margin: 12px -16px -18px;
+  width: calc(100% + 32px);
 }
 
 .context-progress {
@@ -587,9 +598,13 @@ p {
 
 .start-panel .cta {
   width: 100%;
-  min-height: 52px;
+  min-height: 48px;
   font-weight: 700;
-  font-size: 15px;
+}
+
+.start-panel #nextLearningBtn {
+  width: 100%;
+  margin-top: 8px;
 }
 
 .start-panel .hint {
@@ -711,10 +726,12 @@ details.panel[open] summary,
 
 .sub-check-button {
   min-width: 150px;
+  min-height: 44px;
 }
 
 .sub-solution-button {
   min-width: 130px;
+  min-height: 44px;
 }
 
 .check-result {
@@ -730,7 +747,7 @@ details.panel[open] summary,
 
 .check-result.ok,
 .result-row .ok {
-  color: var(--ok);
+  color: var(--ok-text);
   font-weight: 700;
 }
 
@@ -834,6 +851,7 @@ details.panel[open] summary,
 .cell.correct::after {
   content: "✓";
   background: var(--ok);
+  color: var(--ink);
 }
 
 .cell.wrong::after {
@@ -856,7 +874,7 @@ details.panel[open] summary,
 }
 
 .hint-button {
-  min-height: 36px;
+  min-height: 44px;
   padding: 6px 12px;
   background: var(--paper);
   color: var(--ink);
@@ -987,7 +1005,7 @@ details.panel[open] summary,
   justify-content: space-between;
   gap: 10px;
   width: 100%;
-  min-height: 0;
+  min-height: 44px;
   border: 0;
   border-radius: 0;
   padding: 6px 8px;
@@ -1002,7 +1020,7 @@ details.panel[open] summary,
   color: var(--ink);
 }
 
-.result-row .ok { color: var(--ok); font-weight: 700; }
+.result-row .ok { color: var(--ok-text); font-weight: 700; }
 .result-row .ng { color: var(--ng); font-weight: 700; }
 .result-row .hint-log { margin-left: auto; }
 
@@ -1011,6 +1029,12 @@ details.panel[open] summary,
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   margin-top: 10px;
+}
+
+.keypad-toggle {
+  display: none;
+  width: 100%;
+  min-height: 44px;
 }
 
 .keypad button {
@@ -1179,9 +1203,7 @@ details.panel[open] summary,
     width: 100%;
   }
 
-  /* マス選択→キー入力の移動距離を最小化する（フィッツの法則）。
-     解答マスをタップした状態は常に active になるため、キーパッドは
-     常に画面下部に固定して、スクロールなしで数字入力へ到達できるようにする。 */
+  /* 入力中だけ開くことで、問題文を読む画面領域を確保する。 */
   .keypad-panel {
     position: fixed;
     left: 0;
@@ -1198,15 +1220,39 @@ details.panel[open] summary,
     display: none;
   }
 
+  .keypad-toggle {
+    display: block;
+  }
+
+  .keypad-panel:not(.collapsed) .keypad-toggle {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    width: auto;
+    margin: 0;
+  }
+
+  .keypad-panel.collapsed {
+    padding: 0;
+    border-top-width: 1px;
+  }
+
+  .keypad-panel.collapsed > .muted,
+  .keypad-panel.collapsed .keypad {
+    display: none;
+  }
+
   .keypad button {
     height: 56px;
   }
 
   .shell {
-    /* keypad-panel の実測高さ（約298px、ラベル込み）+ 余裕。safe-area分は
-       keypad-panel側にも足されているのでここでも同じ分を加算し、採点結果の
-       最終行がキーパッドの下に隠れて押せなくなるのを防ぐ。 */
+    /* 開いたキーパッドの下に最終行が隠れない余白。 */
     padding-bottom: calc(320px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .shell:not(.keypad-open) {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -1260,14 +1306,19 @@ details.panel[open] summary,
   color: var(--muted);
 }
 
-.exam-shell { width: min(1100px, 90vw); margin: 32px auto 80px; }
+.exam-shell { width: min(1100px, calc(100% - 32px)); margin: 32px auto 80px; }
 
 body.exam-flow .context-progress { display: none; }
 body.exam-flow .utility-menu { display: none; }
 body.exam-flow .guest-notice { display: none; }
 
-.intro-panel { width: min(760px, 90vw); margin: 32px auto 80px; padding: clamp(24px, 5vw, 48px); }
-.lead { font-size: 18px; color: var(--muted); }
+.intro-panel { width: min(760px, calc(100% - 32px)); margin: 32px auto 80px; padding: clamp(24px, 5vw, 48px); }
+.lead { font-size: 16px; color: var(--muted); }
+.intro-panel > h2,
+.result-hero > h2 {
+  font-size: 22px;
+  line-height: 1.4;
+}
 
 .scope-panel {
   display: grid;
@@ -1333,7 +1384,7 @@ body.exam-flow .guest-notice { display: none; }
 .question:last-child { border-bottom: 0; padding-bottom: 0; }
 .question-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-family: var(--mono); font-size: 13px; }
 .question-number { font-weight: 700; font-size: 16px; }
-.question-stem { margin-bottom: 16px; font-size: 17px; }
+.question-stem { margin-bottom: 16px; font-size: 16px; line-height: 1.8; }
 
 .numeric-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .numeric-fields label { display: grid; gap: 4px; min-width: 0; color: var(--muted); font-size: 14px; }
@@ -1367,7 +1418,16 @@ body.exam-flow .guest-notice { display: none; }
 .option.selected { border-width: 2px; }
 .option-mark { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--ink); font-family: var(--mono); flex-shrink: 0; }
 
-.result-hero { max-width: 760px; margin: 0 auto 24px; padding: 32px; }
+.result-hero { width: 100%; margin: 0 0 24px; padding: 24px; }
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.result-actions button {
+  flex: 1 1 180px;
+}
 .result-score {
   display: flex;
   align-items: baseline;
@@ -1381,7 +1441,7 @@ body.exam-flow .guest-notice { display: none; }
 
 .review { border-bottom: 1px solid var(--line); padding: 20px 0; break-inside: avoid; }
 .review:last-child { border-bottom: 0; }
-.review.correct .question-head strong { color: var(--ok); }
+.review.correct .question-head strong { color: var(--ok-text); }
 .review.incorrect .question-head strong { color: var(--ng); }
 .review details { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
 .review summary { cursor: pointer; font-weight: 700; }
@@ -1401,12 +1461,12 @@ body.exam-flow .guest-notice { display: none; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
 @media (max-width: 640px) {
-  .exam-shell { width: min(94vw, 1100px); margin-top: 20px; }
+  .exam-shell { width: calc(100% - 32px); margin-top: 20px; }
   .intro-panel, .exam-group, .result-group { padding: 16px; }
+  .result-hero { padding: 16px; }
   .intro-grid { grid-template-columns: 1fr; }
   .intro-grid > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .intro-grid > div:last-child { border-bottom: 0; }
   .scope-panel { grid-template-columns: 1fr; gap: 8px; }
   .group-heading { flex-direction: column; }
-  .question-stem { font-size: 16px; }
 }
