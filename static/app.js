@@ -105,7 +105,7 @@ let currentStudentName = loadCurrentStudent();
 let progress = {};
 let cloud = null;
 
-const HINT_LEVELS = ["着眼点", "立式", "計算", "答え合わせ"];
+const DETAIL_STEP_LABELS = ["着眼点", "立式", "計算", "答え合わせ"];
 
 const DETAIL_TEXT = {
   "1-(1)": [
@@ -720,85 +720,16 @@ function renderField(field) {
   </div>`;
 }
 
-function stepsForSub(group, sub) {
-  return hintEntryForSub(group, sub).steps;
-}
-
-function strategyForSub(group, sub) {
-  const key = detailKey(group, sub);
-  const registered = window.MATH_HINT_STRATEGIES?.[currentExamKey]?.[key];
-  if (registered?.roadmap?.length) return registered.roadmap;
-  return learningPointsFor(group, sub);
-}
-
-function strategySummaryForSub(group, sub) {
-  const registered = window.MATH_HINT_STRATEGIES?.[currentExamKey]?.[detailKey(group, sub)];
-  return registered?.summary || "細かい計算に入る前に、使う考え方と処理の順番を確認する。";
-}
-
-function hintEntryForSub(group, sub) {
+function detailStepsForSub(group, sub) {
   const raw = DETAIL_TEXTS[currentExamKey]?.[detailKey(group, sub)] || fallbackDetail(sub);
-  if (Array.isArray(raw)) return { strategy: strategyForSub(group, sub), steps: raw };
-  return {
-    strategy: Array.isArray(raw.strategy) ? raw.strategy : strategyForSub(group, sub),
-    steps: Array.isArray(raw.steps) ? raw.steps : fallbackDetail(sub),
-  };
+  return Array.isArray(raw) ? raw : Array.isArray(raw.steps) ? raw.steps : fallbackDetail(sub);
 }
 
-function hintLevelLabel(stepIndex, totalSteps) {
-  if (totalSteps <= 1) return HINT_LEVELS[0];
-  if (stepIndex === totalSteps - 1) return HINT_LEVELS[3];
-  const levelIndex = Math.min(HINT_LEVELS.length - 2, Math.floor(stepIndex * (HINT_LEVELS.length - 1) / totalSteps));
-  return HINT_LEVELS[levelIndex];
-}
-
-function hintSummaryForFields(fields) {
-  const summaries = fields.map((field) => {
-    const sign = field.format === "signed_integer" || String(field.value || "").startsWith("-") ? "符号に注意" : "";
-    return `${field.title || "空欄"}: ${field.cellCount}マス${sign ? ` / ${sign}` : ""}`;
-  });
-  return summaries.length ? summaries.join("、") : "";
-}
-
-function renderHintBox(group, sub, subIndex, fields) {
-  if (!$("#hintMode")?.checked) return "";
-  const key = subKey(currentGroup, subIndex);
-  const entry = progress[key] || {};
-  const steps = stepsForSub(group, sub);
-  const shown = Math.min(entry.hintsUsed || 0, steps.length);
-  // 既存の進捗（hintsUsed だけ保存されたもの）は、方針も確認済みとして扱う。
-  const strategyViewed = entry.strategyViewed === true || shown > 0;
-  const nextNumber = Math.min(shown + 1, steps.length);
-  const isAtAnswer = strategyViewed && shown === steps.length - 1;
-  const fieldHint = hintSummaryForFields(fields);
-  const strategy = strategyForSub(group, sub);
-  const strategySummary = strategySummaryForSub(group, sub);
-  const strategyHtml = strategyViewed ? `
-    <section class="hint-strategy" aria-label="解法の方針">
-      <div class="hint-strategy-label">APPROACH / 解法の方針</div>
-      <p class="hint-strategy-summary">${mdLite(strategySummary)}</p>
-      <ol>${strategy.map((point) => `<li>${mdLite(point)}</li>`).join("")}</ol>
-    </section>
-  ` : "";
-  const revealed = steps.slice(0, shown).map((step, stepIndex) => `
-    <li>
-      <span class="hint-level">L${Math.min(stepIndex + 1, 4)} ${escapeHtml(hintLevelLabel(stepIndex, steps.length))}</span>
-      <p>${mdLite(step)}</p>
-    </li>
-  `).join("");
-  const emptyText = fieldHint
-    ? `<p class="hint-empty">まずは問題文から使う公式を探してください。空欄の形は ${escapeHtml(fieldHint)} です。</p>`
-    : `<p class="hint-empty">まずは問題文から、求める量と条件を分けてみてください。</p>`;
-  return `<div class="hint-box" data-hint-box="${subIndex}">
-    <div class="hint-toolbar">
-      <button class="hint-button" type="button" data-hint="${subIndex}" ${shown >= steps.length ? "disabled" : ""}>
-        ${!strategyViewed ? "解法の方針を見る" : shown >= steps.length ? "ヒント完了" : `${isAtAnswer ? "答え合わせへ" : "次のヒントを見る"} (${nextNumber}/${steps.length})`}
-      </button>
-      <span class="hint-status">${strategyViewed ? (shown ? `方針＋${shown}段階使用` : "方針確認済み") : "ノーヒント挑戦中"}</span>
-    </div>
-    ${strategyHtml}
-    <div class="hint-steps">${revealed ? `<ol>${revealed}</ol>` : strategyViewed ? emptyText : `<p class="hint-empty">細かい計算の前に、まず解法の方針を確認できます。</p>`}</div>
-  </div>`;
+function detailStepLabel(stepIndex, totalSteps) {
+  if (totalSteps <= 1) return DETAIL_STEP_LABELS[0];
+  if (stepIndex === totalSteps - 1) return DETAIL_STEP_LABELS[3];
+  const levelIndex = Math.min(DETAIL_STEP_LABELS.length - 2, Math.floor(stepIndex * (DETAIL_STEP_LABELS.length - 1) / totalSteps));
+  return DETAIL_STEP_LABELS[levelIndex];
 }
 
 function subResult(subIndex) {
@@ -856,16 +787,11 @@ function focusSubFirstBlank(subIndex) {
 }
 
 function renderSubProblem(sub, subIndex) {
-  const group = groups[currentGroup];
   const fields = createViewFields(currentGroup, subIndex, sub);
   const filled = fields.filter(isFieldFilled).length;
   const result = subResult(subIndex);
   const isCorrect = result?.correct;
   const isWrong = result && !result.correct;
-  const hintSteps = stepsForSub(group, sub);
-  const hintsUsed = progress[subKey(currentGroup, subIndex)]?.hintsUsed || 0;
-  const strategyViewed = progress[subKey(currentGroup, subIndex)]?.strategyViewed === true;
-  const noHintBadge = isCorrect && hintsUsed === 0 && !strategyViewed ? `<span class="no-hint-badge">ノーヒント正解</span>` : "";
   const resultText = !result
     ? "未確認"
     : result.correct
@@ -873,19 +799,17 @@ function renderSubProblem(sub, subIndex) {
       : `${result.correctFields}/${result.total} 正解・入力内容を見直してください`;
   const resultClass = !result ? "pending" : result.correct ? "ok" : "ng";
   const canShowSolution = !$("#hideSolutions").checked
-    || Boolean(result)
-    || hintsUsed >= hintSteps.length;
+    || Boolean(result);
   const solutionButton = canShowSolution
     ? `<button class="sub-solution-button ghost" type="button" data-open-solution="${subIndex}">解説を見る</button>`
     : "";
   return `<article class="sub-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" data-sub="${subIndex}">
     <div class="sub-head">
       <div class="sub-label">${escapeHtml(sub.label)}</div>
-      <div class="sub-meta">${noHintBadge}${filled}/${fields.length} 入力</div>
+      <div class="sub-meta">${filled}/${fields.length} 入力</div>
     </div>
     <div class="sub-stem"><p>${mdLite(sub.stem_md)}</p></div>
     <div class="fields">${fields.map(renderField).join("")}</div>
-    ${renderHintBox(group, sub, subIndex, fields)}
     <div class="sub-checkbar">
       <span class="check-result ${resultClass}" aria-live="polite">${resultText}</span>
       <button class="sub-check-button ${result ? "ghost" : "primary"}" type="button" data-check-sub="${subIndex}" ${filled < fields.length ? "disabled" : ""}>
@@ -907,7 +831,6 @@ function renderProblem() {
   $("#groupStem").innerHTML = `<p>${mdLite(group.stem_md || "")}</p>`;
   $("#subList").innerHTML = (group.sub_problems || []).map(renderSubProblem).join("");
   bindCells();
-  bindHints();
   bindSubChecks();
   bindSolutionButtons();
   renderMath($("#groupStem"));
@@ -933,43 +856,6 @@ function focusActiveCell() {
   renderKeypad();
   const cell = document.querySelector(`[data-cell="${CSS.escape(active.uid)}"][data-cell-index="${active.cellIndex}"]`);
   cell?.focus();
-}
-
-function bindHints() {
-  $$("[data-hint]").forEach((button) => {
-    button.addEventListener("click", () => revealHint(Number(button.dataset.hint)));
-  });
-}
-
-function revealHint(subIndex) {
-  const group = groups[currentGroup];
-  const sub = group.sub_problems[subIndex];
-  const key = subKey(currentGroup, subIndex);
-  const steps = stepsForSub(group, sub);
-  const entry = progress[key] || {};
-  const current = Math.min(entry.hintsUsed || 0, steps.length);
-  if (entry.strategyViewed !== true && current === 0) {
-    progress[key] = {
-      ...entry,
-      strategyViewed: true,
-      strategyAt: new Date().toISOString(),
-    };
-    saveProgress();
-    renderProblem();
-    renderScore(true);
-    return;
-  }
-  if (current >= steps.length) return;
-  if (current === steps.length - 1 && !confirm("最後のヒントには答えが含まれます。先に一度、今の答えで採点しますか？\n\nOK: 答え合わせのヒントを開く\nキャンセル: まだ考える")) return;
-  progress[key] = {
-    ...entry,
-    strategyViewed: true,
-    hintsUsed: current + 1,
-    hintAt: new Date().toISOString(),
-  };
-  saveProgress();
-  renderProblem();
-  renderScore(true);
 }
 
 function renderKeypad() {
@@ -1167,7 +1053,6 @@ function renderScore(forceBlank = false) {
   $("#resultList").innerHTML = results.map((r) => `<button class="result-row" type="button" data-jump-sub="${r.subIndex}">
     <span>${escapeHtml(r.sub.label)}</span>
     <span class="${!r.checked ? "pending" : r.correct ? "ok" : "ng"}">${!r.checked ? "未確認" : r.correct ? "正解" : `${r.correctFields}/${r.total}`}</span>
-    <small class="hint-log">ヒント${progress[subKey(currentGroup, r.subIndex)]?.hintsUsed || 0}回</small>
   </button>`).join("");
   bindResultRows();
 }
@@ -1203,12 +1088,12 @@ function fallbackDetail(sub) {
 }
 
 function detailStepsHtml(group, sub) {
-  const steps = stepsForSub(group, sub);
+  const steps = detailStepsForSub(group, sub);
   const shown = Math.min(modalDetailShown, steps.length);
   const nextNumber = Math.min(shown + 1, steps.length);
   const revealed = steps.slice(0, shown).map((step, stepIndex) => `
     <li>
-      <span class="hint-level">L${Math.min(stepIndex + 1, 4)} ${escapeHtml(hintLevelLabel(stepIndex, steps.length))}</span>
+      <span class="detail-step-label">L${Math.min(stepIndex + 1, 4)} ${escapeHtml(detailStepLabel(stepIndex, steps.length))}</span>
       <p>${mdLite(step)}</p>
     </li>
   `).join("");
@@ -1216,11 +1101,11 @@ function detailStepsHtml(group, sub) {
     ? "最後まで表示しました"
     : `${shown === 0 ? "最初のステップを見る" : "次のステップを見る"} (${nextNumber}/${steps.length})`;
   return `
-    <div class="hint-toolbar">
-      <button class="hint-button" type="button" data-reveal-detail ${shown >= steps.length ? "disabled" : ""}>${buttonLabel}</button>
-      <span class="hint-status">${shown}/${steps.length} 段階表示中</span>
+    <div class="detail-step-toolbar">
+      <button class="detail-step-button" type="button" data-reveal-detail ${shown >= steps.length ? "disabled" : ""}>${buttonLabel}</button>
+      <span class="detail-step-status">${shown}/${steps.length} 段階表示中</span>
     </div>
-    <div class="hint-steps">${revealed || `<p class="hint-empty">ボタンを押すと、詳しい解き方を1段階ずつ確認できます。</p>`}</div>
+    <div class="detail-steps">${revealed || `<p class="detail-empty">ボタンを押すと、詳しい解き方を1段階ずつ確認できます。</p>`}</div>
   `;
 }
 
@@ -1469,7 +1354,6 @@ function bindStaticEvents() {
   $("#nextGroupBtn").addEventListener("click", () => moveGroup(1));
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#hideSolutions").addEventListener("change", renderProblem);
-  $("#hintMode").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
     const value = event.target.value;
     if (value === "__add__") {
