@@ -8,3 +8,6 @@ static/config.json
 # docs/problem-source-map.md「生成・採用ルール 7」に従い、
 # git・GitHub Pages へ含めない。ローカルの data/ にのみ置くこと。
 data/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+graft/

@@ -67,25 +67,25 @@
         <span class="eyebrow">SOURCE</span>
         <strong id="sourceTitle">2026 総合型選抜</strong>
         <span id="sourceText">薬・理工学部 数学</span>
-        <details class="source-switch-toggle">
-          <summary>出典を変える</summary>
-          <div class="source-switch-body">
-            <section class="exam-panel" id="schoolPanel">
-              <span class="context-label">学校</span>
-              <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
-            </section>
-            <section class="exam-panel">
-              <span class="context-label">方式・年度</span>
-              <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
-            </section>
-          </div>
-        </details>
       </section>
       <section class="context-progress" aria-label="全体の進捗">
         <span class="context-label">進捗</span>
         <div class="meter"><i id="progressFill"></i></div>
         <span class="meter-text" id="progressText">0 / 0</span>
       </section>
+      <details class="source-switch-toggle">
+        <summary>出典を変える</summary>
+        <div class="source-switch-body">
+          <section class="exam-panel" id="schoolPanel">
+            <span class="context-label">学校</span>
+            <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
+          </section>
+          <section class="exam-panel">
+            <span class="context-label">方式・年度</span>
+            <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
+          </section>
+        </div>
+      </details>
     </div>
   </header>
 
@@ -98,10 +98,14 @@
         <p class="hint" id="continueHint"></p>
       </section>
 
-      <section class="panel">
+      <section class="panel group-panel" id="groupPanel">
         <div class="section-head">
           <h2>大問</h2>
           <span class="muted" id="groupCount"></span>
+        </div>
+        <div class="group-summary">
+          <span id="groupSummaryText" class="group-summary-text"></span>
+          <button id="groupListToggle" class="ghost group-summary-toggle" type="button" aria-expanded="false" aria-controls="groupList">変更</button>
         </div>
         <nav id="groupList" class="group-list" aria-label="大問一覧"></nav>
       </section>
@@ -134,18 +138,18 @@
           <span class="score-sub">未採点</span>
         </div>
         <div class="actions">
-          <button id="gradeBtn" class="ghost" type="button">この大問をまとめて採点</button>
-          <button id="nextIssueBtn" class="ghost" type="button">未入力のマスへ</button>
+          <button id="gradeBtn" class="ghost" type="button">大問全体を確認</button>
+          <button id="nextIssueBtn" class="ghost" type="button">次の未入力へ</button>
         </div>
         <div class="danger-zone">
-          <button id="clearBtn" class="ghost danger" type="button">入力を全部消してやり直す</button>
+          <button id="clearBtn" class="ghost danger" type="button">この大問をリセット</button>
         </div>
         <div id="resultList" class="result-list"></div>
       </section>
 
       <section class="panel keypad-panel collapsed" id="practiceKeypadPanel">
         <h2>入力</h2>
-        <button id="keypadToggle" class="ghost keypad-toggle" type="button" aria-expanded="false">入力キーパッドを開く</button>
+        <button id="keypadToggle" class="ghost keypad-toggle" type="button" aria-expanded="false">数字を入力</button>
         <div id="activeLabel" class="muted">マスを選択してください</div>
         <div class="keypad" id="keypad"></div>
       </section>
@@ -157,24 +161,32 @@
     <section id="intro" class="panel intro-panel">
       <p class="eyebrow" id="introEyebrow">30 MINUTES / 100 POINTS</p>
       <h2 id="examTitle"></h2>
-      <p id="examNote" class="lead"></p>
-      <section class="scope-panel" aria-label="試験の前提情報">
-        <div><span class="exam-label">シリーズ</span><strong id="seriesInfo"></strong></div>
-        <div><span class="exam-label">対象単元</span><p id="unitList"></p></div>
-      </section>
-      <div class="intro-grid">
-        <div><span class="exam-label">制限時間</span><strong id="durationInfo">30分</strong></div>
-        <div><span class="exam-label">構成</span><strong id="structureInfo">12小問</strong></div>
-        <div><span class="exam-label">保存</span><strong id="saveMode">この端末のみ</strong></div>
-      </div>
-      <label class="name-field">氏名（任意）<input id="studentName" type="text" maxlength="40" placeholder="ゲスト"></label>
-      <ul class="rules">
-        <li>試験中は正誤・解説を表示しません。</li>
-        <li>回答は自動保存されます。制限時間を過ぎても、提出するまで自動提出されません。</li>
-        <li>提出後に正答と解説を確認できます。</li>
-      </ul>
+      <p id="introSummary" class="intro-summary"></p>
+      <p class="name-display hidden" id="nameDisplay">氏名 <strong id="nameDisplayValue"></strong> として受験します</p>
+      <label class="name-field" id="nameFieldLabel">氏名（任意）<input id="studentName" type="text" maxlength="40" placeholder="ゲスト"></label>
       <button id="startBtn" class="cta" type="button">試験を開始する</button>
       <p id="resumeHint" class="hint"></p>
+      <p class="intro-note">試験中は正誤・解説を表示しません。</p>
+      <details class="intro-detail">
+        <summary>試験の詳細</summary>
+        <div class="intro-detail-body">
+          <p id="examNote" class="lead"></p>
+          <section class="scope-panel" aria-label="試験の前提情報">
+            <div><span class="exam-label">シリーズ</span><strong id="seriesInfo"></strong></div>
+            <div><span class="exam-label">対象単元</span><p id="unitList"></p></div>
+          </section>
+          <div class="intro-grid">
+            <div><span class="exam-label">制限時間</span><strong id="durationInfo">30分</strong></div>
+            <div><span class="exam-label">構成</span><strong id="structureInfo">12小問</strong></div>
+            <div><span class="exam-label">保存</span><strong id="saveMode">この端末のみ</strong></div>
+          </div>
+          <ul class="rules">
+            <li>試験中は正誤・解説を表示しません。</li>
+            <li>回答は自動保存されます。制限時間を過ぎても、提出するまで自動提出されません。</li>
+            <li>提出後に正答と解説を確認できます。</li>
+          </ul>
+        </div>
+      </details>
     </section>
 
     <section id="exam" class="shell hidden">
@@ -224,7 +236,7 @@
 
         <section class="panel keypad-panel collapsed" id="examKeypadPanel">
           <h2>入力</h2>
-          <button id="examKeypadToggle" class="ghost keypad-toggle" type="button" aria-expanded="false">入力キーパッドを開く</button>
+          <button id="examKeypadToggle" class="ghost keypad-toggle" type="button" aria-expanded="false">数字を入力</button>
           <div id="examActiveLabel" class="muted">数字欄を選択してください</div>
           <div class="keypad" id="examKeypad"></div>
         </section>

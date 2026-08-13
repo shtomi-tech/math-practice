@@ -51,8 +51,6 @@ URLパラメータで直接開けます。`?exam=sougou` などの過去問キ�
    };
    ```
 
-   小問データに `learning_points` の配列を追加すると、詳細解説に「この問題から学べること」を表示できる。
-
 4. `index.html` の `<script defer>` に作成したデータファイルを追加する。
 
 - `exam.key` は DATASETS 内で一意にすること（進捗の保存キーを兼ねるため）。ミニ試験のキー（`mini_01` など）とも衝突不可。
@@ -69,6 +67,7 @@ URLパラメータで直接開けます。`?exam=sougou` などの過去問キ�
 
 ```text
 node scripts/check-no-common-hints.js # 共通ヒントの削除状態
+node scripts/check-solution-modal.js  # 解説モーダルの表示区分
 node scripts/check-exam.js    # ミニ試験の配点・問題数
 node --check static/app.js
 ```

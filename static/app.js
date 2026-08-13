@@ -100,6 +100,7 @@ let keypadOpen = false;
 let modalReturnFocus = null;
 let modalDetailShown = 0;
 let checkedSubs = {};
+let groupListOpen = false;
 let students = loadStudents();
 let currentStudentName = loadCurrentStudent();
 let progress = {};
@@ -532,11 +533,9 @@ function renderExamShell() {
   $("#sourceText").textContent = exam.sourceText;
   $(".brand .eyebrow").textContent = exam.eyebrow || school.eyebrow || "MATH / PAST EXAMS";
 
-  // ミニ試験は選択肢が少なく「回を変える」動線への到達性が重要なため、
-  // ラベルを言い換えた上でパネルを開いた状態にする（閉じる操作自体は妨げない）。
-  const sourceToggle = $(".source-switch-toggle");
+  // ミニ試験は選択肢が少ないため、ラベルだけ「回を変える」に言い換える。
+  // 学校・回の選択肢は既定で畳んでおき、試験概要・開始CTAより先に表示されないようにする。
   $(".source-switch-toggle > summary").textContent = isMiniKey(currentExamKey) ? "回を変える" : "出典を変える";
-  if (isMiniKey(currentExamKey)) sourceToggle.open = true;
 
   // 学校が1つだけのときは学校切替パネルを隠す
   $("#schoolPanel").classList.toggle("hidden", AVAILABLE_SCHOOLS.length <= 1);
@@ -549,7 +548,10 @@ function renderExamShell() {
     </button>`;
   }).join("");
   $$("[data-school]").forEach((button) => {
-    button.addEventListener("click", () => setCurrentSchool(button.dataset.school));
+    button.addEventListener("click", () => {
+      setCurrentSchool(button.dataset.school);
+      $(".source-switch-toggle").open = false;
+    });
   });
 
   const schoolExams = (school.exams || []).filter((e) => hasExamData(e.key));
@@ -562,7 +564,10 @@ function renderExamShell() {
     </button>`;
   }).join("");
   $$("[data-exam]").forEach((button) => {
-    button.addEventListener("click", () => setCurrentExam(button.dataset.exam));
+    button.addEventListener("click", () => {
+      setCurrentExam(button.dataset.exam);
+      $(".source-switch-toggle").open = false;
+    });
   });
 }
 
@@ -585,6 +590,10 @@ function totalCountFor(examKey) {
   return (DATASETS[examKey]?.problem_groups || []).reduce((sum, group) => sum + (group.sub_problems || []).length, 0);
 }
 
+function truncateTitle(title = "", max = 10) {
+  return title.length > max ? `${title.slice(0, max)}…` : title;
+}
+
 function renderGroups() {
   $("#groupCount").textContent = `${groups.length}題`;
   $("#groupList").innerHTML = groups.map((group, index) => {
@@ -601,9 +610,18 @@ function renderGroups() {
     button.addEventListener("click", () => {
       currentGroup = Number(button.dataset.group);
       ensureAnswersForGroup();
+      groupListOpen = false;
       render();
+      $("#groupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
+  const current = groups[currentGroup];
+  const summaryEl = $("#groupSummaryText");
+  if (summaryEl) {
+    summaryEl.textContent = current ? `大問${current.group_number}　${truncateTitle(current.title)}` : "";
+  }
+  $("#groupListToggle")?.setAttribute("aria-expanded", String(groupListOpen));
+  $("#groupPanel")?.classList.toggle("list-open", groupListOpen);
 }
 
 function renderProgress() {
@@ -813,7 +831,7 @@ function renderSubProblem(sub, subIndex) {
     <div class="sub-checkbar">
       <span class="check-result ${resultClass}" aria-live="polite">${resultText}</span>
       <button class="sub-check-button ${result ? "ghost" : "primary"}" type="button" data-check-sub="${subIndex}" ${filled < fields.length ? "disabled" : ""}>
-        ${result ? "もう一度確認" : "この小問を確認"}
+        ${result ? "再確認" : "答えを確認"}
       </button>
       ${solutionButton}
     </div>
@@ -863,9 +881,11 @@ function renderKeypad() {
   // 破壊的な「全部消す」は左上に隔離して誤タップ事故を防ぐ（フィッツの法則）。
   const keys = ["消去", "7", "8", "9", "-", "4", "5", "6", "⌫", "1", "2", "3", "0", "次へ"];
   const keyLabels = { "消去": "全部消す" };
+  const keyAria = { "消去": "この欄を消去" };
   $("#keypad").innerHTML = keys.map((key) => {
     const wide = key === "次へ" ? "wide3" : "";
-    return `<button class="${wide}" type="button" data-key="${key}">${keyLabels[key] || key}</button>`;
+    const aria = keyAria[key] ? ` aria-label="${keyAria[key]}"` : "";
+    return `<button class="${wide}" type="button" data-key="${key}"${aria}>${keyLabels[key] || key}</button>`;
   }).join("");
   $$("[data-key]").forEach((button) => {
     button.addEventListener("click", () => handleKey(button.dataset.key));
@@ -876,7 +896,7 @@ function renderKeypad() {
   $("#practiceMain")?.classList.toggle("keypad-open", keypadOpen);
   if (toggle) {
     toggle.setAttribute("aria-expanded", String(keypadOpen));
-    toggle.textContent = keypadOpen ? "入力キーパッドを閉じる" : "入力キーパッドを開く";
+    toggle.textContent = keypadOpen ? "キーパッドを閉じる" : "数字を入力";
   }
 }
 
@@ -987,7 +1007,7 @@ function renderNextIssueBtn() {
   const button = $("#nextIssueBtn");
   const hasIssue = graded ? anyWrongField() : anyBlankField();
   button.disabled = !hasIssue;
-  button.textContent = graded ? "誤答のマスへ" : "未入力のマスへ";
+  button.textContent = graded ? "次の誤答へ" : "次の未入力へ";
 }
 
 function bindSubChecks() {
@@ -1034,7 +1054,7 @@ function renderScore(forceBlank = false) {
   if (!graded && forceBlank) {
     $("#scoreBox").innerHTML = `<span class="score-main">—</span><span class="score-sub">未採点</span>`;
     $("#resultList").innerHTML = "";
-    $("#gradeBtn").textContent = "この大問をまとめて採点";
+    $("#gradeBtn").textContent = "大問全体を確認";
     renderNextIssueBtn();
     return;
   }
@@ -1042,18 +1062,22 @@ function renderScore(forceBlank = false) {
   const correct = results.filter((r) => r.correct).length;
   const checked = results.filter((r) => r.checked).length;
   const total = results.length;
-  $("#gradeBtn").textContent = graded ? "もう一度まとめて採点" : "この大問をまとめて採点";
+  $("#gradeBtn").textContent = graded ? "大問全体を再確認" : "大問全体を確認";
   renderNextIssueBtn();
   const scoreLabel = checked < total
     ? `確認済み ${checked}/${total}小問`
     : `正答率 ${Math.round((correct / total) * 100)}%`;
   $("#scoreBox").innerHTML = `<span class="score-main">${correct}/${checked || 0}</span><span class="score-sub">${scoreLabel}</span>`;
   // 個別の正誤は各小問カードが正とする（ゲシュタルト：閉合の重複を避ける）。
-  // ここは集計のみを示し、行クリックで該当カードへジャンプできるようにする。
-  $("#resultList").innerHTML = results.map((r) => `<button class="result-row" type="button" data-jump-sub="${r.subIndex}">
-    <span>${escapeHtml(r.sub.label)}</span>
-    <span class="${!r.checked ? "pending" : r.correct ? "ok" : "ng"}">${!r.checked ? "未確認" : r.correct ? "正解" : `${r.correctFields}/${r.total}`}</span>
-  </button>`).join("");
+  // ここは集計のみを示し、行は詳しい正誤説明を繰り返さず該当カードへの短いジャンプナビとして扱う。
+  $("#resultList").innerHTML = results.map((r) => {
+    const state = !r.checked ? "pending" : r.correct ? "ok" : "ng";
+    const label = !r.checked ? "未確認" : r.correct ? "正解" : `${r.correctFields}/${r.total}`;
+    return `<button class="result-row" type="button" data-jump-sub="${r.subIndex}" aria-label="${escapeHtml(r.sub.label)}へ移動（${label}）">
+      <span>${escapeHtml(r.sub.label)}</span>
+      <span class="result-row-status"><span class="${state}">${label}</span><span class="result-row-arrow" aria-hidden="true">▸</span></span>
+    </button>`;
+  }).join("");
   bindResultRows();
 }
 
@@ -1109,56 +1133,6 @@ function detailStepsHtml(group, sub) {
   `;
 }
 
-function learningPointsFor(group, sub) {
-  const points = Array.isArray(sub.learning_points) ? sub.learning_points.filter(Boolean) : [];
-  if (points.length) return points;
-  const topic = `${group.title || ""} ${group.topic_tag || ""}`;
-  if (/確率|場合の数|カード|数直線/.test(topic)) {
-    return [
-      "まず、起こり方を数えるための基準となる量を決める。",
-      "条件を満たす場合を、重複や数え漏れがない形に言い換える。",
-      "最後に、求めた場合の数や確率が条件と一致するか確認する。"
-    ];
-  }
-  if (/三角|円|図形|座標|ベクトル/.test(topic)) {
-    return [
-      "図形の条件を、長さ・角度・平行などの関係へ翻訳する。",
-      "使える定理を選び、既知の量を次の計算へつなぐ。",
-      "図形全体の条件と、求める量の関係を最後に確認する。"
-    ];
-  }
-  if (/微分|積分|放物線|最大|最小|接線/.test(topic)) {
-    return [
-      "式を扱いやすい形へ変形し、変数や置き換えの範囲を確認する。",
-      "最大・最小や面積では、定義域と端点を忘れずに調べる。",
-      "計算結果を、元の関数や図形の条件に戻して解釈する。"
-    ];
-  }
-  if (/数と式|整式|約数|対数|指数|データ/.test(topic)) {
-    return [
-      "与えられた式や条件を、使いやすい標準形に整理する。",
-      "公式をそのまま使う前に、何を一つのまとまりとして扱うか考える。",
-      "最後に条件を代入し、答えが元の問題に合っているか確認する。"
-    ];
-  }
-  return [
-    "問題の条件を、計算できる関係へ置き換える。",
-    "途中で得た結果を、次の小問の道具として再利用する。",
-    "答えを元の条件に戻して確認する。"
-  ];
-}
-
-function learningPointsHtml(group, sub) {
-  const points = learningPointsFor(group, sub);
-  if (!points.length) return "";
-  return `
-    <section class="detail-section learning-section">
-      <h3>この問題から学べること</h3>
-      <ul>${points.map((point) => `<li>${mdLite(point)}</li>`).join("")}</ul>
-    </section>
-  `;
-}
-
 function renderSolutionModalBody(group, sub) {
   $("#modalMeta").textContent = `GROUP ${group.group_number} / ${sub.label}`;
   $("#modalTitle").textContent = `${group.title} ${sub.label}`;
@@ -1173,10 +1147,9 @@ function renderSolutionModalBody(group, sub) {
         <div>${answerSummary(sub) || "—"}</div>
       </section>
       <section class="detail-section">
-        <h3>詳しい解き方</h3>
+        <h3>解説</h3>
         ${detailStepsHtml(group, sub)}
       </section>
-      ${learningPointsHtml(group, sub)}
     </div>
   `;
   $("[data-reveal-detail]")?.addEventListener("click", () => {
@@ -1203,6 +1176,7 @@ function closeSolutionModal() {
 }
 
 function clearCurrent() {
+  if (!confirm("この大問の入力内容をすべて消します。正解済みの進捗（完了記録）は保持されます。")) return;
   answerDrafts[groupDraftKey(currentGroup)] = {};
   saveDrafts();
   ensureAnswersForGroup();
@@ -1352,6 +1326,11 @@ function bindStaticEvents() {
   });
   $("#prevGroupBtn").addEventListener("click", () => moveGroup(-1));
   $("#nextGroupBtn").addEventListener("click", () => moveGroup(1));
+  $("#groupListToggle").addEventListener("click", () => {
+    groupListOpen = !groupListOpen;
+    $("#groupListToggle").setAttribute("aria-expanded", String(groupListOpen));
+    $("#groupPanel")?.classList.toggle("list-open", groupListOpen);
+  });
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#hideSolutions").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
@@ -1513,6 +1492,7 @@ const examFlow = (() => {
   function renderIntro() {
     $("#introEyebrow").textContent = `${EXAM.durationMinutes} MINUTES / ${EXAM.totalPoints} POINTS`;
     $("#examTitle").textContent = EXAM.title;
+    $("#introSummary").textContent = `${EXAM.durationMinutes}分・${EXAM.totalPoints}点・${questionCount()}小問`;
     $("#examNote").textContent = EXAM.note;
     const seriesTotal = Number.isInteger(EXAM.seriesTotal)
       ? EXAM.seriesTotal
@@ -1523,6 +1503,11 @@ const examFlow = (() => {
     $("#unitList").textContent = EXAM.units.join(" ／ ");
     $("#durationInfo").textContent = `${EXAM.durationMinutes}分`;
     $("#structureInfo").textContent = `${EXAM.units.length}単元・${questionCount()}小問`;
+    // 生徒名がクラウド／practiceモード側で既に確定している場合は、常時編集欄を出さず表示名だけ示す。
+    const nameValue = $("#studentName").value.trim();
+    $("#nameDisplay").classList.toggle("hidden", !nameValue);
+    $("#nameFieldLabel").classList.toggle("hidden", Boolean(nameValue));
+    if (nameValue) $("#nameDisplayValue").textContent = nameValue;
     const active = readActive();
     if (active?.status === "active") {
       $("#startBtn").textContent = "続きから再開する";
@@ -1732,9 +1717,11 @@ const examFlow = (() => {
     // 演習モードと同じ配列（次へ＝右下span3、全部消す＝左上隔離）
     const keys = ["消去", "7", "8", "9", "−", "4", "5", "6", "⌫", "1", "2", "3", "0", "次へ"];
     const keyLabels = { "消去": "全部消す" };
+    const keyAria = { "消去": "この欄を消去" };
     $("#examKeypad").innerHTML = keys.map((key) => {
       const wide = key === "次へ" ? "wide3" : "";
-      return `<button class="${wide}" type="button" data-exam-key="${key}" ${current ? "" : "disabled"}>${keyLabels[key] || key}</button>`;
+      const aria = keyAria[key] ? ` aria-label="${keyAria[key]}"` : "";
+      return `<button class="${wide}" type="button" data-exam-key="${key}"${aria} ${current ? "" : "disabled"}>${keyLabels[key] || key}</button>`;
     }).join("");
     $$('[data-exam-key]').forEach((button) => button.addEventListener("click", () => handleExamKey(button.dataset.examKey)));
     const panel = $("#examKeypadPanel");
@@ -1743,7 +1730,7 @@ const examFlow = (() => {
     $("#exam")?.classList.toggle("keypad-open", keypadOpen);
     if (toggle) {
       toggle.setAttribute("aria-expanded", String(keypadOpen));
-      toggle.textContent = keypadOpen ? "入力キーパッドを閉じる" : "入力キーパッドを開く";
+      toggle.textContent = keypadOpen ? "キーパッドを閉じる" : "数字を入力";
     }
   }
 
