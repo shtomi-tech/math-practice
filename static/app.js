@@ -287,16 +287,36 @@ function writeJson(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function progressStorageKey(examKey, name) {
+  return `${PROGRESS_PREFIX}${examKey}:${encodeURIComponent(normalizeStudentName(name))}`;
+}
+
+function draftStorageKey(examKey, name) {
+  return `${DRAFT_PREFIX}${examKey}:${encodeURIComponent(normalizeStudentName(name))}`;
+}
+
+function loadProgressSnapshot(examKey, name) {
+  if (!hasExamData(examKey) || !normalizeStudentName(name)) return {};
+  const snapshot = readJson(progressStorageKey(examKey, name), {});
+  return snapshot && typeof snapshot === "object" && !Array.isArray(snapshot) ? snapshot : {};
+}
+
+function loadDraftSnapshot(examKey, name) {
+  if (!hasExamData(examKey) || !normalizeStudentName(name)) return {};
+  const snapshot = readJson(draftStorageKey(examKey, name), {});
+  return snapshot && typeof snapshot === "object" && !Array.isArray(snapshot) ? snapshot : {};
+}
+
 function normalizeStudentName(name = "") {
   return String(name).trim().replace(/\s+/g, " ");
 }
 
 function progressKeyFor(name) {
-  return `${PROGRESS_PREFIX}${currentExamKey}:${encodeURIComponent(name)}`;
+  return progressStorageKey(currentExamKey, name);
 }
 
 function draftKeyFor(name) {
-  return `${DRAFT_PREFIX}${currentExamKey}:${encodeURIComponent(name)}`;
+  return draftStorageKey(currentExamKey, name);
 }
 
 function loadStudents() {
@@ -322,13 +342,11 @@ function setCurrentStudent(name) {
 }
 
 function loadProgressFor(name) {
-  if (!name) return {};
-  return readJson(progressKeyFor(name), {});
+  return loadProgressSnapshot(currentExamKey, name);
 }
 
 function loadDraftsFor(name) {
-  if (!name) return {};
-  return readJson(draftKeyFor(name), {});
+  return loadDraftSnapshot(currentExamKey, name);
 }
 
 function saveProgress() {
@@ -522,6 +540,7 @@ function setFirstAvailableActive() {
 function renderExamShell() {
   const exam = EXAMS[currentExamKey] || EXAMS[AVAILABLE_EXAMS[0]];
   const school = SCHOOL_BY_EXAM[currentExamKey] || AVAILABLE_SCHOOLS[0];
+  const currentState = catalogStateForExam(currentExamKey);
   if (isMiniKey(currentExamKey)) {
     document.title = `${exam.sourceTitle}｜数学ミニ試験`;
     $("#appTitle").textContent = "数学ミニ試験";
@@ -536,15 +555,22 @@ function renderExamShell() {
   // ミニ試験は選択肢が少ないため、ラベルだけ「回を変える」に言い換える。
   // 学校・回の選択肢は既定で畳んでおき、試験概要・開始CTAより先に表示されないようにする。
   $(".source-switch-toggle > summary").textContent = isMiniKey(currentExamKey) ? "回を変える" : "出典を変える";
+  $("#sourceSummary").textContent = catalogSummaryText(isMiniKey(currentExamKey) ? MINI_EXAMS[currentExamKey] : exam, currentState);
+  $("#examPanelLabel").textContent = isMiniKey(currentExamKey) ? "試験回" : "方式・年度";
 
   // 学校が1つだけのときは学校切替パネルを隠す
   $("#schoolPanel").classList.toggle("hidden", AVAILABLE_SCHOOLS.length <= 1);
-  $("#schoolSwitch").innerHTML = AVAILABLE_SCHOOLS.map((s) => {
+  $("#schoolSwitch").innerHTML = AVAILABLE_SCHOOLS.map((s, index) => {
     const active = s.id === school.id;
+    const summary = schoolCatalogSummary(s);
+    const selectedText = active ? "・選択中" : "";
     return `<button class="exam-option ${active ? "active" : ""}" type="button" role="tab"
-      aria-selected="${active ? "true" : "false"}" data-school="${escapeHtml(s.id)}">
-      <span>${escapeHtml(s.name)}</span>
-      <small>${examCountForSchool(s)}${s.id === "mini" ? "回" : "方式"}</small>
+      aria-selected="${active ? "true" : "false"}" data-school="${escapeHtml(s.id)}"
+      aria-label="${escapeHtml(`${s.name} ${summary.label}${selectedText}`)}">
+      <span class="exam-option-no">SOURCE ${formatCatalogNumber(index)}</span>
+      <span class="exam-option-title">${escapeHtml(s.name)}</span>
+      <span class="exam-option-status">${escapeHtml(active ? `選択中・${summary.label}` : summary.label)}</span>
+      <span class="exam-option-progress">${summary.total}セット</span>
     </button>`;
   }).join("");
   $$("[data-school]").forEach((button) => {
@@ -555,12 +581,23 @@ function renderExamShell() {
   });
 
   const schoolExams = (school.exams || []).filter((e) => hasExamData(e.key));
-  $("#examSwitch").innerHTML = schoolExams.map((option) => {
+  $("#examSwitch").innerHTML = schoolExams.map((option, index) => {
     const key = option.key;
-    return `<button class="exam-option ${key === currentExamKey ? "active" : ""}" type="button" role="tab"
-      aria-selected="${key === currentExamKey ? "true" : "false"}" data-exam="${escapeHtml(key)}">
-      <span>${escapeHtml(option.shortLabel)}</span>
-      <small>${totalCountFor(key)}小問</small>
+    const state = catalogStateForExam(key);
+    const optionExam = state.mode === "mini" ? MINI_EXAMS[key] : EXAMS[key];
+    const active = key === currentExamKey;
+    const modeLabel = state.mode === "mini" ? "30分ミニ試験" : "過去問演習";
+    const groupLabel = `${groupCountFor(key)}大問・${state.total}${state.mode === "mini" ? "小問" : "小問"}`;
+    const selectedText = active ? "・選択中" : "";
+    return `<button class="exam-option ${active ? "active" : ""} ${catalogStateClass(state)}" type="button" role="tab"
+      aria-selected="${active ? "true" : "false"}" data-exam="${escapeHtml(key)}"
+      aria-label="${escapeHtml(`${option.label || option.shortLabel} ${modeLabel} ${catalogProgressText(optionExam, state)} ${state.status}${selectedText}`)}">
+      <span class="exam-option-no">${formatCatalogNumber(index)}</span>
+      <span class="exam-option-title">${escapeHtml(option.label || option.shortLabel)}</span>
+      <span class="exam-option-mode">${escapeHtml(modeLabel)}</span>
+      <span class="exam-option-status">${escapeHtml(active ? `選択中・${state.status}` : state.status)}</span>
+      <span class="exam-option-progress">${escapeHtml(`${groupLabel}・${catalogProgressText(optionExam, state)}`)}</span>
+      <span class="exam-option-action">次: ${escapeHtml(state.actionLabel)}</span>
     </button>`;
   }).join("");
   $$("[data-exam]").forEach((button) => {
@@ -590,20 +627,187 @@ function totalCountFor(examKey) {
   return (DATASETS[examKey]?.problem_groups || []).reduce((sum, group) => sum + (group.sub_problems || []).length, 0);
 }
 
+function groupCountFor(examKey) {
+  return isMiniKey(examKey)
+    ? (MINI_EXAMS[examKey]?.groups || []).length
+    : (DATASETS[examKey]?.problem_groups || []).length;
+}
+
+function hasDraftValues(value) {
+  if (typeof value === "string") return value.trim() !== "";
+  if (Array.isArray(value)) return value.some(hasDraftValues);
+  if (value && typeof value === "object") return Object.values(value).some(hasDraftValues);
+  return false;
+}
+
+function practiceCatalogState(examKey, studentName = currentStudentName) {
+  const data = DATASETS[examKey] || { problem_groups: [] };
+  const sourceGroups = data.problem_groups || [];
+  const useLiveState = examKey === currentExamKey;
+  const snapshot = useLiveState ? progress : loadProgressSnapshot(examKey, studentName);
+  const drafts = useLiveState ? answerDrafts : loadDraftSnapshot(examKey, studentName);
+  const total = sourceGroups.reduce((sum, group) => sum + (group.sub_problems || []).length, 0);
+  const completed = sourceGroups.reduce((sum, group, groupIndex) => sum + (group.sub_problems || [])
+    .filter((_, subIndex) => snapshot[`group-${group.group_number || groupIndex + 1}-${subIndex}`]?.correct === true).length, 0);
+  const hasDraft = hasDraftValues(drafts);
+  const status = completed >= total && total > 0
+    ? "完了"
+    : completed > 0 || hasDraft
+    ? "学習中"
+    : "未着手";
+  return {
+    mode: "practice",
+    total,
+    completed,
+    hasDraft,
+    status,
+    actionLabel: status === "完了" ? "見直す" : status === "学習中" ? "続きから解く" : "この演習を開く",
+  };
+}
+
+function isQuestionAnswered(question, answers = {}) {
+  const value = answers?.[question.id];
+  if (question.type === "numeric") {
+    return Array.isArray(value) && value.length === question.prompts.length
+      && value.every((entry) => normalize(entry) !== "");
+  }
+  return Array.isArray(value) ? value.length > 0 : typeof value === "number";
+}
+
+function safeStorageObject(key) {
+  const value = readJson(key, null);
+  return value && typeof value === "object" && !Array.isArray(value) ? value : null;
+}
+
+function miniCatalogState(exam) {
+  const activeSnapshot = safeStorageObject(`math-mini-exam:${exam.id}:active`);
+  const resultSnapshot = safeStorageObject(`math-mini-exam:${exam.id}:last-result`);
+  const active = activeSnapshot?.status === "active" ? activeSnapshot : null;
+  const result = resultSnapshot && Number.isFinite(Number(resultSnapshot.score)) ? resultSnapshot : null;
+  const total = (exam.groups || []).reduce((sum, group) => sum + (group.questions || []).length, 0);
+  const answered = active
+    ? (exam.groups || []).flatMap((group) => group.questions || [])
+      .filter((question) => isQuestionAnswered(question, active.answers)).length
+    : 0;
+  const status = active ? "保存中" : result ? "受験済み" : "未受験";
+  return {
+    mode: "mini",
+    total,
+    answered,
+    active,
+    result,
+    status,
+    score: result ? Number(result.score) : null,
+    actionLabel: active ? "続きから再開" : result ? "結果を確認／再受験" : "試験を開く",
+  };
+}
+
+function catalogStateForExam(examKey, studentName = currentStudentName) {
+  return isMiniKey(examKey)
+    ? miniCatalogState(MINI_EXAMS[examKey])
+    : practiceCatalogState(examKey, studentName);
+}
+
+function schoolCatalogSummary(school, studentName = currentStudentName) {
+  const states = (school.exams || [])
+    .filter((exam) => hasExamData(exam.key))
+    .map((exam) => catalogStateForExam(exam.key, studentName));
+  const isMini = states.some((state) => state.mode === "mini");
+  const counts = states.reduce((result, state) => {
+    result[state.status] = (result[state.status] || 0) + 1;
+    return result;
+  }, {});
+  return {
+    total: states.length,
+    counts,
+    mode: isMini ? "mini" : "practice",
+    label: isMini
+      ? `${states.length}回・受験済み${counts["受験済み"] || 0}・保存中${counts["保存中"] || 0}`
+      : `${states.length}方式・完了${counts["完了"] || 0}・途中${counts["学習中"] || 0}`,
+  };
+}
+
+function catalogStateClass(state) {
+  if (state.status === "完了" || state.status === "受験済み") return "is-complete";
+  if (state.status === "学習中" || state.status === "保存中") return "is-progress";
+  return "is-unstarted";
+}
+
+function formatCatalogNumber(index) {
+  return String(index + 1).padStart(2, "0");
+}
+
+function catalogSummaryText(exam, state) {
+  if (state.mode === "mini") {
+    if (state.status === "保存中") {
+      const remaining = state.active?.deadline ? Math.max(0, Math.ceil((state.active.deadline - Date.now()) / 1000)) : null;
+      return `全${Object.keys(MINI_EXAMS).length}回・第${exam.seriesNumber}回 保存中${remaining === null ? "" : `・残り${formatTimeLabel(remaining)}`}`;
+    }
+    if (state.status === "受験済み") return `全${Object.keys(MINI_EXAMS).length}回・第${exam.seriesNumber}回 前回${state.score}/100点`;
+    return `全${Object.keys(MINI_EXAMS).length}回・第${exam.seriesNumber}回 未受験`;
+  }
+  return `全${AVAILABLE_EXAMS.length}セット・現在 ${state.completed}/${state.total}小問完了`;
+}
+
+function formatTimeLabel(seconds) {
+  const safe = Math.max(0, Number(seconds) || 0);
+  return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, "0")}`;
+}
+
+function catalogProgressText(exam, state) {
+  if (state.mode === "mini") {
+    if (state.status === "保存中") return `${state.answered}/${state.total}問回答`;
+    if (state.status === "受験済み") return `前回 ${state.score}/${exam.totalPoints}点`;
+    return `${exam.durationMinutes}分・${exam.totalPoints}点・${state.total}小問`;
+  }
+  return `${state.completed}/${state.total}小問完了`;
+}
+
 function truncateTitle(title = "", max = 10) {
   return title.length > max ? `${title.slice(0, max)}…` : title;
+}
+
+function practiceGroupState(group, groupIndex) {
+  const subs = group.sub_problems || [];
+  const completed = subs.filter((_, subIndex) => progress[subKey(groupIndex, subIndex)]?.correct === true).length;
+  const hasDraft = hasDraftValues(answerDrafts[groupDraftKey(groupIndex)]);
+  const total = subs.length;
+  const status = completed >= total && total > 0
+    ? "完了"
+    : hasDraft
+    ? "入力中"
+    : completed > 0
+    ? "学習中"
+    : "未着手";
+  const stateClass = status === "完了"
+    ? "is-complete"
+    : status === "入力中"
+    ? "is-draft"
+    : status === "学習中"
+    ? "is-progress"
+    : "is-unstarted";
+  return {
+    total,
+    completed,
+    hasDraft,
+    status,
+    stateClass,
+    nextAction: status === "完了" ? "見直す" : status === "未着手" ? "最初の問題へ" : "未入力から続ける",
+  };
 }
 
 function renderGroups() {
   $("#groupCount").textContent = `${groups.length}題`;
   $("#groupList").innerHTML = groups.map((group, index) => {
-    const subs = group.sub_problems || [];
-    const done = subs.every((_, subIndex) => progress[subKey(index, subIndex)]?.correct);
-    const nDone = subs.filter((_, subIndex) => progress[subKey(index, subIndex)]?.correct).length;
-    return `<button class="group-item ${index === currentGroup ? "active" : ""} ${done ? "done" : ""}" data-group="${index}" type="button">
-      <span class="num">[${escapeHtml(group.group_number)}]</span>
+    const groupState = practiceGroupState(group, index);
+    const selected = index === currentGroup;
+    const selectedText = selected ? "・選択中" : "";
+    return `<button class="group-item ${selected ? "active" : ""} ${groupState.stateClass}" data-group="${index}" type="button"
+      ${selected ? 'aria-current="step"' : ""}
+      aria-label="${escapeHtml(`大問${group.group_number} ${group.title} ${groupState.status} ${groupState.completed}/${groupState.total}小問完了${selectedText}`)}">
+      <span class="group-head"><span class="num">GROUP ${formatCatalogNumber(index)}</span><span class="group-status">${groupState.status}${selectedText}</span></span>
       <span class="name">${escapeHtml(group.title)}</span>
-      <span class="mini">${nDone}/${subs.length} 完了</span>
+      <span class="group-progress"><span>${groupState.completed}/${groupState.total}小問完了</span><span>次: ${groupState.nextAction}</span></span>
     </button>`;
   }).join("");
   $$("[data-group]").forEach((button) => {
@@ -618,7 +822,10 @@ function renderGroups() {
   const current = groups[currentGroup];
   const summaryEl = $("#groupSummaryText");
   if (summaryEl) {
-    summaryEl.textContent = current ? `大問${current.group_number}　${truncateTitle(current.title)}` : "";
+    const currentState = current ? practiceGroupState(current, currentGroup) : null;
+    summaryEl.innerHTML = current && currentState
+      ? `<span class="group-summary-title">大問${escapeHtml(current.group_number)}・${escapeHtml(truncateTitle(current.title))}</span><span class="group-summary-state">${escapeHtml(currentState.status)}・${currentState.completed}/${currentState.total}完了</span>`
+      : "";
   }
   $("#groupListToggle")?.setAttribute("aria-expanded", String(groupListOpen));
   $("#groupPanel")?.classList.toggle("list-open", groupListOpen);
@@ -942,6 +1149,9 @@ function handleKey(key) {
     saveProgress();
   }
   renderProblem();
+  renderGroups();
+  renderProgress();
+  renderContinuePanel();
   renderScore(true);
   renderActiveLabel();
 }
@@ -1201,6 +1411,12 @@ function continueStudying() {
 function openLearningPicker() {
   const toggle = $(".source-switch-toggle");
   if (!toggle) return;
+  keypadOpen = false;
+  $("#practiceKeypadPanel")?.classList.add("collapsed");
+  $("#examKeypadPanel")?.classList.add("collapsed");
+  $("#keypadToggle")?.setAttribute("aria-expanded", "false");
+  $("#examKeypadToggle")?.setAttribute("aria-expanded", "false");
+  if (isMiniKey(currentExamKey)) examFlow.closeKeypad?.();
   toggle.open = true;
   toggle.scrollIntoView({ behavior: "smooth", block: "start" });
   toggle.querySelector('[data-exam][aria-selected="true"]')?.focus();
@@ -1331,6 +1547,9 @@ function bindStaticEvents() {
     $("#groupListToggle").setAttribute("aria-expanded", String(groupListOpen));
     $("#groupPanel")?.classList.toggle("list-open", groupListOpen);
   });
+  $(".source-switch-toggle")?.addEventListener("toggle", (event) => {
+    document.body.classList.toggle("catalog-open", event.currentTarget.open);
+  });
   $("#resetProgressBtn").addEventListener("click", resetProgress);
   $("#hideSolutions").addEventListener("change", renderProblem);
   $("#studentSel").addEventListener("change", (event) => {
@@ -1440,6 +1659,7 @@ const examFlow = (() => {
   let activeInput = null;
   let keypadOpen = false;
   let currentGroupIndex = 0;
+  let examGroupListOpen = false;
   const clouds = new Map();
 
   const storageKey = (exam = EXAM) => `math-mini-exam:${exam.id}:active`;
@@ -1527,6 +1747,7 @@ const examFlow = (() => {
     $("#intro").classList.remove("hidden");
     document.body.classList.remove("result-mode");
     updateMode("開始前");
+    renderExamShell();
     renderIntro();
   }
 
@@ -1574,23 +1795,48 @@ const examFlow = (() => {
     }
     activeInput = null;
     keypadOpen = false;
+    examGroupListOpen = false;
     renderExamGroup();
     $("#examGroupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function examGroupState(group) {
+    const total = (group.questions || []).length;
+    const answered = (group.questions || []).filter((question) => isQuestionAnswered(question, state?.answers)).length;
+    const status = answered === 0 ? "未回答" : answered === total ? "回答済み" : "回答中";
+    return {
+      total,
+      answered,
+      status,
+      stateClass: answered === 0 ? "is-unstarted" : answered === total ? "is-complete" : "is-progress",
+    };
   }
 
   function renderExamGroupList() {
     $("#examGroupCount").textContent = `${EXAM.groups.length}題`;
     $("#examGroupList").innerHTML = EXAM.groups.map((group, index) => {
-      const answered = group.questions.filter((q) => isAnswered(q)).length;
-      return `<button class="group-item ${index === currentGroupIndex ? "active" : ""}" data-exam-group="${index}" type="button">
-        <span class="num">[${escapeHtml(group.number)}]</span>
+      const groupState = examGroupState(group);
+      const selected = index === currentGroupIndex;
+      const selectedText = selected ? "・選択中" : "";
+      return `<button class="group-item ${selected ? "active" : ""} ${groupState.stateClass}" data-exam-group="${index}" type="button"
+        ${selected ? 'aria-current="step"' : ""}
+        aria-label="${escapeHtml(`大問${group.number} ${group.title} ${groupState.status} ${groupState.answered}/${groupState.total}回答${selectedText}`)}">
+        <span class="group-head"><span class="num">QUESTION ${formatCatalogNumber(index)}</span><span class="group-status">${groupState.status}${selectedText}</span></span>
         <span class="name">${escapeHtml(group.title)}</span>
-        <span class="mini">${answered}/${group.questions.length} 回答</span>
+        <span class="group-progress"><span>${groupState.answered}/${groupState.total}問回答</span><span>状態: ${groupState.status}</span></span>
       </button>`;
     }).join("");
+    const current = EXAM.groups[currentGroupIndex];
+    const currentState = current ? examGroupState(current) : null;
+    $("#examGroupSummaryText").innerHTML = current && currentState
+      ? `<span class="group-summary-title">大問${escapeHtml(current.number)}・${escapeHtml(current.title)}</span><span class="group-summary-state">${currentState.status}・${currentState.answered}/${currentState.total}回答</span>`
+      : "";
+    $("#examGroupListToggle").setAttribute("aria-expanded", String(examGroupListOpen));
+    $("#examGroupPanel").classList.toggle("list-open", examGroupListOpen);
     $$("[data-exam-group]").forEach((button) => {
       button.addEventListener("click", () => setExamGroup(Number(button.dataset.examGroup)));
     });
+    renderExamShell();
   }
 
   function renderExamGroup() {
@@ -1677,9 +1923,7 @@ const examFlow = (() => {
   }
 
   function isAnswered(q) {
-    const value = state?.answers?.[q.id];
-    if (q.type === "numeric") return Array.isArray(value) && value.every((entry) => normalize(entry) !== "");
-    return Array.isArray(value) ? value.length > 0 : typeof value === "number";
+    return isQuestionAnswered(q, state?.answers);
   }
 
   function updateAnsweredCount() {
@@ -1732,6 +1976,11 @@ const examFlow = (() => {
       toggle.setAttribute("aria-expanded", String(keypadOpen));
       toggle.textContent = keypadOpen ? "キーパッドを閉じる" : "数字を入力";
     }
+  }
+
+  function closeKeypad() {
+    keypadOpen = false;
+    renderExamKeypad();
   }
 
   function handleExamKey(key) {
@@ -1844,6 +2093,7 @@ const examFlow = (() => {
       nextButton.classList.toggle("hidden", !next);
       nextButton.textContent = next ? `第${next.seriesNumber}回へ進む` : "";
     }
+    renderExamShell();
     window.scrollTo({ top: 0, behavior: "auto" });
     $("#resultTitle")?.focus({ preventScroll: true });
   }
@@ -1907,6 +2157,11 @@ const examFlow = (() => {
     if (next) setCurrentExam(next.id);
   });
   $("#chooseExamBtn").addEventListener("click", openLearningPicker);
+  $("#examGroupListToggle").addEventListener("click", () => {
+    examGroupListOpen = !examGroupListOpen;
+    $("#examGroupListToggle").setAttribute("aria-expanded", String(examGroupListOpen));
+    $("#examGroupPanel")?.classList.toggle("list-open", examGroupListOpen);
+  });
   $("#examKeypadToggle").addEventListener("click", () => {
     keypadOpen = !keypadOpen;
     renderExamKeypad();
@@ -1916,5 +2171,5 @@ const examFlow = (() => {
   $("#examNextBtn").addEventListener("click", () => setExamGroup(currentGroupIndex + 1));
   window.addEventListener("beforeunload", () => { if (state?.status === "active") saveActive(); });
 
-  return { enter, leave, initClouds };
+  return { enter, leave, initClouds, closeKeypad };
 })();

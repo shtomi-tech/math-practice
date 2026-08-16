@@ -67,6 +67,7 @@
         <span class="eyebrow">SOURCE</span>
         <strong id="sourceTitle">2026 総合型選抜</strong>
         <span id="sourceText">薬・理工学部 数学</span>
+        <span id="sourceSummary" class="source-summary"></span>
       </section>
       <section class="context-progress" aria-label="全体の進捗">
         <span class="context-label">進捗</span>
@@ -81,7 +82,7 @@
             <div id="schoolSwitch" class="exam-switch" role="tablist" aria-label="学校・出典"></div>
           </section>
           <section class="exam-panel">
-            <span class="context-label">方式・年度</span>
+            <span id="examPanelLabel" class="context-label">方式・年度</span>
             <div id="examSwitch" class="exam-switch" role="tablist" aria-label="方式・年度"></div>
           </section>
         </div>
@@ -191,10 +192,14 @@
 
     <section id="exam" class="shell hidden">
       <aside class="sidebar">
-        <section class="panel">
+        <section class="panel group-panel" id="examGroupPanel">
           <div class="section-head">
             <h2>大問</h2>
             <span class="muted" id="examGroupCount"></span>
+          </div>
+          <div class="group-summary exam-group-summary">
+            <span id="examGroupSummaryText" class="group-summary-text"></span>
+            <button id="examGroupListToggle" class="ghost group-summary-toggle" type="button" aria-expanded="false" aria-controls="examGroupList">変更</button>
           </div>
           <nav id="examGroupList" class="group-list" aria-label="大問一覧"></nav>
         </section>

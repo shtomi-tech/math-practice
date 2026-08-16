@@ -286,6 +286,15 @@ h2 {
   white-space: nowrap;
 }
 
+.source-summary {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
 .context-label {
   display: block;
   margin-bottom: 5px;
@@ -306,6 +315,7 @@ h2 {
 .source-switch-toggle {
   margin-top: 0;
   align-self: start;
+  scroll-margin-top: 16px;
 }
 
 .source-switch-toggle > summary {
@@ -418,7 +428,7 @@ h2 {
 }
 
 .exam-option {
-  min-height: 58px;
+  min-height: 132px;
   padding: 8px 10px;
   border-color: var(--line);
   background: var(--paper);
@@ -437,23 +447,57 @@ h2 {
   border-left: 4px solid var(--ink);
 }
 
+.exam-option.is-complete {
+  border-left: 4px solid var(--ok);
+}
+
+.exam-option.is-progress {
+  border-left: 4px solid var(--line);
+}
+
 .exam-option span,
 .exam-option small {
   display: block;
 }
 
-.exam-option span {
+.exam-option-no,
+.exam-option-mode,
+.exam-option-status,
+.exam-option-progress,
+.exam-option-action {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .04em;
+}
+
+.exam-option-no {
+  color: var(--line);
+  font-weight: 700;
+}
+
+.exam-option-title {
+  display: block;
+  margin-top: 3px;
   font-weight: 700;
   line-height: 1.35;
 }
 
-.exam-option small {
+.exam-option-mode,
+.exam-option-status,
+.exam-option-progress,
+.exam-option-action {
+  display: block;
   margin-top: 4px;
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
+}
+
+.exam-option-status {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.exam-option-action {
+  color: var(--line);
 }
 
 .section-head {
@@ -528,8 +572,24 @@ h2 {
   border-left: 4px solid var(--ink);
 }
 
-.group-item.done {
+.group-item.is-complete {
   background: rgba(22, 163, 74, .10);
+}
+
+.group-item.is-progress,
+.group-item.is-draft {
+  border-left: 4px solid var(--line);
+}
+
+.group-item.is-draft .group-status {
+  color: var(--line);
+}
+
+.group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .group-item .num {
@@ -539,6 +599,14 @@ h2 {
   font-weight: 700;
 }
 
+.group-status {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .group-item .name {
   display: block;
   margin-top: 4px;
@@ -546,8 +614,11 @@ h2 {
   line-height: 1.4;
 }
 
-.group-item .mini {
-  display: block;
+.group-progress {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 8px;
   margin-top: 4px;
   color: var(--muted);
   font-family: var(--mono);
@@ -1160,6 +1231,13 @@ details.panel[open] summary,
     display: none;
   }
 
+  .context-source-card #sourceSummary {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .context-source-card strong {
     font-size: 14px;
   }
@@ -1202,12 +1280,27 @@ details.panel[open] summary,
   }
 
   .group-summary-text {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .group-summary-title {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-weight: 700;
-    font-size: 14px;
+  }
+
+  .group-summary-state {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    white-space: nowrap;
   }
 
   .group-summary-toggle {
@@ -1286,6 +1379,26 @@ details.panel[open] summary,
 
   .shell:not(.keypad-open) {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 390px) {
+  .exam-switch {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-option {
+    min-height: 112px;
+  }
+
+  .source-summary {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  body.catalog-open .keypad-panel {
+    display: none;
   }
 }
 
