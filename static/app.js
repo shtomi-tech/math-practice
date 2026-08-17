@@ -1848,7 +1848,8 @@ const examFlow = (() => {
     $("#examPosition").textContent = `大問 ${currentGroupIndex + 1} / ${EXAM.groups.length}`;
     $("#examPrevBtn").disabled = currentGroupIndex <= 0;
     $("#examNextBtn").disabled = currentGroupIndex >= EXAM.groups.length - 1;
-    $("#examSheet").innerHTML = group.questions.map(renderQuestion).join("");
+    const stemHtml = group.stem ? `<div class="stem chamfer">${group.stem}</div>` : "";
+    $("#examSheet").innerHTML = stemHtml + group.questions.map(renderQuestion).join("");
     renderExamGroupList();
     updateAnsweredCount();
     bindQuestionEvents();
@@ -2081,7 +2082,7 @@ const examFlow = (() => {
     $("#score").textContent = state.score;
     $("#scoreTotal").textContent = `/ ${EXAM.totalPoints}点`;
     $("#resultSummary").textContent = `${state.name}さん、${auto ? "時間切れのため自動提出しました。" : "提出を受け付けました。"}`;
-    $("#resultSheet").innerHTML = EXAM.groups.map((group) => `<section class="result-group panel"><div class="group-heading"><div><p class="eyebrow">QUESTION ${escapeHtml(group.number)}</p><h2>${escapeHtml(group.title)}</h2></div><span class="tag">${group.points}点</span></div>${group.questions.map((q) => {
+    $("#resultSheet").innerHTML = EXAM.groups.map((group) => `<section class="result-group panel"><div class="group-heading"><div><p class="eyebrow">QUESTION ${escapeHtml(group.number)}</p><h2>${escapeHtml(group.title)}</h2></div><span class="tag">${group.points}点</span></div>${group.stem ? `<div class="stem chamfer">${group.stem}</div>` : ""}${group.questions.map((q) => {
       const result = state.results.find((entry) => entry.id === q.id);
       const ok = result.correct === result.total;
       return `<article class="review ${ok ? "correct" : "incorrect"}"><div class="question-head"><span class="question-number">${escapeHtml(q.label)}</span><strong>${ok ? "正解" : "確認"} ${result.points}/${q.points}点</strong></div><div class="question-stem">${q.stem}</div><p><span class="exam-label">あなたの回答</span> ${escapeHtml(displayAnswer(q))}　<span class="exam-label">正答</span> ${escapeHtml(expectedAnswer(q))}</p><details><summary>解説を表示</summary><div class="solution">${q.solution}</div></details></article>`;
