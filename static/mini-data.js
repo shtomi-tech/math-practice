@@ -609,9 +609,9 @@ window.MINI_EXAMS = {
     seriesTotal: null,
     seriesNumber: 6,
     units: ["数と式・1次不等式", "2次関数", "集合と論理", "場合の数", "確率"],
-    durationMinutes: 30,
-    totalPoints: 100,
-    note: "小問集合と段階問題で5分野の基礎を確認する、理解度確認テスト型の30分試験です。",
+    durationMinutes: 45,
+    totalPoints: 150,
+    note: "小問集合と段階問題で5分野の基礎を確認する、理解度確認テスト型の45分試験です。",
     groups: [
       {
         number: "1",
@@ -634,9 +634,9 @@ window.MINI_EXAMS = {
           },
           {
             id: "m06-1-3", label: "(3)", points: 8, type: "choice",
-            stem: "$U=\\{1,2,\\ldots,12\\}$ を全体集合とする。$A=\\{x\\in U\\mid2\\leq x\\leq9\\}$、$B$ を3の倍数の集合とするとき、$n(A\\cap\\overline{B})$ として正しいものを選べ。",
-            options: ["3", "4", "5", "6"], answer: 2,
-            solution: "<strong>考え方：</strong>$A\\cap\\overline B$ は、$A$ に入っていて、かつ $B$ に入らない（3の倍数でない）要素の集まりです。まず $A$ と $B$ を書き出します。<br><strong>手順：</strong>$A=\\{2,3,4,5,6,7,8,9\\}$（8個）。3の倍数は $B=\\{3,6,9,12\\}$。$A$ から $B$ の要素（$3,6,9$）を除くと $A\\cap\\overline B=\\{2,4,5,7,8\\}$ の5個です。<br><strong>注意：</strong>上線は $B$ だけにかかる補集合です。$A\\cap B$（3個）と取り違えないようにします。<br><strong>答え：</strong>5（C）。"
+            stem: "整数 $n$ についての条件 $p:n^2-5n+6=0$、$q:n=2$ を考える。$p$ は $q$ であるための何条件か、正しいものを選べ。",
+            options: ["必要条件", "十分条件", "必要十分条件", "必要条件でも十分条件でもない"], answer: 0,
+            solution: "<strong>考え方：</strong>まず $p$ を満たす $n$ を具体的に求めてから、$p\\Rightarrow q$ と $q\\Rightarrow p$ がそれぞれ成り立つかを確かめます。<br><strong>手順：</strong>$n^2-5n+6=0$ を因数分解すると $(n-2)(n-3)=0$ なので、$p$ を満たす $n$ は $2$ と $3$ です。$n=3$ は $p$ を満たしますが $q$（$n=2$）は満たさないので、$p\\Rightarrow q$ は成り立ちません（$p$ は $q$ の十分条件ではない）。一方、$n=2$ ならば $2^2-5\\times2+6=0$ となり必ず $p$ を満たすので、$q\\Rightarrow p$ は成り立ちます。よって $p$ は $q$ の必要条件です。<br><strong>注意：</strong>2次方程式には解が2つあることを見落とすと、$n=2$ だけが解だと思い込み、十分条件と誤って判断してしまいます。<br><strong>答え：</strong>必要条件（A）。"
           },
           {
             id: "m06-1-4", label: "(4)", points: 8, type: "numeric",
@@ -709,6 +709,183 @@ window.MINI_EXAMS = {
             stem: "この15枚から2枚を同時に引くとき、少なくとも1枚が $A$ に属する確率を既約分数で求めよ。(1)の結果を利用せよ。",
             prompts: ["分子", "分母"], answers: ["4", "7"],
             solution: "<strong>考え方：</strong>「少なくとも1枚が $A$ に属する」の余事象は「2枚とも $A$ に属さない」なので、余事象の確率を1から引きます。<br><strong>手順：</strong>(1)より $n(A)=5$ なので、$A$ に属さないカードは $15-5=10$ 枚。2枚とも $A$ に属さない選び方は $\\binom{10}2=45$ 通り。全体は $\\binom{15}2=105$ 通りなので、余事象の確率は $\\dfrac{45}{105}=\\dfrac37$。したがって少なくとも1枚が $A$ に属する確率は $1-\\dfrac37=\\dfrac47$ です。<br><strong>注意：</strong>「少なくとも1枚」を直接数えようとすると場合分けが増えるため、余事象「1枚も $A$ に属さない」を使う方が速いです。<br><strong>答え：</strong>$\\dfrac47$。"
+          }
+        ]
+      },
+      {
+        number: "4",
+        title: "数と式・1次不等式の段階問題",
+        tag: "ALGEBRA / INEQUALITY",
+        points: 50,
+        stem: "$a>0$ とし、$a+\\dfrac1a=4$ を満たすとき、(1)〜(4)に答えよ。",
+        questions: [
+          {
+            id: "m06-4-1", label: "(1)", points: 12, type: "numeric",
+            stem: "$a^2+\\dfrac1{a^2}$ の値を求めよ。",
+            prompts: ["値"], answers: ["14"],
+            solution: "<strong>考え方：</strong>$\\left(a+\\dfrac1a\\right)^2=a^2+2+\\dfrac1{a^2}$ の関係を使うと、$a$ の値そのものを求めなくても $a^2+\\dfrac1{a^2}$ の値が求まります。<br><strong>手順：</strong>両辺を2乗すると $\\left(a+\\dfrac1a\\right)^2=a^2+2\\cdot a\\cdot\\dfrac1a+\\dfrac1{a^2}=a^2+2+\\dfrac1{a^2}$。左辺は $4^2=16$ なので、$16=a^2+2+\\dfrac1{a^2}$。よって $a^2+\\dfrac1{a^2}=16-2=14$。<br><strong>注意：</strong>2乗すると必ず $+2$ の項が現れます（$a\\cdot\\dfrac1a=1$ のため）。この $+2$ を引き忘れないようにします。<br><strong>答え：</strong>14。"
+          },
+          {
+            id: "m06-4-2", label: "(2)", points: 12, type: "numeric",
+            stem: "$a^3+\\dfrac1{a^3}$ の値を求めよ。",
+            prompts: ["値"], answers: ["52"],
+            solution: "<strong>考え方：</strong>$\\left(a+\\dfrac1a\\right)^3$ を展開すると、$a^3+\\dfrac1{a^3}$ の項と $3\\left(a+\\dfrac1a\\right)$ の項が出てくる関係を利用します。<br><strong>手順：</strong>$\\left(a+\\dfrac1a\\right)^3=a^3+3a+\\dfrac3a+\\dfrac1{a^3}=a^3+\\dfrac1{a^3}+3\\left(a+\\dfrac1a\\right)$。左辺は $4^3=64$、$3\\left(a+\\dfrac1a\\right)=3\\times4=12$ なので、$a^3+\\dfrac1{a^3}=64-12=52$。<br><strong>注意：</strong>3乗の展開では、$a^3+\\dfrac1{a^3}$ の他に $3\\left(a+\\dfrac1a\\right)$ の項が現れることを見落とさないようにします。<br><strong>答え：</strong>52。"
+          },
+          {
+            id: "m06-4-3", label: "(3)", points: 13, type: "numeric",
+            stem: "(1)の結果を用いて、不等式 $|3x-14|<10$ を満たす整数 $x$ の個数を求めよ。",
+            prompts: ["個数"], answers: ["6"],
+            solution: "<strong>考え方：</strong>$|X|<k$（$k>0$）の解は $-k<X<k$ の1本の範囲になることを使い、$x$ の範囲を求めてから整数を数えます。<br><strong>手順：</strong>$-10<3x-14<10$ より $4<3x<24$。各辺を3で割ると $\\dfrac43<x<8$。この範囲に入る整数は $x=2,3,4,5,6,7$ の6個です。<br><strong>注意：</strong>$\\dfrac43$ は整数ではないので $x=2$ から、$8$ は含まないので $x=7$ までが範囲です。境界の扱いを間違えないようにします。<br><strong>答え：</strong>6個。"
+          },
+          {
+            id: "m06-4-4", label: "(4)", points: 13, type: "numeric",
+            stem: "不等式 $|3x-14|<k$（$k$ は自然数）を満たす整数 $x$ がちょうど9個であるとき、$k$ の値を求めよ。",
+            prompts: ["$k$"], answers: ["14"],
+            solution: "<strong>考え方：</strong>(3)と同じ形の不等式で、範囲の広さを決める $k$ を大きくするほど、含まれる整数の個数が増えていきます。整数の個数がちょうど9個になる $k$ を探します。<br><strong>手順：</strong>$|3x-14|<k$ より $\\dfrac{14-k}3<x<\\dfrac{14+k}3$。$k=14$ のとき $0<x<\\dfrac{28}3$（$\\approx9.33$）となり、整数は $x=1,2,\\ldots,9$ の9個です。$k=13$ のときは $\\dfrac13<x<9$ となり、整数は $x=1,\\ldots,8$ の8個で9個に届きません。したがって $k=14$ です。<br><strong>注意：</strong>$k$ を1つ小さくした場合も確認し、ちょうど9個になる最小の $k$ であることを確かめると確実です。<br><strong>答え：</strong>$k=14$。"
+          }
+        ]
+      }
+    ]
+  },
+  "mini_07": {
+    id: "mini_07",
+    title: "基礎ミックス ver3 第1回",
+    seriesTotal: null,
+    seriesNumber: 7,
+    units: ["中学の復習", "式の計算", "実数", "1次不等式", "集合", "場合の数"],
+    durationMinutes: 45,
+    totalPoints: 150,
+    note: "中学の復習から数学Iの数と式・集合・場合の数までを、小問集合と段階問題で確認する45分試験です。",
+    groups: [
+      {
+        number: "1",
+        title: "中学の復習と各分野の小問集合",
+        tag: "MIXED REVIEW",
+        points: 40,
+        stem: "次の(1)〜(5)は、互いに独立した小問です。中学の復習と、各分野の基礎事項を確認します。",
+        questions: [
+          {
+            id: "m07-1-1", label: "(1)", points: 8, type: "numeric",
+            stem: "$\\sqrt{54n}$ が自然数となるような最小の自然数 $n$ を求めよ。また、そのときの $\\sqrt{54n}$ の値を求めよ。",
+            prompts: ["$n$", "$\\sqrt{54n}$"], answers: ["6", "18"],
+            solution: "<strong>考え方：</strong>根号の中を素因数分解し、指数がすべて偶数になるように足りない因数を掛けます。<br><strong>手順：</strong>$54=2\\times3^3$ なので $\\sqrt{54n}=\\sqrt{2\\times3^3\\times n}$。指数を偶数にそろえるには $2$ と $3$ が1つずつ足りないので、最小の $n$ は $2\\times3=6$ です。このとき $54n=324=18^2$ なので $\\sqrt{54n}=18$。<br><strong>注意：</strong>$n=2$ では $2^2\\times3^3$、$n=3$ では $2\\times3^4$ となり、どちらも根号は外れません。素因数ごとに指数の偶奇を確認します。<br><strong>答え：</strong>$n=6$、$\\sqrt{54n}=18$。"
+          },
+          {
+            id: "m07-1-2", label: "(2)", points: 8, type: "numeric",
+            stem: "$(2x-3)^2-(2x+3)(2x-3)$ を展開して整理すると $ax+b$ となる。$a$、$b$ の値を求めよ。",
+            prompts: ["$a$", "$b$"], answers: ["-12", "18"],
+            solution: "<strong>考え方：</strong>乗法公式 $(A-B)^2=A^2-2AB+B^2$ と $(A+B)(A-B)=A^2-B^2$ をそれぞれ使って展開し、同類項をまとめます。<br><strong>手順：</strong>$(2x-3)^2=4x^2-12x+9$、$(2x+3)(2x-3)=4x^2-9$。差をとると $(4x^2-12x+9)-(4x^2-9)=-12x+18$。よって $a=-12$、$b=18$。<br><strong>注意：</strong>後ろの式全体に $-$ が掛かるので $-(-9)=+9$ となり、定数項は $9+9=18$ です。かっこを外すときの符号に注意します。<br><strong>答え：</strong>$a=-12$、$b=18$。"
+          },
+          {
+            id: "m07-1-3", label: "(3)", points: 8, type: "choice",
+            stem: "$2x^2+5xy-3y^2$ を因数分解したものとして正しいものを選べ。",
+            options: ["$(2x-y)(x+3y)$", "$(2x+y)(x-3y)$", "$(2x-3y)(x+y)$", "$(x-y)(2x+3y)$"], answer: 0,
+            solution: "<strong>考え方：</strong>$x$ について整理し、たすき掛けで $2$ と $-3$ の分け方を探します。展開して元に戻るかを必ず確認します。<br><strong>手順：</strong>$2x^2$ を $2x$ と $x$ に、$-3y^2$ を $-y$ と $3y$ に分けると、$xy$ の係数は $2x\\times3y+x\\times(-y)=6xy-xy=5xy$ となり一致します。よって $(2x-y)(x+3y)$。<br><strong>注意：</strong>$(2x+y)(x-3y)$ を展開すると $2x^2-5xy-3y^2$ となり $xy$ の符号が逆、$(2x-3y)(x+y)$ は $2x^2-xy-3y^2$ で係数が合いません。展開による検算が確実です。<br><strong>答え：</strong>$(2x-y)(x+3y)$（A）。"
+          },
+          {
+            id: "m07-1-4", label: "(4)", points: 8, type: "numeric",
+            stem: "不等式 $\\dfrac{2x-1}{3}\\leq\\dfrac{x+2}{2}$ を満たす最大の整数 $x$ を求めよ。",
+            prompts: ["$x$"], answers: ["8"],
+            solution: "<strong>考え方：</strong>分母をはらってから1次不等式を解き、得られた範囲に含まれる整数のうち最大のものを答えます。<br><strong>手順：</strong>両辺に $6$ を掛けると $2(2x-1)\\leq3(x+2)$。展開して $4x-2\\leq3x+6$、移項して $x\\leq8$。この範囲の最大の整数は $8$ です。<br><strong>注意：</strong>両辺に掛けた $6$ は正の数なので不等号の向きは変わりません（負の数を掛けたり割ったりするときだけ向きが変わります）。$\\leq$ なので $x=8$ 自身も解に含まれます。<br><strong>答え：</strong>$x=8$。"
+          },
+          {
+            id: "m07-1-5", label: "(5)", points: 8, type: "numeric",
+            stem: "集合 $A=\\{1,\\,2,\\,3,\\,4,\\,5\\}$ について、$A$ の部分集合の個数と、そのうち要素がちょうど2個であるものの個数を求めよ。",
+            prompts: ["部分集合の個数", "要素2個の個数"], answers: ["32", "10"],
+            solution: "<strong>考え方：</strong>部分集合は、各要素について「入れる／入れない」を決める作業なので $2^n$ 個です。要素数を指定したものは組合せで数えます。<br><strong>手順：</strong>要素は5個なので部分集合は $2^5=32$ 個。要素がちょうど2個のものは5個から2個を選ぶ組合せで $\\binom52=\\dfrac{5\\times4}{2\\times1}=10$ 個です。<br><strong>注意：</strong>部分集合には空集合と $A$ 自身も含まれます（$32$ にはこの2つが入っています）。数え忘れに注意します。<br><strong>答え：</strong>部分集合は32個、要素2個のものは10個。"
+          }
+        ]
+      },
+      {
+        number: "2",
+        title: "対称式の段階問題",
+        tag: "ALGEBRAIC EXPRESSION",
+        points: 30,
+        stem: "$x+y=5$、$xy=3$ とする。(1)〜(3)に答えよ。ただし、$x$、$y$ の値そのものを求める必要はない。",
+        questions: [
+          {
+            id: "m07-2-1", label: "(1)", points: 10, type: "numeric",
+            stem: "$x^2+y^2$ と $(x-y)^2$ の値を求めよ。",
+            prompts: ["$x^2+y^2$", "$(x-y)^2$"], answers: ["19", "13"],
+            solution: "<strong>考え方：</strong>$(x+y)^2=x^2+2xy+y^2$ を変形すると $x^2+y^2=(x+y)^2-2xy$ と表せます。$(x-y)^2$ も同じように $(x+y)^2-4xy$ で求まります。<br><strong>手順：</strong>$(x+y)^2=25$ なので $x^2+y^2=25-2\\times3=19$。また $(x-y)^2=x^2-2xy+y^2=19-2\\times3=13$（$(x+y)^2-4xy=25-12=13$ としても同じです）。<br><strong>注意：</strong>$x^2+y^2$ と $(x+y)^2$ を混同しないようにします。必ず $-2xy$ の項を引きます。<br><strong>答え：</strong>$x^2+y^2=19$、$(x-y)^2=13$。"
+          },
+          {
+            id: "m07-2-2", label: "(2)", points: 10, type: "numeric",
+            stem: "$x^3+y^3$ の値を求めよ。",
+            prompts: ["$x^3+y^3$"], answers: ["80"],
+            solution: "<strong>考え方：</strong>3乗の和は $x^3+y^3=(x+y)^3-3xy(x+y)$ と、基本対称式だけで表せます。<br><strong>手順：</strong>$(x+y)^3=125$、$3xy(x+y)=3\\times3\\times5=45$ なので、$x^3+y^3=125-45=80$。<br><strong>注意：</strong>$x^3+y^3=(x+y)(x^2-xy+y^2)$ を使ってもよく、(1)の結果から $5\\times(19-3)=5\\times16=80$ となって一致します。検算に使えます。<br><strong>答え：</strong>80。"
+          },
+          {
+            id: "m07-2-3", label: "(3)", points: 10, type: "numeric",
+            stem: "$\\dfrac{x}{y}+\\dfrac{y}{x}$ の値を既約分数で求めよ。(1)の結果を利用せよ。",
+            prompts: ["分子", "分母"], answers: ["19", "3"],
+            solution: "<strong>考え方：</strong>通分すると分子が $x^2+y^2$、分母が $xy$ になるので、(1)で求めた値をそのまま使えます。<br><strong>手順：</strong>$\\dfrac{x}{y}+\\dfrac{y}{x}=\\dfrac{x^2+y^2}{xy}=\\dfrac{19}{3}$。$19$ は素数で $3$ で割り切れないので、これが既約分数です。<br><strong>注意：</strong>$xy=3\\neq0$ なので分母は $0$ になりません。通分の分子は $x^2+y^2$ であって $x+y$ ではない点に注意します。<br><strong>答え：</strong>$\\dfrac{19}{3}$。"
+          }
+        ]
+      },
+      {
+        number: "3",
+        title: "実数と1次不等式の段階問題",
+        tag: "REAL NUMBERS / INEQUALITY",
+        points: 40,
+        stem: "$a=\\dfrac{1}{\\sqrt5-2}$、$b=\\dfrac{1}{\\sqrt5+2}$ とする。(1)〜(4)に答えよ。必要ならば $2.2<\\sqrt5<2.3$ を用いてよい。",
+        questions: [
+          {
+            id: "m07-3-1", label: "(1)", points: 10, type: "numeric",
+            stem: "分母を有理化して $a=\\sqrt5+p$、$b=\\sqrt5+q$ と表すとき、$p$、$q$ の値を求めよ。",
+            prompts: ["$p$", "$q$"], answers: ["2", "-2"],
+            solution: "<strong>考え方：</strong>分母が $\\sqrt5-2$ の形なので、共役な数 $\\sqrt5+2$ を分母・分子に掛けると、分母が $(\\sqrt5)^2-2^2$ となって根号が消えます。<br><strong>手順：</strong>$a=\\dfrac{1}{\\sqrt5-2}=\\dfrac{\\sqrt5+2}{(\\sqrt5-2)(\\sqrt5+2)}=\\dfrac{\\sqrt5+2}{5-4}=\\sqrt5+2$。同様に $b=\\dfrac{\\sqrt5-2}{5-4}=\\sqrt5-2$。よって $p=2$、$q=-2$。<br><strong>注意：</strong>分母が $1$ になるのでそのまま $\\sqrt5\\pm2$ と書けます。$b=\\sqrt5+(-2)$ なので $q=-2$ です（符号に注意）。<br><strong>答え：</strong>$p=2$、$q=-2$。"
+          },
+          {
+            id: "m07-3-2", label: "(2)", points: 10, type: "numeric",
+            stem: "$ab$ と $a^2+b^2$ の値を求めよ。(1)の結果を利用せよ。",
+            prompts: ["$ab$", "$a^2+b^2$"], answers: ["1", "18"],
+            solution: "<strong>考え方：</strong>$a+b$ と $ab$ を先に求め、$a^2+b^2=(a+b)^2-2ab$ を使うと、根号を含む式を2乗する手間が省けます。<br><strong>手順：</strong>(1)より $a=\\sqrt5+2$、$b=\\sqrt5-2$ なので、$ab=(\\sqrt5+2)(\\sqrt5-2)=5-4=1$、$a+b=2\\sqrt5$。よって $a^2+b^2=(2\\sqrt5)^2-2\\times1=20-2=18$。<br><strong>注意：</strong>$(2\\sqrt5)^2=2^2\\times(\\sqrt5)^2=4\\times5=20$ です。係数の2乗を忘れないようにします。<br><strong>答え：</strong>$ab=1$、$a^2+b^2=18$。"
+          },
+          {
+            id: "m07-3-3", label: "(3)", points: 10, type: "numeric",
+            stem: "$a$ の整数部分 $m$ を求めよ。また、$a$ の小数部分が $\\sqrt5-r$ と表せるとき、$r$ の値を求めよ。",
+            prompts: ["$m$", "$r$"], answers: ["4", "2"],
+            solution: "<strong>考え方：</strong>整数部分は「その数を超えない最大の整数」です。$2.2<\\sqrt5<2.3$ から $a=\\sqrt5+2$ の範囲を絞り、小数部分は（もとの数）−（整数部分）で求めます。<br><strong>手順：</strong>各辺に2を足すと $4.2<\\sqrt5+2<4.3$ なので、$a$ の整数部分は $m=4$。小数部分は $a-4=(\\sqrt5+2)-4=\\sqrt5-2$ なので $r=2$。<br><strong>注意：</strong>小数部分は $0$ 以上 $1$ 未満になるはずです。$\\sqrt5-2\\approx0.236$ で条件を満たしています（これは(1)の $b$ と同じ値です）。<br><strong>答え：</strong>$m=4$、$r=2$。"
+          },
+          {
+            id: "m07-3-4", label: "(4)", points: 10, type: "numeric",
+            stem: "(3)で求めた $m$ を用いて、不等式 $|2x-m|<5$ を満たす整数 $x$ の個数と、そのうち最大のものを求めよ。",
+            prompts: ["個数", "最大の$x$"], answers: ["5", "4"],
+            solution: "<strong>考え方：</strong>$|X|<k$（$k>0$）の解は $-k<X<k$ の1本の範囲になります。範囲を求めてから、含まれる整数を書き出します。<br><strong>手順：</strong>(3)より $m=4$ なので $|2x-4|<5$。よって $-5<2x-4<5$、各辺に4を足して $-1<2x<9$、2で割って $-\\dfrac12<x<\\dfrac92$。この範囲の整数は $x=0,1,2,3,4$ の5個で、最大は4です。<br><strong>注意：</strong>$\\dfrac92=4.5$ は範囲に含まれないので、最大の整数は5ではなく4です。境界が分数のときは、実際に整数を書き出して数えると確実です。<br><strong>答え：</strong>5個、最大は $x=4$。"
+          }
+        ]
+      },
+      {
+        number: "4",
+        title: "集合と場合の数の段階問題",
+        tag: "SETS / COUNTING",
+        points: 40,
+        stem: "$1$ から $50$ までの整数が $1$ つずつ書かれたカードが $50$ 枚ある。$3$ の倍数が書かれたカードの集合を $A$、$4$ の倍数が書かれたカードの集合を $B$ とする。(1)〜(4)に答えよ。",
+        questions: [
+          {
+            id: "m07-4-1", label: "(1)", points: 12, type: "numeric",
+            stem: "$n(A)$、$n(B)$、$n(A\\cap B)$ をそれぞれ求めよ。",
+            prompts: ["$n(A)$", "$n(B)$", "$n(A\\cap B)$"], answers: ["16", "12", "4"],
+            solution: "<strong>考え方：</strong>$1$ から $N$ までにある $k$ の倍数の個数は、$N\\div k$ の商（小数点以下切り捨て）で求まります。$A\\cap B$ は「3の倍数かつ4の倍数」＝12の倍数です。<br><strong>手順：</strong>$50\\div3=16$ 余り $2$ より $n(A)=16$。$50\\div4=12$ 余り $2$ より $n(B)=12$。3と4の最小公倍数は12で、$50\\div12=4$ 余り $2$ より $n(A\\cap B)=4$（$12,24,36,48$）。<br><strong>注意：</strong>「3の倍数かつ4の倍数」を $3\\times4=12$ の倍数としてよいのは、3と4が互いに素だからです。たとえば「4の倍数かつ6の倍数」は24の倍数ではなく12の倍数なので、最小公倍数で考えます。<br><strong>答え：</strong>$n(A)=16$、$n(B)=12$、$n(A\\cap B)=4$。"
+          },
+          {
+            id: "m07-4-2", label: "(2)", points: 10, type: "numeric",
+            stem: "$n(A\\cup B)$ と、$A$ にも $B$ にも属さないカードの枚数を求めよ。(1)の結果を利用せよ。",
+            prompts: ["$n(A\\cup B)$", "どちらにも属さない枚数"], answers: ["24", "26"],
+            solution: "<strong>考え方：</strong>和集合の要素数は $n(A\\cup B)=n(A)+n(B)-n(A\\cap B)$ で求めます。どちらにも属さない枚数は、全体から和集合を引きます。<br><strong>手順：</strong>$n(A\\cup B)=16+12-4=24$。全体は50枚なので、どちらにも属さないカードは $50-24=26$ 枚です。<br><strong>注意：</strong>$n(A)+n(B)$ をそのまま足すと、12の倍数の4枚を2回数えてしまいます。必ず $n(A\\cap B)$ を1回分引きます。<br><strong>答え：</strong>$n(A\\cup B)=24$、どちらにも属さないカードは26枚。"
+          },
+          {
+            id: "m07-4-3", label: "(3)", points: 9, type: "numeric",
+            stem: "$A\\cup B$ に属するカードの中から3枚を選ぶ選び方は何通りあるか。(2)の結果を利用せよ。",
+            prompts: ["通り"], answers: ["2024"],
+            solution: "<strong>考え方：</strong>選ぶ順番は関係ないので、組合せ $\\binom{n}{3}$ を使います。$n$ は(2)で求めた $n(A\\cup B)$ です。<br><strong>手順：</strong>(2)より $n(A\\cup B)=24$ なので、$\\binom{24}{3}=\\dfrac{24\\times23\\times22}{3\\times2\\times1}=\\dfrac{12144}{6}=2024$ 通り。<br><strong>注意：</strong>「選ぶ」だけで並べないので順列 $_{24}\\mathrm{P}_3$ ではありません。$3!=6$ で割るのを忘れないようにします。<br><strong>答え：</strong>2024通り。"
+          },
+          {
+            id: "m07-4-4", label: "(4)", points: 9, type: "numeric",
+            stem: "50枚から2枚を選ぶとき、少なくとも1枚が $A\\cap B$ に属する選び方は何通りあるか。(1)の結果を利用せよ。",
+            prompts: ["通り"], answers: ["190"],
+            solution: "<strong>考え方：</strong>「少なくとも1枚」は場合分けが増えるので、余事象「2枚とも $A\\cap B$ に属さない」を全体から引きます。<br><strong>手順：</strong>全体の選び方は $\\binom{50}{2}=\\dfrac{50\\times49}{2}=1225$ 通り。(1)より $n(A\\cap B)=4$ なので、$A\\cap B$ に属さないカードは $50-4=46$ 枚あり、そこから2枚選ぶ方法は $\\binom{46}{2}=\\dfrac{46\\times45}{2}=1035$ 通り。よって $1225-1035=190$ 通りです。<br><strong>注意：</strong>直接数えると「ちょうど1枚」$4\\times46=184$ 通りと「2枚とも」$\\binom42=6$ 通りの和で $190$ 通りとなり、一致します（検算に使えます）。<br><strong>答え：</strong>190通り。"
           }
         ]
       }

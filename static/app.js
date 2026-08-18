@@ -586,7 +586,7 @@ function renderExamShell() {
     const state = catalogStateForExam(key);
     const optionExam = state.mode === "mini" ? MINI_EXAMS[key] : EXAMS[key];
     const active = key === currentExamKey;
-    const modeLabel = state.mode === "mini" ? "30分ミニ試験" : "過去問演習";
+    const modeLabel = state.mode === "mini" ? `${optionExam.durationMinutes}分ミニ試験` : "過去問演習";
     const groupLabel = `${groupCountFor(key)}大問・${state.total}${state.mode === "mini" ? "小問" : "小問"}`;
     const selectedText = active ? "・選択中" : "";
     return `<button class="exam-option ${active ? "active" : ""} ${catalogStateClass(state)}" type="button" role="tab"
