@@ -32,7 +32,6 @@ const forbiddenByFile = {
     ".hint-log",
   ],
   "README.md": ["段階ヒント", "hint_strategy", "check-hints.js", "check-prerequisites.js", "hint-strategies.js"],
-  "static/rikaido2507-hints.js": ["summary:", "roadmap:", "prerequisites:", "MATH_HINT_STRATEGIES"],
 };
 
 for (const [relative, forbidden] of Object.entries(forbiddenByFile)) {
@@ -42,7 +41,7 @@ for (const [relative, forbidden] of Object.entries(forbiddenByFile)) {
   }
 }
 
-for (const relative of ["static/hint-strategies.js", "scripts/check-hints.js", "scripts/check-prerequisites.js"]) {
+for (const relative of ["static/hint-strategies.js", "static/rikaido2507-hints.js", "scripts/check-hints.js", "scripts/check-prerequisites.js"]) {
   if (fs.existsSync(path.join(root, relative))) errors.push(`${relative}: 共通ヒント用ファイルが残っています`);
 }
 

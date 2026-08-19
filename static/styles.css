@@ -1126,6 +1126,26 @@ details.panel[open] summary,
   color: var(--paper);
 }
 
+.detail-print-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.detail-print-link:hover,
+.detail-print-link:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 .detail-step-status,
 .detail-step-label {
   font-family: var(--mono);

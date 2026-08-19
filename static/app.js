@@ -238,6 +238,7 @@ const DETAIL_TEXTS = {
   ...(window.TEIKYO_DETAIL_TEXTS || {}),
   ...(window.MATH_DETAIL_TEXTS || {}),
 };
+const PRINT_SOURCES = window.MATH_PRINT_SOURCES || {};
 
 function loadCurrentExam() {
   const requested = new URLSearchParams(window.location.search).get("exam");
@@ -1312,6 +1313,13 @@ function detailKey(group, sub) {
   return `${group.group_number}-${sub.label}`;
 }
 
+function printUrlFor(group, sub) {
+  const src = PRINT_SOURCES[currentExamKey];
+  if (!src) return null;
+  const name = src.overrides?.[detailKey(group, sub)] || src.files[group.group_number];
+  return name ? `${src.dir}${name}.pdf#page=${src.page}` : null;
+}
+
 function fallbackDetail(sub) {
   return [
     "まず問題文から、求める量と条件を分けて確認する。",
@@ -1346,8 +1354,19 @@ function detailStepsHtml(group, sub) {
 function renderSolutionModalBody(group, sub) {
   $("#modalMeta").textContent = `GROUP ${group.group_number} / ${sub.label}`;
   $("#modalTitle").textContent = `${group.title} ${sub.label}`;
-  $("#modalBody").innerHTML = `
-    <div class="detail-grid">
+  const printUrl = printUrlFor(group, sub);
+  const sections = printUrl
+    ? `
+      <section class="detail-section">
+        <h3>問題</h3>
+        <p>${mdLite(sub.stem_md || "")}</p>
+      </section>
+      <section class="detail-section">
+        <h3>解説</h3>
+        <a class="detail-print-link" href="${escapeHtml(printUrl)}" target="_blank" rel="noopener">解説プリントを開く（別タブ・PDF）</a>
+      </section>
+    `
+    : `
       <section class="detail-section">
         <h3>問題</h3>
         <p>${mdLite(sub.stem_md || "")}</p>
@@ -1360,12 +1379,18 @@ function renderSolutionModalBody(group, sub) {
         <h3>解説</h3>
         ${detailStepsHtml(group, sub)}
       </section>
+    `;
+  $("#modalBody").innerHTML = `
+    <div class="detail-grid">
+      ${sections}
     </div>
   `;
-  $("[data-reveal-detail]")?.addEventListener("click", () => {
-    modalDetailShown += 1;
-    renderSolutionModalBody(group, sub);
-  });
+  if (!printUrl) {
+    $("[data-reveal-detail]")?.addEventListener("click", () => {
+      modalDetailShown += 1;
+      renderSolutionModalBody(group, sub);
+    });
+  }
   renderMath($("#solutionModal"));
 }
 

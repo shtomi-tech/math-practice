@@ -9,5 +9,8 @@ static/config.json
 # git・GitHub Pages へ含めない。ローカルの data/ にのみ置くこと。
 data/
 
+# 解説プリントのローカル原稿・生成物（公開判断は別途）
+/prints/
+
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 graft/
