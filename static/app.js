@@ -238,7 +238,7 @@ const DETAIL_TEXTS = {
   ...(window.TEIKYO_DETAIL_TEXTS || {}),
   ...(window.MATH_DETAIL_TEXTS || {}),
 };
-const PRINT_SOURCES = window.MATH_PRINT_SOURCES || {};
+const MATH_SOLUTIONS = window.MATH_SOLUTIONS || {};
 
 function loadCurrentExam() {
   const requested = new URLSearchParams(window.location.search).get("exam");
@@ -423,6 +423,13 @@ function mdLite(text = "") {
     .replace(/\n/g, "<br>");
 }
 
+function solutionTextHtml(text = "") {
+  const normalized = String(text).replace(/\$\$([\s\S]*?)\$\$/g, (_, body) =>
+    `$$${body.replace(/\r?\n/g, " ")}$$`,
+  );
+  return mdLite(normalized);
+}
+
 function renderMath(root = document.body) {
   if (!window.renderMathInElement) return;
   window.renderMathInElement(root, {
@@ -432,6 +439,7 @@ function renderMath(root = document.body) {
       { left: "\\(", right: "\\)", display: false },
       { left: "\\[", right: "\\]", display: true },
     ],
+    macros: { "\\bun": "\\dfrac{#1}{#2}" },
     throwOnError: false,
   });
 }
@@ -1026,6 +1034,11 @@ function renderSubProblem(sub, subIndex) {
   const resultClass = !result ? "pending" : result.correct ? "ok" : "ng";
   const canShowSolution = !$("#hideSolutions").checked
     || Boolean(result);
+  const solution = solutionForSub(groups[currentGroup], sub);
+  const strategyId = `strategy-${groupKey(currentGroup)}-${subIndex}`;
+  const strategyButton = solution
+    ? `<button class="sub-strategy-button ghost" type="button" data-open-strategy aria-controls="${strategyId}" aria-expanded="false">方針を見る</button>`
+    : "";
   const solutionButton = canShowSolution
     ? `<button class="sub-solution-button ghost" type="button" data-open-solution="${subIndex}">解説を見る</button>`
     : "";
@@ -1041,8 +1054,10 @@ function renderSubProblem(sub, subIndex) {
       <button class="sub-check-button ${result ? "ghost" : "primary"}" type="button" data-check-sub="${subIndex}" ${filled < fields.length ? "disabled" : ""}>
         ${result ? "再確認" : "答えを確認"}
       </button>
+      ${strategyButton}
       ${solutionButton}
     </div>
+    ${solution ? `<div id="${strategyId}">${strategyPanelHtml(solution)}</div>` : ""}
   </article>`;
 }
 
@@ -1054,10 +1069,18 @@ function renderProblem() {
   $("#prevGroupBtn").disabled = currentGroup <= 0;
   $("#nextGroupBtn").disabled = currentGroup >= groups.length - 1;
   $("#topicTag").textContent = group.topic_tag || "数学";
+  const printLink = $("#groupPrintLink");
+  const printUrl = groupPrintUrl(group);
+  if (printLink) {
+    printLink.classList.toggle("hidden", !printUrl);
+    if (printUrl) printLink.href = printUrl;
+    else printLink.removeAttribute("href");
+  }
   $("#groupStem").innerHTML = `<p>${mdLite(group.stem_md || "")}</p>`;
   $("#subList").innerHTML = (group.sub_problems || []).map(renderSubProblem).join("");
   bindCells();
   bindSubChecks();
+  bindStrategyButtons();
   bindSolutionButtons();
   renderMath($("#groupStem"));
   renderMath($("#subList"));
@@ -1235,6 +1258,21 @@ function bindSolutionButtons() {
   });
 }
 
+function bindStrategyButtons() {
+  $$("[data-open-strategy]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = document.getElementById(button.getAttribute("aria-controls"));
+      const strategyPanel = panel?.querySelector("[data-strategy-panel]");
+      if (!strategyPanel) return;
+      const expanded = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(!expanded));
+      strategyPanel.hidden = expanded;
+      strategyPanel.classList.toggle("hidden", expanded);
+      if (!expanded) renderMath(strategyPanel);
+    });
+  });
+}
+
 function checkSubProblem(subIndex) {
   const result = gradeSubProblem(subIndex);
   if (!result) {
@@ -1313,11 +1351,36 @@ function detailKey(group, sub) {
   return `${group.group_number}-${sub.label}`;
 }
 
-function printUrlFor(group, sub) {
-  const src = PRINT_SOURCES[currentExamKey];
-  if (!src) return null;
-  const name = src.overrides?.[detailKey(group, sub)] || src.files[group.group_number];
-  return name ? `${src.dir}${name}.pdf#page=${src.page}` : null;
+function solutionForSub(group, sub) {
+  return MATH_SOLUTIONS[currentExamKey]?.[detailKey(group, sub)] || null;
+}
+
+function groupPrintUrl(group) {
+  if (!group || !MATH_SOLUTIONS[currentExamKey]) return null;
+  const url = new URL("./print.html", window.location.href);
+  url.searchParams.set("exam", currentExamKey);
+  url.searchParams.set("group", group.group_number);
+  return url.href;
+}
+
+function solutionFormulaHtml(formula) {
+  if (!formula) return "";
+  return `
+    <div class="solution-formula">
+      <h4>${escapeHtml(formula.title || "公式")}</h4>
+      <div>${solutionTextHtml(formula.body || "")}</div>
+    </div>
+  `;
+}
+
+function strategyPanelHtml(solution) {
+  return `
+    <div class="sub-strategy hidden" data-strategy-panel hidden>
+      <div class="sub-strategy-label">方針</div>
+      <p>${solutionTextHtml(solution.approach || "")}</p>
+      ${solutionFormulaHtml(solution.formula)}
+    </div>
+  `;
 }
 
 function fallbackDetail(sub) {
@@ -1354,16 +1417,23 @@ function detailStepsHtml(group, sub) {
 function renderSolutionModalBody(group, sub) {
   $("#modalMeta").textContent = `GROUP ${group.group_number} / ${sub.label}`;
   $("#modalTitle").textContent = `${group.title} ${sub.label}`;
-  const printUrl = printUrlFor(group, sub);
-  const sections = printUrl
+  const solution = solutionForSub(group, sub);
+  const sections = solution
     ? `
       <section class="detail-section">
         <h3>問題</h3>
         <p>${mdLite(sub.stem_md || "")}</p>
       </section>
       <section class="detail-section">
-        <h3>解説</h3>
-        <a class="detail-print-link" href="${escapeHtml(printUrl)}" target="_blank" rel="noopener">解説プリントを開く（別タブ・PDF）</a>
+        <h3>方針</h3>
+        <p>${solutionTextHtml(solution.approach || "")}</p>
+        ${solutionFormulaHtml(solution.formula)}
+      </section>
+      <section class="detail-section">
+        <h3>解答</h3>
+        <div>${solutionTextHtml(solution.solution || "")}</div>
+        ${solution.figure ? `<div class="solution-figure">${solution.figure}</div>` : ""}
+        <p class="solution-answer"><strong>答え：</strong>${solutionTextHtml(solution.answer || "")}</p>
       </section>
     `
     : `
@@ -1385,7 +1455,7 @@ function renderSolutionModalBody(group, sub) {
       ${sections}
     </div>
   `;
-  if (!printUrl) {
+  if (!solution) {
     $("[data-reveal-detail]")?.addEventListener("click", () => {
       modalDetailShown += 1;
       renderSolutionModalBody(group, sub);

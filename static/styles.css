@@ -517,6 +517,34 @@ h2 {
   white-space: nowrap;
 }
 
+.group-heading-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.group-print-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.group-print-link:hover,
+.group-print-link:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 .meter {
   height: 8px;
   margin-top: 6px;
@@ -805,6 +833,30 @@ details.panel[open] summary,
   min-height: 44px;
 }
 
+.sub-strategy-button {
+  min-width: 130px;
+  min-height: 44px;
+}
+
+.sub-strategy {
+  margin-top: 12px;
+  padding: 12px;
+  border-left: 3px solid var(--line);
+  background: var(--ice);
+}
+
+.sub-strategy-label {
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.sub-strategy p {
+  margin: 0;
+}
+
 .check-result {
   font-family: var(--mono);
   font-size: 11px;
@@ -1086,6 +1138,8 @@ details.panel[open] summary,
   border: 1px solid var(--ink);
   background: var(--ice);
   padding: 12px;
+  /* グリッド項目の既定 min-width:auto だと図の分だけ列幅を超えるため縮めるようにする */
+  min-width: 0;
 }
 
 .detail-section h3 {
@@ -1106,6 +1160,52 @@ details.panel[open] summary,
   margin-top: 8px;
 }
 
+/* 数式は折り返せない。長い displaystyle はモーダル全体ではなく数式だけを横スクロールさせる。 */
+.detail-section .katex-display,
+.sub-strategy .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+}
+
+.solution-formula {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.solution-formula h4 {
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+}
+
+.solution-formula > div > :first-child,
+.solution-answer {
+  margin: 0;
+}
+
+.solution-answer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.solution-figure {
+  margin: 14px auto;
+  color: var(--ink);
+  text-align: center;
+}
+
+.solution-figure-svg {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  margin: 0 auto;
+}
+
 .detail-step-toolbar {
   display: flex;
   align-items: center;
@@ -1122,26 +1222,6 @@ details.panel[open] summary,
 }
 
 .detail-step-button:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.detail-print-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 8px 12px;
-  border: 1px solid var(--ink);
-  background: var(--paper);
-  color: var(--ink);
-  font-weight: 700;
-  text-align: center;
-  text-decoration: none;
-}
-
-.detail-print-link:hover,
-.detail-print-link:focus-visible {
   background: var(--ink);
   color: var(--paper);
 }
