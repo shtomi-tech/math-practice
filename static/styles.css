@@ -1102,7 +1102,8 @@ details.panel[open] summary,
 }
 
 .modal-box {
-  width: min(1180px, 100%);
+  /* 1カラムなので、日本語の1行が長くなりすぎない幅に抑える */
+  width: min(880px, 100%);
   max-height: min(82vh, 760px);
   overflow: auto;
   border: 2px solid var(--line);
@@ -1128,9 +1129,11 @@ details.panel[open] summary,
   padding: 16px;
 }
 
+/* 問題→方針→解答は読む順序そのものなので1カラムに積む。
+   2カラムだと問題と方針の高さが揃わず、半数の小問で100px超の空白が残っていた。 */
 .detail-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, .55fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px;
 }
 
@@ -1414,10 +1417,6 @@ details.panel[open] summary,
 
   .group-panel.list-open .group-list {
     display: flex;
-  }
-
-  .detail-grid {
-    grid-template-columns: 1fr;
   }
 
   .sub-checkbar {
