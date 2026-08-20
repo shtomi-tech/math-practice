@@ -57,6 +57,47 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         }
       ]
+    },
+    {
+      "group_number": "3",
+      "title": "円卓での男女の並び方",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(円順列・隣接条件)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "男子4人 $A,B,C,D$ と女子4人 $E,F,G,H$ の計8人が円形のテーブルのまわりに座る。次の座り方は何通りあるか。",
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": "男子は男子，女子は女子でそれぞれ続いて座る。",
+          "answer_fields": [
+            {"format": "integer", "value": "576", "boxes": ["ア", "イ", "ウ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": "男子と女子が交互に座る。",
+          "answer_fields": [
+            {"format": "integer", "value": "144", "boxes": ["エ", "オ", "カ"]}
+          ]
+        },
+        {
+          "label": "(3)",
+          "stem_md": "$A$ と $E$ が隣り合って座る。",
+          "answer_fields": [
+            {"format": "integer", "value": "1440", "boxes": ["キ", "ク", "ケ", "コ"]}
+          ]
+        },
+        {
+          "label": "(4)",
+          "stem_md": "$A$ と $E$ が隣り合わない。",
+          "answer_fields": [
+            {"format": "integer", "value": "3600", "boxes": ["サ", "シ", "ス", "セ"]}
+          ]
+        }
+      ]
     }
   ]
 };
