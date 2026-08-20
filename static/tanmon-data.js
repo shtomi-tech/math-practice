@@ -98,6 +98,33 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         }
       ]
+    },
+    {
+      "group_number": "4",
+      "title": "男女から選ぶ組合せ",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(組合せ・余事象)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "男子9人と女子6人の計15人から4人を選ぶ。次の問いに答えよ。",
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": "4人の選び方は全部で $\\boxed{\\text{ア}}\\boxed{\\text{イ}}\\boxed{\\text{ウ}}\\boxed{\\text{エ}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "1365", "boxes": ["ア", "イ", "ウ", "エ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": "選んだ4人の中に少なくとも1人が女子である選び方は $\\boxed{\\text{オ}}\\boxed{\\text{カ}}\\boxed{\\text{キ}}\\boxed{\\text{ク}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "1239", "boxes": ["オ", "カ", "キ", "ク"]}
+          ]
+        }
+      ]
     }
   ]
 };

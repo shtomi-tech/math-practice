@@ -104,4 +104,32 @@ $$
 $$`,
     answer: String.raw`$3600$通り`,
   },
+  "4-(1)": {
+    approach: String.raw`選ぶ順番を考えないので，15人から4人を選ぶ組合せとして数えます。`,
+    formula: {
+      title: "組合せ",
+      body: String.raw`順序を考えずに $n$ 個から $r$ 個を選ぶ方法は $\binom{n}{r}$ 通り。`,
+    },
+    solution: String.raw`15人から4人を選ぶので，
+$$
+\binom{15}{4}=\frac{15\times14\times13\times12}{4\times3\times2\times1}=1365
+$$`,
+    answer: String.raw`$1365$通り`,
+  },
+  "4-(2)": {
+    approach: String.raw`「少なくとも1人が女子」は，女子が1人もいない場合を除く余事象で数えると簡単です。`,
+    formula: {
+      title: "余事象と組合せ",
+      body: String.raw`条件を満たす選び方＝全体の選び方−条件を満たさない選び方。`,
+    },
+    solution: String.raw`全体の選び方は (1)より $1365$ 通りです。女子が1人もいない選び方は，男子9人から4人を選ぶので
+$$
+\binom{9}{4}=126
+$$
+通りです。したがって，少なくとも1人が女子である選び方は
+$$
+1365-126=1239
+$$`,
+    answer: String.raw`$1239$通り`,
+  },
 };
