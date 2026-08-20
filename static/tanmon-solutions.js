@@ -132,4 +132,52 @@ $$
 $$`,
     answer: String.raw`$1239$通り`,
   },
+  "5-(1)": {
+    approach: String.raw`RADAR では R と A がそれぞれ2回ずつ現れます。同じ文字を区別しない重複順列として数えます。`,
+    formula: {
+      title: "重複順列",
+      body: String.raw`同じ文字の重複を分母で割る。`,
+    },
+    solution: String.raw`5文字をすべて区別して並べると $5!$ 通りですが，R と A の入れ替えをそれぞれ $2!$ 回ずつ同一視します。
+$$
+\frac{5!}{2!2!}=30
+$$`,
+    answer: String.raw`$30$通り`,
+  },
+  "5-(2)": {
+    approach: String.raw`p,p,q,q,r,r をすべて使うので，6文字の重複順列として数えます。`,
+    formula: {
+      title: "重複順列",
+      body: String.raw`同じ文字がそれぞれ2個ずつあるとき，並べ方は $\frac{6!}{2!2!2!}$ 通り。`,
+    },
+    solution: String.raw`6文字を区別して並べる $6!$ 通りから，p同士，q同士，r同士の入れ替えを同一視します。
+$$
+\frac{6!}{2!2!2!}=90
+$$`,
+    answer: String.raw`$90$通り`,
+  },
+  "5-(3)": {
+    approach: String.raw`p,qだけを使って4個選ぶには，p,p,q,qをすべて使うしかありません。`,
+    formula: {
+      title: "重複順列",
+      body: String.raw`p,p,q,q の並べ方は $\frac{4!}{2!2!}$ 通り。`,
+    },
+    solution: String.raw`p,p,q,q の並べ方を数えます。
+$$
+\frac{4!}{2!2!}=6
+$$`,
+    answer: String.raw`$6$通り`,
+  },
+  "5-(4)": {
+    approach: String.raw`5個の中にp,q,rをすべて含めるため，どの文字を1個だけ使うかで3つに場合分けします。`,
+    formula: {
+      title: "場合分けと重複順列",
+      body: String.raw`1,2,2 個ずつの3種類を並べる方法は $\frac{5!}{2!2!}$ 通り。`,
+    },
+    solution: String.raw`5個の中にp,q,rをすべて含める場合，個数は $(1,2,2)$ の組合せになります。1個だけ使う文字はp,q,rの3通りで，各場合の並べ方は $\frac{5!}{2!2!}$ 通りです。
+$$
+3\times\frac{5!}{2!2!}=3\times30=90
+$$`,
+    answer: String.raw`$90$通り`,
+  },
 };

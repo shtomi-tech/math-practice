@@ -125,6 +125,47 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         }
       ]
+    },
+    {
+      "group_number": "5",
+      "title": "重複する文字の並べ方",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(重複順列・組合せ)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "次の問いに答えよ。",
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": "$RADAR$ の5文字をすべて横一列に並べるとき，文字列は全部で $\\boxed{\\text{ア}}\\boxed{\\text{イ}}$ 通りできる。",
+          "answer_fields": [
+            {"format": "integer", "value": "30", "boxes": ["ア", "イ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": "$p,p,q,q,r,r$ の6個の文字をすべて選んで一列に並べるとき，並べ方は全部で $\\boxed{\\text{ウ}}\\boxed{\\text{エ}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "90", "boxes": ["ウ", "エ"]}
+          ]
+        },
+        {
+          "label": "(3)",
+          "stem_md": "$p,p,q,q,r,r$ の6個の文字から4個を選び，$p,q$ の文字だけが現れるように一列に並べるとき，並べ方は全部で $\\boxed{\\text{オ}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "6", "boxes": ["オ"]}
+          ]
+        },
+        {
+          "label": "(4)",
+          "stem_md": "$p,p,q,q,r,r$ の6個の文字から5個を選び，$p,q,r$ のすべての文字が現れるように一列に並べるとき，並べ方は全部で $\\boxed{\\text{カ}}\\boxed{\\text{キ}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "90", "boxes": ["カ", "キ"]}
+          ]
+        }
+      ]
     }
   ]
 };
