@@ -44,7 +44,7 @@ for (const key of ["1-(1)", "1-(2)", "1-(3)", "1-(4)", "1-(5)"]) {
 }
 assert.match(migratedSolutions["1-(5)"].figure, /L213\.71 48\.22 Z/);
 assert.match(migratedSolutions["1-(5)"].figure, /cx="200" cy="94\.22"/);
-assert.match(index, /static\/app\.js\?v=20260819-hint-html/);
+assert.match(index, /static\/app\.js\?v=20260821-three-grid-problems/);
 assert.equal(modalBody.includes("learningPointsHtml"), false);
 assert.equal(modalBody.includes("learning-section"), false);
 

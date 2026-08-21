@@ -342,7 +342,19 @@ function setCurrentStudent(name) {
   answerDrafts = loadDraftsFor(currentStudentName);
 }
 
+function migrateCurrentTanmonGridState(name) {
+  if (currentExamKey !== "tanmon_ippan" || !normalizeStudentName(name) || !window.migrateTanmonGridState) return;
+  const progressKey = progressKeyFor(name);
+  const draftKey = draftKeyFor(name);
+  const oldProgress = readJson(progressKey, {});
+  const oldDrafts = readJson(draftKey, {});
+  const migrated = window.migrateTanmonGridState(oldProgress, oldDrafts);
+  if (JSON.stringify(migrated.progress) !== JSON.stringify(oldProgress)) writeJson(progressKey, migrated.progress);
+  if (JSON.stringify(migrated.drafts) !== JSON.stringify(oldDrafts)) writeJson(draftKey, migrated.drafts);
+}
+
 function loadProgressFor(name) {
+  migrateCurrentTanmonGridState(name);
   return loadProgressSnapshot(currentExamKey, name);
 }
 

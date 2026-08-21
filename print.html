@@ -9,8 +9,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script defer src="./static/rikaido2507-data.js"></script>
   <script defer src="./static/rikaido2507-solutions.js"></script>
-  <script defer src="./static/tanmon-data.js"></script>
-  <script defer src="./static/tanmon-solutions.js"></script>
+  <script defer src="./static/tanmon-data.js?v=20260821-three-grid-problems"></script>
+  <script defer src="./static/tanmon-solutions.js?v=20260821-three-grid-problems"></script>
   <style>
     :root {
       --ink: #21242e;
@@ -403,7 +403,7 @@
         ${solution.figure ? `<div class="solution-figure">${solution.figure}</div>` : ""}
         <p class="answer"><strong>答え：</strong>${solutionTextHtml(solution.answer || "")}</p>
       `;
-      const compactClass = (group.group_number === "4" && sub.label === "(3)") || group.group_number === "6"
+      const compactClass = (group.group_number === "4" && sub.label === "(3)") || group.group_number === "8"
         ? " print-subproblem-tall"
         : "";
       return `

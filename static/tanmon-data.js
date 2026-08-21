@@ -186,17 +186,43 @@ window.MATH_DATASETS.tanmon_ippan = {
           "answer_fields": [
             {"format": "integer", "value": "210", "boxes": ["ア", "イ", "ウ"]}
           ]
-        },
+        }
+      ]
+    },
+    {
+      "group_number": "7",
+      "title": "経由点を通る最短経路",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(最短経路・経由点)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "経由点を通る最短の道順の数を求めよ。",
+      "sub_problems": [
         {
-          "label": "(2)",
+          "label": "(1)",
           "figure": String.raw`<svg class="solution-figure-svg" viewBox="0 0 420 270" role="img" aria-label="6列4行の格子状の道。左下がA、右上がB、途中の交点にCがある。"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M60 30V230 M110 30V230 M160 30V230 M210 30V230 M260 30V230 M310 30V230 M360 30V230 M60 30H360 M60 80H360 M60 130H360 M60 180H360 M60 230H360"/></g><g fill="currentColor"><circle cx="260" cy="130" r="4"/></g><g fill="currentColor" font-family="Arial, sans-serif" font-size="16"><text x="45" y="250" text-anchor="end">A</text><text x="370" y="25">B</text><text x="268" y="145">C</text></g></svg>`,
           "stem_md": "下の図のような道のある地域で，AからCを経由してBまで行く最短の道順は何通りあるか。答えは $\\boxed{\\text{エ}}\\boxed{\\text{オ}}$ 通りである。",
           "answer_fields": [
             {"format": "integer", "value": "90", "boxes": ["エ", "オ"]}
           ]
-        },
+        }
+      ]
+    },
+    {
+      "group_number": "8",
+      "title": "複数の経由点と包除原理",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(最短経路・包除原理)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "図の点P，Q，Rについて，最短の道順の数を求めよ。",
+      "sub_problems": [
         {
-          "label": "(3)",
+          "label": "(1)",
           "figure": TANMON_GRID_PQR_FIGURE,
           "stem_md": "下の図のような道のある地域で，AからBまで行く最短の道順は $\\boxed{\\text{カ}}\\boxed{\\text{キ}}\\boxed{\\text{ク}}$ 通りである。",
           "answer_fields": [
@@ -204,7 +230,7 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         },
         {
-          "label": "(4)",
+          "label": "(2)",
           "figure": TANMON_GRID_PQR_FIGURE,
           "stem_md": "下の図のような道のある地域で，AからPを経由してBまで行く最短の道順は $\\boxed{\\text{ケ}}\\boxed{\\text{コ}}$ 通りである。",
           "answer_fields": [
@@ -212,7 +238,7 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         },
         {
-          "label": "(5)",
+          "label": "(3)",
           "figure": TANMON_GRID_PQR_FIGURE,
           "stem_md": "下の図のような道のある地域で，AからRを経由してBまで行く最短の道順は $\\boxed{\\text{サ}}\\boxed{\\text{シ}}$ 通りである。",
           "answer_fields": [
@@ -220,7 +246,7 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         },
         {
-          "label": "(6)",
+          "label": "(4)",
           "figure": TANMON_GRID_PQR_FIGURE,
           "stem_md": "下の図のような道のある地域で，AからPまたはQを経由してBまで行く最短の道順は $\\boxed{\\text{ス}}\\boxed{\\text{セ}}\\boxed{\\text{ソ}}$ 通りである。",
           "answer_fields": [
@@ -228,7 +254,7 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         },
         {
-          "label": "(7)",
+          "label": "(5)",
           "figure": TANMON_GRID_PQR_FIGURE,
           "stem_md": "下の図のような道のある地域で，AからP，Q，Rの少なくとも1つを経由してBまで行く最短の道順は $\\boxed{\\text{タ}}\\boxed{\\text{チ}}\\boxed{\\text{ツ}}$ 通りである。",
           "answer_fields": [
