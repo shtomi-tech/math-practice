@@ -262,6 +262,33 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         }
       ]
+    },
+    {
+      "group_number": "9",
+      "title": "両方の集団を含む組合せ",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(組合せ・余事象)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "次の問いに答えよ。",
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": "スタッフ6人と利用者5人の中から4人の委員を選ぶとき，スタッフと利用者が少なくとも1人ずつ含まれる選び方は全部で $\\boxed{\\text{ア}}\\boxed{\\text{イ}}\\boxed{\\text{ウ}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "310", "boxes": ["ア", "イ", "ウ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": "大人7人と高校生6人から5人の班をつくるとき，大人と高校生が少なくとも1人ずつ含まれる選び方は全部で $\\boxed{\\text{エ}}\\boxed{\\text{オ}}\\boxed{\\text{カ}}\\boxed{\\text{キ}}$ 通りある。",
+          "answer_fields": [
+            {"format": "integer", "value": "1260", "boxes": ["エ", "オ", "カ", "キ"]}
+          ]
+        }
+      ]
     }
   ]
 };
