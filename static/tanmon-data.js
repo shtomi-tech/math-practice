@@ -1,4 +1,5 @@
 window.MATH_DATASETS = window.MATH_DATASETS || {};
+const TANMON_GRID_PQR_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 420 270" role="img" aria-label="6列4行の格子状の道。左下がA、右上がB、途中の交点にP、Q、Rがある。"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M60 30V230 M110 30V230 M160 30V230 M210 30V230 M260 30V230 M310 30V230 M360 30V230 M60 30H360 M60 80H360 M60 130H360 M60 180H360 M60 230H360"/></g><g fill="currentColor"><circle cx="210" cy="180" r="4"/><circle cx="260" cy="80" r="4"/><circle cx="160" cy="80" r="4"/></g><g fill="currentColor" font-family="Arial, sans-serif" font-size="16"><text x="45" y="250" text-anchor="end">A</text><text x="370" y="25">B</text><text x="218" y="196">P</text><text x="268" y="76">Q</text><text x="168" y="76">R</text></g></svg>`;
 window.MATH_DATASETS.tanmon_ippan = {
   "source_file_summary": {
     "notes": "全レベル問題集①基礎レベル の問題タイプを参考にした自作類題。原文は転載していない。"
@@ -163,6 +164,75 @@ window.MATH_DATASETS.tanmon_ippan = {
           "stem_md": "$p,p,q,q,r,r$ の6個の文字から5個を選び，$p,q,r$ のすべての文字が現れるように一列に並べるとき，並べ方は全部で $\\boxed{\\text{カ}}\\boxed{\\text{キ}}$ 通りある。",
           "answer_fields": [
             {"format": "integer", "value": "90", "boxes": ["カ", "キ"]}
+          ]
+        }
+      ]
+    },
+    {
+      "group_number": "6",
+      "title": "格子状の道の最短経路",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(最短経路)",
+      "difficulty": 1,
+      "source_name": "単問演習",
+      "source_year": "自作類題",
+      "stem_md": "格子状の道について，最短の道順の数を求めよ。",
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "figure": String.raw`<svg class="solution-figure-svg" viewBox="0 0 420 270" role="img" aria-label="6列4行の格子状の道。左下がA、右上がB。"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M60 30V230 M110 30V230 M160 30V230 M210 30V230 M260 30V230 M310 30V230 M360 30V230 M60 30H360 M60 80H360 M60 130H360 M60 180H360 M60 230H360"/></g><g fill="currentColor" font-family="Arial, sans-serif" font-size="16"><text x="45" y="250" text-anchor="end">A</text><text x="370" y="25">B</text></g></svg>`,
+          "stem_md": "下の図のような道のある地域で，AからBまで行く最短の道順は何通りあるか。答えは $\\boxed{\\text{ア}}\\boxed{\\text{イ}}\\boxed{\\text{ウ}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "210", "boxes": ["ア", "イ", "ウ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "figure": String.raw`<svg class="solution-figure-svg" viewBox="0 0 420 270" role="img" aria-label="6列4行の格子状の道。左下がA、右上がB、途中の交点にCがある。"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M60 30V230 M110 30V230 M160 30V230 M210 30V230 M260 30V230 M310 30V230 M360 30V230 M60 30H360 M60 80H360 M60 130H360 M60 180H360 M60 230H360"/></g><g fill="currentColor"><circle cx="260" cy="130" r="4"/></g><g fill="currentColor" font-family="Arial, sans-serif" font-size="16"><text x="45" y="250" text-anchor="end">A</text><text x="370" y="25">B</text><text x="268" y="145">C</text></g></svg>`,
+          "stem_md": "下の図のような道のある地域で，AからCを経由してBまで行く最短の道順は何通りあるか。答えは $\\boxed{\\text{エ}}\\boxed{\\text{オ}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "90", "boxes": ["エ", "オ"]}
+          ]
+        },
+        {
+          "label": "(3)",
+          "figure": TANMON_GRID_PQR_FIGURE,
+          "stem_md": "下の図のような道のある地域で，AからBまで行く最短の道順は $\\boxed{\\text{カ}}\\boxed{\\text{キ}}\\boxed{\\text{ク}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "210", "boxes": ["カ", "キ", "ク"]}
+          ]
+        },
+        {
+          "label": "(4)",
+          "figure": TANMON_GRID_PQR_FIGURE,
+          "stem_md": "下の図のような道のある地域で，AからPを経由してBまで行く最短の道順は $\\boxed{\\text{ケ}}\\boxed{\\text{コ}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "80", "boxes": ["ケ", "コ"]}
+          ]
+        },
+        {
+          "label": "(5)",
+          "figure": TANMON_GRID_PQR_FIGURE,
+          "stem_md": "下の図のような道のある地域で，AからRを経由してBまで行く最短の道順は $\\boxed{\\text{サ}}\\boxed{\\text{シ}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "50", "boxes": ["サ", "シ"]}
+          ]
+        },
+        {
+          "label": "(6)",
+          "figure": TANMON_GRID_PQR_FIGURE,
+          "stem_md": "下の図のような道のある地域で，AからPまたはQを経由してBまで行く最短の道順は $\\boxed{\\text{ス}}\\boxed{\\text{セ}}\\boxed{\\text{ソ}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "149", "boxes": ["ス", "セ", "ソ"]}
+          ]
+        },
+        {
+          "label": "(7)",
+          "figure": TANMON_GRID_PQR_FIGURE,
+          "stem_md": "下の図のような道のある地域で，AからP，Q，Rの少なくとも1つを経由してBまで行く最短の道順は $\\boxed{\\text{タ}}\\boxed{\\text{チ}}\\boxed{\\text{ツ}}$ 通りである。",
+          "answer_fields": [
+            {"format": "integer", "value": "169", "boxes": ["タ", "チ", "ツ"]}
           ]
         }
       ]

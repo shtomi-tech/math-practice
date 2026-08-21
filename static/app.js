@@ -954,6 +954,12 @@ function renderField(field) {
   </div>`;
 }
 
+function questionFigureHtml(sub) {
+  return sub.figure
+    ? `<div class="solution-figure question-figure">${sub.figure}</div>`
+    : "";
+}
+
 function detailStepsForSub(group, sub) {
   const raw = DETAIL_TEXTS[currentExamKey]?.[detailKey(group, sub)] || fallbackDetail(sub);
   return Array.isArray(raw) ? raw : Array.isArray(raw.steps) ? raw.steps : fallbackDetail(sub);
@@ -1047,7 +1053,7 @@ function renderSubProblem(sub, subIndex) {
       <div class="sub-label">${escapeHtml(sub.label)}</div>
       <div class="sub-meta">${filled}/${fields.length} 入力</div>
     </div>
-    <div class="sub-stem"><p>${mdLite(sub.stem_md)}</p></div>
+    <div class="sub-stem"><p>${mdLite(sub.stem_md)}</p>${questionFigureHtml(sub)}</div>
     <div class="fields">${fields.map(renderField).join("")}</div>
     <div class="sub-checkbar">
       <span class="check-result ${resultClass}" aria-live="polite">${resultText}</span>
@@ -1423,6 +1429,7 @@ function renderSolutionModalBody(group, sub) {
       <section class="detail-section">
         <h3>問題</h3>
         <p>${mdLite(sub.stem_md || "")}</p>
+        ${questionFigureHtml(sub)}
       </section>
       <section class="detail-section">
         <h3>方針</h3>
@@ -1440,6 +1447,7 @@ function renderSolutionModalBody(group, sub) {
       <section class="detail-section">
         <h3>問題</h3>
         <p>${mdLite(sub.stem_md || "")}</p>
+        ${questionFigureHtml(sub)}
       </section>
       <section class="detail-section">
         <h3>答え</h3>

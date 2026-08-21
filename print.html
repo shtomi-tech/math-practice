@@ -378,6 +378,12 @@
       `;
     }
 
+    function questionFigureHtml(sub) {
+      return sub.figure
+        ? `<div class="solution-figure question-figure">${sub.figure}</div>`
+        : "";
+    }
+
     function sectionHtml(label, body) {
       return `
         <section class="print-section">
@@ -390,14 +396,14 @@
     function renderSubproblem(group, sub, solutions) {
       const solution = solutions?.[`${group.group_number}-${sub.label}`];
       if (!solution) return "";
-      const question = mdLite(sub.stem_md || "");
+      const question = `${mdLite(sub.stem_md || "")}${questionFigureHtml(sub)}`;
       const approach = `${solutionTextHtml(solution.approach || "")}${solutionFormulaHtml(solution.formula)}`;
       const answer = `
         ${solutionTextHtml(solution.solution || "")}
         ${solution.figure ? `<div class="solution-figure">${solution.figure}</div>` : ""}
         <p class="answer"><strong>答え：</strong>${solutionTextHtml(solution.answer || "")}</p>
       `;
-      const compactClass = group.group_number === "4" && sub.label === "(3)"
+      const compactClass = (group.group_number === "4" && sub.label === "(3)") || group.group_number === "6"
         ? " print-subproblem-tall"
         : "";
       return `
