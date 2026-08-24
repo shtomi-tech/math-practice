@@ -289,6 +289,35 @@ window.MATH_DATASETS.tanmon_ippan = {
           ]
         }
       ]
+    },
+    {
+      "group_number": "10",
+      "title": "2つの部屋への入れ方と鉛筆の分配",
+      "subject": "数学",
+      "unit": "単問演習 場合の数・確率",
+      "topic_tag": "場合の数(積の法則・重複組合せ)",
+      "difficulty": 1,
+      "source_name": "福岡大・日本大",
+      "source_year": "添付問題",
+      "stem_md": "次の問いに答えよ。",
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": "$a,b,c,d$ の4人を，2つの部屋 $A,B$ に入れるとき，空室があってもよい場合の入れ方は $\\boxed{\\text{ア}}\\boxed{\\text{イ}}$ 通りある。また，空室がない場合の入れ方は $\\boxed{\\text{ウ}}\\boxed{\\text{エ}}$ 通りある。（福岡大）",
+          "answer_fields": [
+            {"format": "integer", "value": "16", "boxes": ["ア", "イ"]},
+            {"format": "integer", "value": "14", "boxes": ["ウ", "エ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": "10本の同じ鉛筆を3人に分ける場合を考える。このとき，鉛筆を1本もらえない人がいてもよいとする場合の分け方は全部で $\\boxed{\\text{オ}}\\boxed{\\text{カ}}$ 通りある。また，どの人も必ず1本はもらえる場合の分け方は $\\boxed{\\text{キ}}\\boxed{\\text{ク}}$ 通りである。（日本大）",
+          "answer_fields": [
+            {"format": "integer", "value": "66", "boxes": ["オ", "カ"]},
+            {"format": "integer", "value": "36", "boxes": ["キ", "ク"]}
+          ]
+        }
+      ]
     }
   ]
 };
