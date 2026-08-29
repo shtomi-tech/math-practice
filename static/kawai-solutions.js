@@ -379,3 +379,247 @@ $\overrightarrow{AH}=t\,\overrightarrow{AC}$ だから $\triangle OAH=t\cdot\tri
     answer: String.raw`(i) $\overrightarrow{OH}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}$　(ii) $\dfrac{17\sqrt{6}}{14}$`
   }
 };
+
+window.MATH_SOLUTIONS.kawai_2026_zenkijutsu2_typeIII = {
+  "1-(1)": {
+    approach: String.raw`素因数分解してから，約数の個数と総和の公式を用いる。`,
+    formula: {
+      title: "約数の個数と総和",
+      body: String.raw`$N=p^{a}q^{b}$ のとき，正の約数の個数は $(a+1)(b+1)$，総和は $(1+p+\cdots+p^{a})(1+q+\cdots+q^{b})$。`
+    },
+    solution: String.raw`$496=2^{4}\times 31$ である。正の約数の個数は
+$$(4+1)(1+1)=10.$$
+総和は
+$$(1+2+4+8+16)(1+31)=31\times 32=992.$$`,
+    answer: String.raw`約数は $10$ 個，総和は $992$`
+  },
+  "1-(2)": {
+    approach: String.raw`(i) 和が $6$ になる目の順序つきの組を，$4+1+1$ 型・$3+2+1$ 型・$2+2+2$ 型に分けて数える。(ii) その中で3つとも異なるのは $3+2+1$ 型だけ。`,
+    formula: {
+      title: "条件付き確率",
+      body: String.raw`$P(A\mid B)=\dfrac{P(A\cap B)}{P(B)}=\dfrac{n(A\cap B)}{n(B)}$（$B$ が起きた場合の数で割る）`
+    },
+    solution: String.raw`3回の目を順序つきで考えると全事象は $6^{3}=216$ 通り。
+
+(i) 和が $6$ になるのは，$\{4,1,1\}$（$3$ 通り），$\{3,2,1\}$（$6$ 通り），$\{2,2,2\}$（$1$ 通り）の合計 $10$ 通り。よって
+$$P(\text{和}=6)=\dfrac{10}{216}=\dfrac{5}{108}.$$
+
+(ii) 和が $6$ の $10$ 通りのうち，3つとも異なるのは $\{3,2,1\}$ の $6$ 通り。よって求める条件付き確率は
+$$\dfrac{6}{10}=\dfrac{3}{5}.$$`,
+    answer: String.raw`(i) $\dfrac{5}{108}$　(ii) $\dfrac{3}{5}$`
+  },
+  "1-(3)": {
+    approach: String.raw`桁数は $\log_{10}$ の整数部分 $+1$。最高位の数は $\log_{10}(2^{n})$ の小数部分が $[\log_{10}4,\ \log_{10}5)$ に入ることで判定する。`,
+    formula: {
+      title: "桁数と最高位の数",
+      body: String.raw`$10^{k-1}\le N<10^{k}$ なら $N$ は $k$ 桁。$\log_{10}N=k-1+\alpha$ で $\log_{10}d\le\alpha<\log_{10}(d+1)$ なら最高位は $d$。`
+    },
+    solution: String.raw`(i) $\log_{10}(2^{100})=100\times 0.301=30.1$ だから $10^{30}<2^{100}<10^{31}$。よって $31$ 桁。
+
+(ii) $2^{n}$ が $22$ 桁だから $21\le 0.301n<22$。最高位が $4$ だから，$0.301n$ の小数部分は
+$$\log_{10}4\le(\text{小数部分})<\log_{10}5,\quad\text{すなわち}\quad 0.602\le(\text{小数部分})<0.699$$
+（$\log_{10}5=1-0.301=0.699$）。あわせて $21.602\le 0.301n<21.699$ より
+$$\dfrac{21.602}{0.301}\le n<\dfrac{21.699}{0.301},\qquad 71.7\ldots\le n<72.0\ldots.$$
+正の整数は $n=72$（このとき $0.301\times 72=21.672$ で条件を満たす）。`,
+    answer: String.raw`(i) $31$ 桁　(ii) $n=72$`
+  },
+  "1-(4)": {
+    approach: String.raw`$u=\tan\theta$ の2次不等式として因数分解し，$-\dfrac{1}{\sqrt{3}}<\tan\theta<\sqrt{3}$ を導く。あとは $0\le\theta<2\pi$ で $\tan\theta$ の値の変化を区間ごとに調べる。`,
+    formula: {
+      title: "tan の2次不等式",
+      body: String.raw`$\sqrt{3}u^{2}-2u-\sqrt{3}=\sqrt{3}\left(u-\sqrt{3}\right)\left(u+\dfrac{1}{\sqrt{3}}\right)$`
+    },
+    solution: String.raw`$u=\tan\theta$ とおくと $\sqrt{3}u^{2}-2u-\sqrt{3}=\sqrt{3}\left(u-\sqrt{3}\right)\left(u+\dfrac{1}{\sqrt{3}}\right)$。$\sqrt{3}>0$ なので不等式は
+$$-\dfrac{1}{\sqrt{3}}<\tan\theta<\sqrt{3}.$$
+$\tan\theta=-\dfrac{1}{\sqrt{3}}$ となるのは $\theta=\dfrac{5}{6}\pi,\ \dfrac{11}{6}\pi$，$\tan\theta=\sqrt{3}$ となるのは $\theta=\dfrac{\pi}{3},\ \dfrac{4}{3}\pi$。$\tan\theta$ は $\left(-\dfrac{\pi}{2},\dfrac{\pi}{2}\right)$，$\left(\dfrac{\pi}{2},\dfrac{3}{2}\pi\right)$，$\left(\dfrac{3}{2}\pi,\dfrac{5}{2}\pi\right)$ の各区間で増加だから，$0\le\theta<2\pi$ での解は
+$$0\le\theta<\dfrac{\pi}{3},\qquad \dfrac{5}{6}\pi<\theta<\dfrac{4}{3}\pi,\qquad \dfrac{11}{6}\pi<\theta<2\pi.$$`,
+    answer: String.raw`$0\le\theta<\dfrac{\pi}{3}$，$\dfrac{5}{6}\pi<\theta<\dfrac{4}{3}\pi$，$\dfrac{11}{6}\pi<\theta<2\pi$`
+  },
+  "2-(1)": {
+    approach: String.raw`$S_{1}=a_{1}$ を使い，$n=1$ を条件式に代入する。`,
+    formula: {
+      title: "和と項の関係",
+      body: String.raw`$S_{1}=a_{1}$，$n\ge 2$ で $a_{n}=S_{n}-S_{n-1}$`
+    },
+    solution: String.raw`$n=1$ とすると
+$$S_{1}=a_{1}=2a_{1}+1-4=2a_{1}-3.$$
+よって $a_{1}=3$。`,
+    answer: String.raw`$a_{1}=3$`
+  },
+  "2-(2)": {
+    approach: String.raw`$a_{n+1}=S_{n+1}-S_{n}$ に条件式を代入して漸化式を作り，特性方程式（$\alpha=2\alpha-1$）で一般項を求める。`,
+    formula: {
+      title: "1次の漸化式",
+      body: String.raw`$a_{n+1}=pa_{n}+q$ は $a_{n+1}-\alpha=p(a_{n}-\alpha)$ と変形（$\alpha=p\alpha+q$）。`
+    },
+    solution: String.raw`$a_{n+1}=S_{n+1}-S_{n}=\{2a_{n+1}+(n+1)-4\}-\{2a_{n}+n-4\}=2a_{n+1}-2a_{n}+1$。整理して
+$$a_{n+1}=2a_{n}-1.$$
+$a_{n+1}-1=2(a_{n}-1)$ で $a_{1}-1=2$ だから，$\{a_{n}-1\}$ は公比 $2$ の等比数列で
+$$a_{n}-1=2\cdot 2^{n-1}=2^{n}.$$`,
+    answer: String.raw`$a_{n+1}=2a_{n}-1$，$a_{n}=2^{n}+1$`
+  },
+  "2-(3)": {
+    approach: String.raw`$a_{n}=2^{n}+1$ が $\{b_{n}\}$（$7$ で割って $2$ 余る数）に入る条件は $2^{n}\equiv 1\pmod 7$。$2^{n}\bmod 7$ の周期 $3$ から $n\equiv 0\pmod 3$ とわかり，共通項は $c_{k}=8^{k}+1$。`,
+    formula: {
+      title: "$2^{n}$ の $\bmod 7$ の周期",
+      body: String.raw`$2^{1},2^{2},2^{3}\equiv 2,4,1\pmod 7$（以後周期 $3$ で繰り返す）。`
+    },
+    solution: String.raw`$b_{n}=7n+2$ は $9$ 以上で「$7$ で割ると $2$ 余る数」全体である。$a_{n}=2^{n}+1$ がこれに入る条件は $2^{n}\equiv 1\pmod 7$。$2^{n}\bmod 7$ は $2,4,1$ の繰り返し（周期 $3$）なので $n\equiv 0\pmod 3$。
+
+$n=3k$ のとき $a_{3k}=2^{3k}+1=8^{k}+1\ (\ge 9)$ はすべて $\{b_{n}\}$ に含まれる。よって $c_{k}=8^{k}+1$，$c_{k}-1=8^{k}$ となり，
+$$(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)=8^{1}\cdot 8^{2}\cdots 8^{n}=8^{1+2+\cdots+n}=8^{\frac{n(n+1)}{2}}.$$`,
+    answer: String.raw`$8^{\frac{n(n+1)}{2}}$`
+  },
+  "3-(1)": {
+    approach: String.raw`$\overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA}$ の大きさの2乗を展開し，内積について解く。`,
+    formula: {
+      title: "内積と大きさ",
+      body: String.raw`$|\overrightarrow{OB}-\overrightarrow{OA}|^{2}=|\overrightarrow{OB}|^{2}-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+|\overrightarrow{OA}|^{2}$`
+    },
+    solution: String.raw`$|\overrightarrow{AB}|^{2}=|\overrightarrow{OB}-\overrightarrow{OA}|^{2}=|\overrightarrow{OB}|^{2}-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+|\overrightarrow{OA}|^{2}$ に $|\overrightarrow{OA}|=5$，$|\overrightarrow{OB}|=4$，$|\overrightarrow{AB}|=7$ を代入すると
+$$49=16-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+25,\qquad \overrightarrow{OA}\cdot\overrightarrow{OB}=-4.$$`,
+    answer: String.raw`$\overrightarrow{OA}\cdot\overrightarrow{OB}=-4$`
+  },
+  "3-(2)": {
+    approach: String.raw`$\overrightarrow{OC}=\dfrac{1}{4}\overrightarrow{OB}$。$H$ を直線 $AC$ 上の点として $\overrightarrow{OH}=(1-t)\overrightarrow{OA}+\dfrac{t}{4}\overrightarrow{OB}$ とおき，$\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ から $t$ を決める。面積は $\triangle OAH=t\cdot\triangle OAC=\dfrac{t}{4}\triangle OAB$。`,
+    formula: {
+      title: "垂線の足と面積比",
+      body: String.raw`直線 $AC$ 上の点は $\overrightarrow{OH}=\overrightarrow{OA}+t(\overrightarrow{OC}-\overrightarrow{OA})$。このとき $\triangle OAH:\triangle OAC=t:1$。`
+    },
+    solution: String.raw`$\overrightarrow{OA}=\vec{a}$，$\overrightarrow{OB}=\vec{b}$ とおくと $|\vec{a}|^{2}=25$，$|\vec{b}|^{2}=16$，$\vec{a}\cdot\vec{b}=-4$，$\overrightarrow{OC}=\dfrac{1}{4}\vec{b}$。
+
+(i) $\overrightarrow{OH}=(1-t)\vec{a}+\dfrac{t}{4}\vec{b}$ とおくと
+$$\overrightarrow{BH}=(1-t)\vec{a}+\left(\dfrac{t}{4}-1\right)\vec{b},\qquad \overrightarrow{AC}=\dfrac{1}{4}\vec{b}-\vec{a}.$$
+$\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ を計算すると $-26(1-t)+8\left(\dfrac{t}{4}-1\right)=28t-34=0$，$t=\dfrac{17}{14}$。よって
+$$\overrightarrow{OH}=\left(1-\dfrac{17}{14}\right)\vec{a}+\dfrac{17}{56}\vec{b}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}.$$
+
+(ii) $\cos\angle AOB=\dfrac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}=-\dfrac{1}{5}$ より $\sin\angle AOB=\dfrac{2\sqrt{6}}{5}$ なので
+$$\triangle OAB=\dfrac{1}{2}\cdot 5\cdot 4\cdot\dfrac{2\sqrt{6}}{5}=4\sqrt{6}.$$
+$\overrightarrow{AH}=t\,\overrightarrow{AC}$ だから $\triangle OAH=t\cdot\triangle OAC=t\cdot\dfrac{1}{4}\triangle OAB=\dfrac{17}{14}\cdot\dfrac{1}{4}\cdot 4\sqrt{6}=\dfrac{17\sqrt{6}}{14}.$`,
+    answer: String.raw`(i) $\overrightarrow{OH}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}$　(ii) $\dfrac{17\sqrt{6}}{14}$`
+  },
+  "4-(1)": {
+    approach: String.raw`積の微分で $f'(x)$ を求め，$f'(x)=e^{-x}\,x(2-x)$ の符号変化から極値を判定する。`,
+    formula: {
+      title: "積の微分",
+      body: String.raw`$(uv)'=u'v+uv'$，$\left(e^{-x}\right)'=-e^{-x}$`
+    },
+    solution: String.raw`
+$$f'(x)=2xe^{-x}+x^{2}(-e^{-x})=e^{-x}\,x(2-x).$$
+$e^{-x}>0$ だから $f'(x)$ の符号は $x(2-x)$ と同じで，$x<0$ で負，$0<x<2$ で正，$x>2$ で負。
+よって $x=0$ で極小値 $f(0)=0$，$x=2$ で極大値 $f(2)=4e^{-2}=\dfrac{4}{e^{2}}$。`,
+    answer: String.raw`極小値 $0$（$x=0$），極大値 $\dfrac{4}{e^{2}}$（$x=2$）`
+  },
+  "4-(2)": {
+    approach: String.raw`$k(x)=x^{2}e^{-x/2}$ の増減を調べ，$x\ge 0$ での最大値が $x=4$ で $\dfrac{16}{e^{2}}$ であることを示す。極限は $f(x)=k(x)\cdot e^{-x/2}$ とみて，はさみうちで示す。`,
+    formula: {
+      title: "はさみうちの原理",
+      body: String.raw`$0\le f(x)\le M\,e^{-x/2}$ で $x\to\infty$ のとき右辺 $\to 0$ なら $f(x)\to 0$。`
+    },
+    solution: String.raw`$k(x)=x^{2}e^{-\frac{x}{2}}$ とおくと
+$$k'(x)=2xe^{-\frac{x}{2}}+x^{2}\left(-\dfrac{1}{2}\right)e^{-\frac{x}{2}}=e^{-\frac{x}{2}}\cdot\dfrac{x}{2}(4-x).$$
+$x\ge 0$ では，$0<x<4$ で $k'(x)>0$，$x>4$ で $k'(x)<0$ だから $x=4$ で最大となり，最大値は
+$$k(4)=16e^{-2}=\dfrac{16}{e^{2}}.$$
+よって $x\ge 0$ で $x^{2}e^{-\frac{x}{2}}\le\dfrac{16}{e^{2}}$。
+
+これを使うと，$x\ge 0$ で
+$$0\le f(x)=x^{2}e^{-x}=\left(x^{2}e^{-\frac{x}{2}}\right)e^{-\frac{x}{2}}\le\dfrac{16}{e^{2}}\,e^{-\frac{x}{2}}.$$
+$x\to\infty$ のとき右辺 $\to 0$ だから，はさみうちの原理より $\displaystyle\lim_{x\to\infty}f(x)=0$。`,
+    answer: String.raw`$x=4$ で最大値 $\dfrac{16}{e^{2}}$。これより $0\le f(x)\le\dfrac{16}{e^{2}}e^{-x/2}\to 0$`
+  },
+  "4-(3)": {
+    approach: String.raw`$x=0$ は解でないので $a=\dfrac{e^{x}}{x^{2}}$ と変形し，$h(x)=\dfrac{e^{x}}{x^{2}}$ のグラフと $y=a$ の交点数で考える。(ii) は $x$ と $-x$，$x$ と $\dfrac{4}{x}$ での $h$ の値の大小を比較する。`,
+    formula: {
+      title: "解の個数とグラフ",
+      body: String.raw`$h'(x)=\dfrac{(x-2)e^{x}}{x^{3}}$。$h$ は $x>0$ で $x=2$ を境に減少→増加，最小値 $h(2)=\dfrac{e^{2}}{4}$。`
+    },
+    solution: String.raw`$x=0$ は $e^{x}=ax^{2}$ を満たさないので，$x\ne 0$ で $a=\dfrac{e^{x}}{x^{2}}=:h(x)$ とおける。
+$$h'(x)=\dfrac{e^{x}\cdot x^{2}-e^{x}\cdot 2x}{x^{4}}=\dfrac{(x-2)e^{x}}{x^{3}}.$$
+$x<0$ で $h$ は増加（値域 $(0,\infty)$），$0<x<2$ で減少，$x>2$ で増加し，$x>0$ での最小値は $h(2)=\dfrac{e^{2}}{4}$。
+
+(i) $y=a$ と $y=h(x)$ の交点は，$x<0$ でつねに $1$ 個。$x>0$ では $a>\dfrac{e^{2}}{4}$ のとき $2$ 個，$a=\dfrac{e^{2}}{4}$ のとき $1$ 個，それ以下で $0$ 個。合計 $3$ 個となるのは
+$$a>\dfrac{e^{2}}{4}.$$
+
+(ii) このとき $\alpha<0<\beta<2<\gamma$ で，$h(\alpha)=h(\beta)=h(\gamma)=a$。$a>\dfrac{e^{2}}{4}>h(-2)$ より $\alpha>-2$ なので $-\alpha\in(0,2)$。
+
+・$x>0$ で $\dfrac{h(x)}{h(-x)}=\dfrac{e^{x}}{e^{-x}}=e^{2x}>1$ だから $h(-\alpha)>h(\alpha)=a=h(\beta)$。$h$ は $(0,2)$ で減少で $-\alpha,\ \beta\in(0,2)$ だから $-\alpha<\beta$，すなわち $\alpha+\beta>0$。
+
+・$\beta\in(0,2)$ に対し $\dfrac{4}{\beta}\in(2,\infty)$。$F(x)=\dfrac{h\!\left(\frac{4}{x}\right)}{h(x)}=\dfrac{x^{4}}{16}e^{\frac{4}{x}-x}$ とおくと
+$$\bigl(\log F(x)\bigr)'=\dfrac{4}{x}-\dfrac{4}{x^{2}}-1=-\dfrac{(x-2)^{2}}{x^{2}}\le 0$$
+で，$F(2)=1$ だから $0<x<2$ で $F(x)>1$，つまり $h\!\left(\dfrac{4}{\beta}\right)>h(\beta)=a=h(\gamma)$。$h$ は $(2,\infty)$ で増加で $\dfrac{4}{\beta},\ \gamma\in(2,\infty)$ だから $\gamma<\dfrac{4}{\beta}$，すなわち $\beta\gamma<4$。`,
+    answer: String.raw`(i) $a>\dfrac{e^{2}}{4}$　(ii) $\alpha+\beta>0$，$\beta\gamma<4$（本文参照）`
+  },
+  "5-(1)": {
+    approach: String.raw`$\mathrm{AP}\ge 2\mathrm{OP}$ を $\mathrm{AP}^{2}\ge 4\mathrm{OP}^{2}$ として座標で表し，平方完成する（アポロニウスの円の内部）。`,
+    formula: {
+      title: "距離の条件と円",
+      body: String.raw`$\mathrm{AP}^{2}\ge 4\,\mathrm{OP}^{2}$ を展開して整理すると円の内部・周になる。`
+    },
+    solution: String.raw`$\mathrm{P}(x,y)$ とすると $\mathrm{AP}\ge 2\mathrm{OP}$ は $\mathrm{AP}^{2}\ge 4\mathrm{OP}^{2}$、すなわち
+$$(x+3)^{2}+(y+3)^{2}\ge 4(x^{2}+y^{2}).$$
+展開して整理すると $3x^{2}+3y^{2}-6x-6y-18\le 0$、両辺を $3$ で割って
+$$x^{2}+y^{2}-2x-2y-6\le 0,\qquad (x-1)^{2}+(y-1)^{2}\le 8.$$
+よって $D$ は中心 $(1,1)$、半径 $2\sqrt{2}$ の円の周および内部。`,
+    answer: String.raw`$D:\ (x-1)^{2}+(y-1)^{2}\le 8$（中心 $(1,1)$，半径 $2\sqrt{2}$ の円の周と内部）`
+  },
+  "5-(2)": {
+    approach: String.raw`$x,y$ が実数である条件 $s^{2}-4t\ge 0$（$t\le\dfrac{s^{2}}{4}$）と，$D$ の条件を $x^{2}+y^{2}=s^{2}-2t$ で $s,t$ に書き換えた不等式を組み合わせる。`,
+    formula: {
+      title: "対称式と実数条件",
+      body: String.raw`$x+y=s$，$xy=t$ の $x,y$ が実数 $\iff s^{2}-4t\ge 0$。また $x^{2}+y^{2}=s^{2}-2t$。`
+    },
+    solution: String.raw`$x,y$ が実数である条件は $s^{2}-4t\ge 0$、すなわち $t\le\dfrac{s^{2}}{4}$。
+
+$D$ の条件 $(x-1)^{2}+(y-1)^{2}\le 8$ は $x^{2}+y^{2}-2(x+y)\le 6$、$x^{2}+y^{2}=s^{2}-2t$ を代入して
+$$s^{2}-2t-2s\le 6,\qquad t\ge\dfrac{s^{2}-2s-6}{2}.$$
+この2つが両立するには $\dfrac{s^{2}-2s-6}{2}\le\dfrac{s^{2}}{4}$、整理して $s^{2}-4s-12\le 0$、$(s-6)(s+2)\le 0$ より $-2\le s\le 6$。
+
+よって求める領域は，$-2\le s\le 6$ の範囲で
+$$\dfrac{s^{2}-2s-6}{2}\le t\le\dfrac{s^{2}}{4}$$
+を満たす部分（2つの放物線ではさまれたレンズ形）。`,
+    answer: String.raw`$-2\le s\le 6$，$\dfrac{s^{2}-2s-6}{2}\le t\le\dfrac{s^{2}}{4}$`
+  },
+  "5-(3)": {
+    approach: String.raw`$(2x+1)(2y+1)=4t+2s+1$ と $s,t$ で表し，(2) の領域の上辺・下辺（$t$ について端）で評価する。$t$ について1次だから，最大は上辺 $t=\dfrac{s^{2}}{4}$、最小は下辺 $t=\dfrac{s^{2}-2s-6}{2}$ で考えればよい。`,
+    formula: {
+      title: "1次式の端での評価",
+      body: String.raw`$F=4t+2s+1$ は $t$ について増加だから，$s$ を固定すると $F$ の最大・最小は $t$ の端でとる。`
+    },
+    solution: String.raw`$(2x+1)(2y+1)=4xy+2(x+y)+1=4t+2s+1=:F$。
+
+最大は上辺 $t=\dfrac{s^{2}}{4}$ で，$F=s^{2}+2s+1=(s+1)^{2}$。$-2\le s\le 6$ での最大は $s=6$ のとき $(6+1)^{2}=49$（$x=y=3$）。
+
+最小は下辺 $t=\dfrac{s^{2}-2s-6}{2}$ で，$F=2s^{2}-2s-11$。$-2\le s\le 6$ での最小は頂点 $s=\dfrac{1}{2}$ のとき
+$$2\cdot\dfrac{1}{4}-1-11=-\dfrac{23}{2}.$$`,
+    answer: String.raw`最大値 $49$，最小値 $-\dfrac{23}{2}$`
+  },
+  "6-(1)": {
+    approach: String.raw`$u=x$，$dv=e^{1-x}dx$ とおいて部分積分する（$v=-e^{1-x}$）。`,
+    formula: {
+      title: "部分積分",
+      body: String.raw`$\displaystyle\int u\,dv=uv-\int v\,du$`
+    },
+    solution: String.raw`$u=x$，$dv=e^{1-x}dx$ とすると $du=dx$，$v=-e^{1-x}$ だから
+$$\int xe^{1-x}\,dx=-xe^{1-x}-\int(-e^{1-x})\,dx=-xe^{1-x}-e^{1-x}+C=-(x+1)e^{1-x}+C.$$`,
+    answer: String.raw`$-(x+1)e^{1-x}+C$`
+  },
+  "6-(2)": {
+    approach: String.raw`$f(x)-x$，$g(x)-x$ をそれぞれ因数分解して交点 $x=0,1$ と上下関係を調べ，$0\le x\le 1$ で積分する。$S_{2}$ の被積分関数は多項式の割り算で $\dfrac{2}{1+x^{2}}$ の項を出す。`,
+    formula: {
+      title: "面積と部分分数",
+      body: String.raw`$\dfrac{x^{3}-2x^{2}+x}{1+x^{2}}=(x-2)+\dfrac{2}{1+x^{2}}$，$\displaystyle\int\dfrac{dx}{1+x^{2}}=\arctan x$`
+    },
+    solution: String.raw`$f(x)-x=ax\left(e^{1-x}-1\right)$ より交点は $x=0,\ 1$。$0<x<1$ では $e^{1-x}-1>0$ なので $f(x)>x$。
+$$S_{1}=\int_{0}^{1}ax\left(e^{1-x}-1\right)dx=a\left[\int_{0}^{1}xe^{1-x}dx-\int_{0}^{1}x\,dx\right].$$
+(1) より $\displaystyle\int_{0}^{1}xe^{1-x}dx=\Bigl[-(x+1)e^{1-x}\Bigr]_{0}^{1}=-2+e$ だから
+$$S_{1}=a\left\{(e-2)-\dfrac{1}{2}\right\}=a\cdot\dfrac{2e-5}{2}.$$
+
+$g(x)-x=\dfrac{2x^{2}-x(1+x^{2})}{1+x^{2}}=\dfrac{-x(x-1)^{2}}{1+x^{2}}$ より交点は $x=0,\ 1$ で，$0<x<1$ では $g(x)<x$。
+$$S_{2}=\int_{0}^{1}\dfrac{x(x-1)^{2}}{1+x^{2}}dx=\int_{0}^{1}\dfrac{x^{3}-2x^{2}+x}{1+x^{2}}dx=\int_{0}^{1}\left\{(x-2)+\dfrac{2}{1+x^{2}}\right\}dx.$$
+$$S_{2}=\left[\dfrac{x^{2}}{2}-2x+2\arctan x\right]_{0}^{1}=\dfrac{1}{2}-2+\dfrac{\pi}{2}=\dfrac{\pi-3}{2}.$$
+
+$S_{1}=S_{2}$ より $a\cdot\dfrac{2e-5}{2}=\dfrac{\pi-3}{2}$、$2e-5>0$ だから
+$$a=\dfrac{\pi-3}{2e-5}.$$`,
+    answer: String.raw`$a=\dfrac{\pi-3}{2e-5}$`
+  }
+};
