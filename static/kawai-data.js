@@ -255,6 +255,299 @@ $P(X=0)=\dfrac{\boxed{\text{ア}}}{\boxed{\text{イ}}\boxed{\text{ウ}}}$，$P(X
   ]
 };
 
+window.MATH_DATASETS.kawai_2026_zenkijutsu2_typeII = {
+  "source_file_summary": {
+    "detected_pages": 4,
+    "notes": "河合塾 2026年度 第2回 全国記述模試 数学 II型（ユーザー提供の問題写真 IMG_1414〜IMG_1417＝冊子 p.6〜9）から転記。写真は問題のみで解答冊子は無いため、解答・解説は独立計算で新規作成し全マスを検算した（Python の sympy・総当りで検証済み）。原典は記述式だが、本アプリのマス目採点に合わせて数値・範囲・比・一般項をマス目化した。1マス＝符号込み1文字、2桁以上の値は\\boxed{}を桁数分並べている。大問1〜3（各50点）＝II型共通必須、大問4（50点）＝数学I・A・II必須／数学I・A・II・B選択、大問5（50点）＝数学I・A・II・B選択／数学I・A・II・B・C選択、大問6（50点）＝数学I・A・II・B・C選択。大問3はI型の大問4と同一問題。受験科目に応じて1〜3必答＋4〜6から1題選択の200点構成。"
+  },
+  "problem_groups": [
+    {
+      "group_number": "1",
+      "page_numbers": [6],
+      "title": "【II型共通・必須】約数・剰余の定理・三角関数・対数不等式（小問集合）",
+      "subject": "数学",
+      "unit": "河合塾 全国記述模試 2026 第2回 II型",
+      "topic_tag": "整数の性質・式と証明・三角関数・対数",
+      "difficulty": 2,
+      "source_name": "河合塾 全国記述模試",
+      "source_year": "2026 第2回",
+      "stem_md": String.raw`《II型共通　必須問題》（配点 50点）`,
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": String.raw`$496$ の正の約数はいくつあるか。また，その総和を求めよ。
+
+正の約数は $\boxed{\text{ア}}\boxed{\text{イ}}$ 個あり，その総和は $\boxed{\text{ウ}}\boxed{\text{エ}}\boxed{\text{オ}}$ である。`,
+          "answer_fields": [
+            {"format": "integer", "value": "10", "boxes": ["ア", "イ"]},
+            {"format": "integer", "value": "992", "boxes": ["ウ", "エ", "オ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": String.raw`多項式 $f(x)$ を $x-1$ で割ったときの余りが $2$，$x+2$ で割ったときの余りが $-1$ であるとき，$f(x)$ を $(x-1)(x+2)$ で割ったときの余りを求めよ。
+
+余りは $x+\boxed{\text{カ}}$ である。`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["カ"]}
+          ]
+        },
+        {
+          "label": "(3)",
+          "stem_md": String.raw`関数 $f(\theta)=\sin 2\theta-\sin\theta-\cos\theta$（$0\le\theta<2\pi$）について答えよ。
+
+(i) $t=\sin\theta+\cos\theta$ とおくとき，$f(\theta)$ を $t$ で表せ。また $\theta$ が $0\le\theta<2\pi$ を動くときの $t$ の値の範囲を求めよ。$f(\theta)=t^{2}-t-\boxed{\text{キ}}$，$-\sqrt{\boxed{\text{ク}}}\le t\le\sqrt{\boxed{\text{ケ}}}$
+
+(ii) $f(\theta)$ の最大値と最小値を求めよ。最大値 $\boxed{\text{コ}}+\sqrt{\boxed{\text{サ}}}$，最小値 $-\dfrac{\boxed{\text{シ}}}{\boxed{\text{ス}}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["キ"]},
+            {"format": "integer", "value": "2", "boxes": ["ク"]},
+            {"format": "integer", "value": "2", "boxes": ["ケ"]},
+            {"format": "integer", "value": "1", "boxes": ["コ"]},
+            {"format": "integer", "value": "2", "boxes": ["サ"]},
+            {"format": "integer", "value": "5", "boxes": ["シ"]},
+            {"format": "integer", "value": "4", "boxes": ["ス"]}
+          ]
+        },
+        {
+          "label": "(4)",
+          "stem_md": String.raw`不等式 $\log_{2}(x-1)\le\log_{4}(4-x^{2})-1$ を解け。$\boxed{\text{セ}}<x\le\dfrac{\boxed{\text{ソ}}}{\boxed{\text{タ}}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["セ"]},
+            {"format": "integer", "value": "8", "boxes": ["ソ"]},
+            {"format": "integer", "value": "5", "boxes": ["タ"]}
+          ]
+        }
+      ]
+    },
+    {
+      "group_number": "2",
+      "page_numbers": [7],
+      "title": "【II型共通・必須】放物線の接線と面積（微分・積分）",
+      "subject": "数学",
+      "unit": "河合塾 全国記述模試 2026 第2回 II型",
+      "topic_tag": "微分法と積分法",
+      "difficulty": 3,
+      "source_name": "河合塾 全国記述模試",
+      "source_year": "2026 第2回",
+      "stem_md": String.raw`《II型共通　必須問題》（配点 50点）
+
+$a$ を $0$ でない実数の定数とし，$f(x)=ax^{2}$，$g(x)=-x^{2}+4x-3$ とする。$xy$ 平面上で曲線 $y=f(x)$，$y=g(x)$ をそれぞれ $C_{1}$，$C_{2}$ とし，$C_{1}$ 上の点 $\mathrm{A}(2,\ f(2))$ における $C_{1}$ の接線を $\ell$ とする。`,
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": String.raw`$\ell$ の方程式を $a$ を用いて表せ。$\ell:\ y=\boxed{\text{ア}}ax-\boxed{\text{イ}}a$`,
+          "answer_fields": [
+            {"format": "integer", "value": "4", "boxes": ["ア"]},
+            {"format": "integer", "value": "4", "boxes": ["イ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": String.raw`$\ell$ は $C_{2}$ に接するとする。
+
+(i) $a$ の値を求めよ。$a=\dfrac{\boxed{\text{ウ}}}{\boxed{\text{エ}}}$
+
+(ii) $C_{2}$ と $\ell$ および $y$ 軸で囲まれる部分の面積を求めよ。$\dfrac{\boxed{\text{オ}}}{\boxed{\text{カ}}}$
+
+(iii) $y$ 軸の $y>0$ の部分に点 $\mathrm{P}$ をとる。$C_{1}$ と線分 $\mathrm{AP}$ および $y$ 軸で囲まれる部分の面積が (ii) の $4$ 倍となるとき，$\mathrm{P}$ の座標を求めよ。$\mathrm{P}\left(0,\ \dfrac{\boxed{\text{キ}}}{\boxed{\text{ク}}}\right)$`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["ウ"]},
+            {"format": "integer", "value": "2", "boxes": ["エ"]},
+            {"format": "integer", "value": "1", "boxes": ["オ"]},
+            {"format": "integer", "value": "3", "boxes": ["カ"]},
+            {"format": "integer", "value": "2", "boxes": ["キ"]},
+            {"format": "integer", "value": "3", "boxes": ["ク"]}
+          ]
+        }
+      ]
+    },
+    {
+      "group_number": "3",
+      "page_numbers": [8],
+      "title": "【II型共通・必須】確率（反復試行・期待値・条件付き確率）",
+      "subject": "数学",
+      "unit": "河合塾 全国記述模試 2026 第2回 II型",
+      "topic_tag": "場合の数と確率",
+      "difficulty": 3,
+      "source_name": "河合塾 全国記述模試",
+      "source_year": "2026 第2回",
+      "stem_md": String.raw`《II型共通　必須問題》（配点 50点）　※本問は I 型の大問4と同一問題。
+
+何も入っていない袋がある。1個のサイコロを投げ，出た目に応じて次の規則で袋の中に球を入れる操作を4回繰り返す。
+
+・$1$ または $2$ の目が出たとき：赤球と白球を1個ずつ入れる。
+
+・$3$ または $4$ の目が出たとき：赤球と青球を1個ずつ入れる。
+
+・$5$ または $6$ の目が出たとき：白球と青球を1個ずつ入れる。
+
+4回の操作後に袋の中に入っている赤球の個数を $X$ とする。`,
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": String.raw`$X=0$ となる確率と $X=1$ となる確率を求めよ。
+
+$P(X=0)=\dfrac{\boxed{\text{ア}}}{\boxed{\text{イ}}\boxed{\text{ウ}}}$，$P(X=1)=\dfrac{\boxed{\text{エ}}}{\boxed{\text{オ}}\boxed{\text{カ}}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["ア"]},
+            {"format": "integer", "value": "81", "boxes": ["イ", "ウ"]},
+            {"format": "integer", "value": "8", "boxes": ["エ"]},
+            {"format": "integer", "value": "81", "boxes": ["オ", "カ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": String.raw`$X$ の期待値を求めよ。$E(X)=\dfrac{\boxed{\text{キ}}}{\boxed{\text{ク}}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "8", "boxes": ["キ"]},
+            {"format": "integer", "value": "3", "boxes": ["ク"]}
+          ]
+        },
+        {
+          "label": "(3)",
+          "stem_md": String.raw`4回の操作後に袋の中に赤，白，青の3色すべての色の球が入っているとき，$X=4$ となる条件付き確率を求めよ。$\dfrac{\boxed{\text{ケ}}}{\boxed{\text{コ}}\boxed{\text{サ}}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "7", "boxes": ["ケ"]},
+            {"format": "integer", "value": "39", "boxes": ["コ", "サ"]}
+          ]
+        }
+      ]
+    },
+    {
+      "group_number": "4",
+      "page_numbers": [8],
+      "title": "【II型・数I・A・II必須／II・B選択】円と直線・対称点・線分和の最小",
+      "subject": "数学",
+      "unit": "河合塾 全国記述模試 2026 第2回 II型",
+      "topic_tag": "図形と方程式",
+      "difficulty": 3,
+      "source_name": "河合塾 全国記述模試",
+      "source_year": "2026 第2回",
+      "stem_md": String.raw`《II型　数学I・A・II 必須問題／数学I・A・II・B 選択問題》（配点 50点）
+
+$a$ を実数の定数とする。$xy$ 平面上に
+
+$$\text{円 }C:\ x^{2}+y^{2}-4ax-2ay+3a^{2}+4a-3=0,\qquad \text{直線 }\ell:\ y=x+2$$
+
+があり，$C$ は $x$ 軸に接している。`,
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": String.raw`$a$ の値をすべて求めよ（小さい方を先に書く）。$a=\boxed{\text{ア}}$，$\boxed{\text{イ}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["ア"]},
+            {"format": "integer", "value": "3", "boxes": ["イ"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": String.raw`最大の $a$ に対応する $C$ を $C_{1}$，最小の $a$ に対応する $C$ を $C_{2}$ とし，$C_{1}$ の中心を $\mathrm{A}$ とする。
+
+(i) $\ell$ に関して $\mathrm{A}$ と対称な点 $\mathrm{A}'$ の座標を求めよ。$\mathrm{A}'(\boxed{\text{ウ}},\ \boxed{\text{エ}})$
+
+(ii) 点 $\mathrm{P}$ が $C_{2}$ 上を，点 $\mathrm{Q}$ が $\ell$ 上をそれぞれ動くとき，$\mathrm{PQ}+\mathrm{QA}$ の最小値を求めよ。$\boxed{\text{オ}}\sqrt{\boxed{\text{カ}}}-\boxed{\text{キ}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "1", "boxes": ["ウ"]},
+            {"format": "integer", "value": "8", "boxes": ["エ"]},
+            {"format": "integer", "value": "5", "boxes": ["オ"]},
+            {"format": "integer", "value": "2", "boxes": ["カ"]},
+            {"format": "integer", "value": "1", "boxes": ["キ"]}
+          ]
+        }
+      ]
+    },
+    {
+      "group_number": "5",
+      "page_numbers": [9],
+      "title": "【II型・数I・A・II・B選択／II・B・C選択】数列（和と一般項・共通項の積）",
+      "subject": "数学",
+      "unit": "河合塾 全国記述模試 2026 第2回 II型",
+      "topic_tag": "数列",
+      "difficulty": 3,
+      "source_name": "河合塾 全国記述模試",
+      "source_year": "2026 第2回",
+      "stem_md": String.raw`《II型　数学I・A・II・B 選択問題／数学I・A・II・B・C 選択問題》（配点 50点）
+
+数列 $\{a_{n}\}$ の初項 $a_{1}$ から第 $n$ 項 $a_{n}$ までの和を $S_{n}$ とするとき，
+
+$$S_{n}=2a_{n}+n-4\qquad(n=1,\ 2,\ 3,\ \ldots)$$
+
+が成り立つ。`,
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": String.raw`$a_{1}$ を求めよ。$a_{1}=\boxed{\text{ア}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "3", "boxes": ["ア"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": String.raw`$a_{n+1}$ を $a_{n}$ を用いて表せ。また，一般項 $a_{n}$ を求めよ。
+
+$a_{n+1}=\boxed{\text{イ}}a_{n}-\boxed{\text{ウ}}$，$a_{n}=\boxed{\text{エ}}^{\,n}+\boxed{\text{オ}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "2", "boxes": ["イ"]},
+            {"format": "integer", "value": "1", "boxes": ["ウ"]},
+            {"format": "integer", "value": "2", "boxes": ["エ"]},
+            {"format": "integer", "value": "1", "boxes": ["オ"]}
+          ]
+        },
+        {
+          "label": "(3)",
+          "stem_md": String.raw`数列 $\{b_{n}\}$ を $b_{n}=7n+2$（$n=1,\ 2,\ 3,\ \ldots$）で定める。$\{a_{n}\}$ と $\{b_{n}\}$ に共通に含まれる数を小さい順に並べた数列を $\{c_{n}\}$ とするとき，積 $(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)$ を求めよ。
+
+$(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)=\boxed{\text{カ}}^{\frac{n(n+1)}{2}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "8", "boxes": ["カ"]}
+          ]
+        }
+      ]
+    },
+    {
+      "group_number": "6",
+      "page_numbers": [9],
+      "title": "【II型・数I・A・II・B・C選択】平面ベクトル（内積・垂線の足・面積）",
+      "subject": "数学",
+      "unit": "河合塾 全国記述模試 2026 第2回 II型",
+      "topic_tag": "ベクトル",
+      "difficulty": 3,
+      "source_name": "河合塾 全国記述模試",
+      "source_year": "2026 第2回",
+      "stem_md": String.raw`《II型　数学I・A・II・B・C 選択問題》（配点 50点）
+
+$OA=5$，$OB=4$，$AB=7$ である三角形 $OAB$ があり，線分 $OB$ を $1:3$ に内分する点を $C$ とする。`,
+      "sub_problems": [
+        {
+          "label": "(1)",
+          "stem_md": String.raw`内積 $\overrightarrow{OA}\cdot\overrightarrow{OB}$ の値を求めよ。$\overrightarrow{OA}\cdot\overrightarrow{OB}=-\boxed{\text{ア}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "4", "boxes": ["ア"]}
+          ]
+        },
+        {
+          "label": "(2)",
+          "stem_md": String.raw`$B$ から直線 $AC$ に引いた垂線と直線 $AC$ の交点を $H$ とする。
+
+(i) $\overrightarrow{OH}$ を $\overrightarrow{OA}$，$\overrightarrow{OB}$ を用いて表せ。$\overrightarrow{OH}=-\dfrac{\boxed{\text{イ}}}{\boxed{\text{ウ}}\boxed{\text{エ}}}\,\overrightarrow{OA}+\dfrac{\boxed{\text{オ}}\boxed{\text{カ}}}{\boxed{\text{キ}}\boxed{\text{ク}}}\,\overrightarrow{OB}$
+
+(ii) 三角形 $OAH$ の面積を求めよ。$\dfrac{\boxed{\text{ケ}}\boxed{\text{コ}}\sqrt{\boxed{\text{サ}}}}{\boxed{\text{シ}}\boxed{\text{ス}}}$`,
+          "answer_fields": [
+            {"format": "integer", "value": "3", "boxes": ["イ"]},
+            {"format": "integer", "value": "14", "boxes": ["ウ", "エ"]},
+            {"format": "integer", "value": "17", "boxes": ["オ", "カ"]},
+            {"format": "integer", "value": "56", "boxes": ["キ", "ク"]},
+            {"format": "integer", "value": "17", "boxes": ["ケ", "コ"]},
+            {"format": "integer", "value": "6", "boxes": ["サ"]},
+            {"format": "integer", "value": "14", "boxes": ["シ", "ス"]}
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 window.MATH_SCHOOLS = (window.MATH_SCHOOLS || []).concat([{
   id: "kawai",
   name: "河合塾（模試）",
@@ -266,6 +559,13 @@ window.MATH_SCHOOLS = (window.MATH_SCHOOLS || []).concat([{
       shortLabel: "第2回記述 I型",
       sourceTitle: "2026年度 第2回 全国記述模試",
       sourceText: "I型（数学I・数学A）",
+    },
+    {
+      key: "kawai_2026_zenkijutsu2_typeII",
+      label: "2026 第2回 全国記述模試 II型",
+      shortLabel: "第2回記述 II型",
+      sourceTitle: "2026年度 第2回 全国記述模試",
+      sourceText: "II型（数学I・A・II・B・C）",
     },
   ],
 }]);

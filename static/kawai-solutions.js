@@ -173,3 +173,209 @@ $$P(X=4\mid 3色そろう)=\dfrac{14/81}{78/81}=\dfrac{14}{78}=\dfrac{7}{39}.$$`
     answer: String.raw`$\dfrac{7}{39}$`
   }
 };
+
+window.MATH_SOLUTIONS.kawai_2026_zenkijutsu2_typeII = {
+  "1-(1)": {
+    approach: String.raw`素因数分解してから，約数の個数と総和の公式を用いる。`,
+    formula: {
+      title: "約数の個数と総和",
+      body: String.raw`$N=p^{a}q^{b}$ のとき，正の約数の個数は $(a+1)(b+1)$，総和は $(1+p+\cdots+p^{a})(1+q+\cdots+q^{b})$。`
+    },
+    solution: String.raw`$496=2^{4}\times 31$ である。正の約数の個数は
+$$(4+1)(1+1)=10.$$
+総和は
+$$(1+2+4+8+16)(1+31)=31\times 32=992.$$`,
+    answer: String.raw`約数は $10$ 個，総和は $992$`
+  },
+  "1-(2)": {
+    approach: String.raw`余りを $ax+b$ とおき，剰余の定理から $f(1)=2$，$f(-2)=-1$ を用いて連立方程式を立てる。`,
+    formula: {
+      title: "剰余の定理",
+      body: String.raw`$f(x)$ を $x-\alpha$ で割った余りは $f(\alpha)$。`
+    },
+    solution: String.raw`$f(x)=(x-1)(x+2)Q(x)+ax+b$ とおく。剰余の定理より
+$$f(1)=a+b=2,\qquad f(-2)=-2a+b=-1.$$
+辺々を引くと $3a=3$ となり，$a=1$，$b=1$。`,
+    answer: String.raw`$x+1$`
+  },
+  "1-(3)": {
+    approach: String.raw`$t^{2}=1+2\sin\theta\cos\theta$ を使って $f(\theta)$ を $t$ の2次式に直す。$t$ の範囲は合成 $t=\sqrt{2}\sin\!\left(\theta+\frac{\pi}{4}\right)$ から。(ii) は区間内での2次関数の最大・最小。`,
+    formula: {
+      title: "sin+cos の合成と2乗",
+      body: String.raw`$t=\sin\theta+\cos\theta=\sqrt{2}\sin\!\left(\theta+\dfrac{\pi}{4}\right)$，$t^{2}=1+2\sin\theta\cos\theta$`
+    },
+    solution: String.raw`(i) $t^{2}=(\sin\theta+\cos\theta)^{2}=1+2\sin\theta\cos\theta=1+\sin 2\theta$ より $\sin 2\theta=t^{2}-1$。よって
+$$f(\theta)=\sin 2\theta-(\sin\theta+\cos\theta)=(t^{2}-1)-t=t^{2}-t-1.$$
+$t=\sqrt{2}\sin\!\left(\theta+\dfrac{\pi}{4}\right)$ で，$0\le\theta<2\pi$ のとき $\sin\!\left(\theta+\dfrac{\pi}{4}\right)$ は $-1$ から $1$ までのすべての値をとるから $-\sqrt{2}\le t\le\sqrt{2}$。
+
+(ii) $g(t)=t^{2}-t-1=\left(t-\dfrac{1}{2}\right)^{2}-\dfrac{5}{4}$。区間 $-\sqrt{2}\le t\le\sqrt{2}$ に頂点 $t=\dfrac{1}{2}$ が含まれるので最小値は $-\dfrac{5}{4}$。最大値は端点を比べて，$g(-\sqrt{2})=1+\sqrt{2}$，$g(\sqrt{2})=1-\sqrt{2}$ より $1+\sqrt{2}$。`,
+    answer: String.raw`(i) $f(\theta)=t^{2}-t-1$，$-\sqrt{2}\le t\le\sqrt{2}$　(ii) 最大値 $1+\sqrt{2}$，最小値 $-\dfrac{5}{4}$`
+  },
+  "1-(4)": {
+    approach: String.raw`まず真数条件で範囲を絞る。$\log_{4}M=\dfrac{1}{2}\log_{2}M$ で底を $2$ にそろえ，$\log_{2}$ の単調性で中身の不等式に直して解く。`,
+    formula: {
+      title: "底の変換と対数の単調性",
+      body: String.raw`$\log_{4}M=\dfrac{1}{2}\log_{2}M$，$\log_{2}$ は増加関数。`
+    },
+    solution: String.raw`真数条件は $x-1>0$ かつ $4-x^{2}>0$ より $1<x<2$。
+
+$\log_{4}(4-x^{2})=\dfrac{1}{2}\log_{2}(4-x^{2})$ だから，両辺を $2$ 倍すると
+$$2\log_{2}(x-1)\le\log_{2}(4-x^{2})-2,\qquad \log_{2}(x-1)^{2}\le\log_{2}\dfrac{4-x^{2}}{4}.$$
+$\log_{2}$ は増加関数なので
+$$(x-1)^{2}\le\dfrac{4-x^{2}}{4},\quad 4(x-1)^{2}\le 4-x^{2},\quad 5x^{2}-8x\le 0,\quad x(5x-8)\le 0.$$
+よって $0\le x\le\dfrac{8}{5}$。真数条件 $1<x<2$ とあわせて $1<x\le\dfrac{8}{5}$。`,
+    answer: String.raw`$1<x\le\dfrac{8}{5}$`
+  },
+  "2-(1)": {
+    approach: String.raw`$f'(x)=2ax$ から接点 $\mathrm{A}(2,\ 4a)$ での傾き $4a$ を求め，接線の式を作る。`,
+    formula: {
+      title: "接線の方程式",
+      body: String.raw`$y=f'(t)(x-t)+f(t)$`
+    },
+    solution: String.raw`$f(x)=ax^{2}$ より $f'(x)=2ax$。$\mathrm{A}(2,\ f(2))=(2,\ 4a)$ での傾きは $f'(2)=4a$ だから，
+$$\ell:\ y=4a(x-2)+4a=4ax-4a.$$`,
+    answer: String.raw`$\ell:\ y=4ax-4a$`
+  },
+  "2-(2)": {
+    approach: String.raw`(i) $\ell$ と $C_{2}$ を連立し，重解条件（判別式 $=0$）で $a$ を決める。(ii)(iii) は差が $(x-\alpha)^{2}$ の形になることを使って積分する。`,
+    formula: {
+      title: "接する条件と面積",
+      body: String.raw`2次方程式が重解をもつ $\iff$ 判別式 $=0$。$\displaystyle\int_{\alpha}^{\beta}(x-\alpha)^{2}dx=\dfrac{(\beta-\alpha)^{3}}{3}$`
+    },
+    solution: String.raw`(i) $4ax-4a=-x^{2}+4x-3$ を整理すると $x^{2}+(4a-4)x+(3-4a)=0$。接する条件は判別式 $=0$：
+$$(4a-4)^{2}-4(3-4a)=16a^{2}-16a+4=4(2a-1)^{2}=0,\qquad a=\dfrac{1}{2}.$$
+
+(ii) $a=\dfrac{1}{2}$ のとき $\ell:\ y=2x-2$。$\ell-C_{2}=(2x-2)-(-x^{2}+4x-3)=(x-1)^{2}\ge 0$ で，$x=1$ で接する。$y$ 軸から接点までで囲むから，
+$$\int_{0}^{1}(x-1)^{2}\,dx=\left[\dfrac{(x-1)^{3}}{3}\right]_{0}^{1}=\dfrac{1}{3}.$$
+
+(iii) $\mathrm{A}(2,\ 2)$，$\mathrm{P}(0,\ p)$（$p>0$）とすると，直線 $\mathrm{AP}$ は $y=p+\dfrac{2-p}{2}x$。$C_{1}:\ y=\dfrac{x^{2}}{2}$ との差は $x=2$ で $0$ になり，$0\le x\le 2$ で $\mathrm{AP}$ が上側。囲む面積は
+$$\int_{0}^{2}\left(p+\dfrac{2-p}{2}x-\dfrac{x^{2}}{2}\right)dx=2p+(2-p)-\dfrac{4}{3}=p+\dfrac{2}{3}.$$
+これが (ii) の $4$ 倍 $\dfrac{4}{3}$ に等しいから $p+\dfrac{2}{3}=\dfrac{4}{3}$，$p=\dfrac{2}{3}$。`,
+    answer: String.raw`(i) $a=\dfrac{1}{2}$　(ii) $\dfrac{1}{3}$　(iii) $\mathrm{P}\left(0,\ \dfrac{2}{3}\right)$`
+  },
+  "3-(1)": {
+    approach: String.raw`1回の操作で赤球が増えるのは目が $1,2,3,4$ のとき。増える確率 $\dfrac{2}{3}$ の試行を4回行うと考え，反復試行の確率を使う。`,
+    formula: {
+      title: "反復試行の確率",
+      body: String.raw`$P(X=k)={}_{4}\mathrm{C}_{k}\left(\dfrac{2}{3}\right)^{k}\left(\dfrac{1}{3}\right)^{4-k}$`
+    },
+    solution: String.raw`赤球が増えるのは目が $1,2$（赤白）または $3,4$（赤青）のときで，その確率は $\dfrac{4}{6}=\dfrac{2}{3}$。増えないのは目が $5,6$ のときで確率 $\dfrac{1}{3}$。よって $X$ は成功確率 $\dfrac{2}{3}$ の試行を4回行ったときの成功回数である。
+$$P(X=0)=\left(\dfrac{1}{3}\right)^{4}=\dfrac{1}{81},\qquad P(X=1)={}_{4}\mathrm{C}_{1}\left(\dfrac{2}{3}\right)\left(\dfrac{1}{3}\right)^{3}=\dfrac{8}{81}.$$`,
+    answer: String.raw`$P(X=0)=\dfrac{1}{81}$，$P(X=1)=\dfrac{8}{81}$`
+  },
+  "3-(2)": {
+    approach: String.raw`$X$ は二項分布に従うので，期待値は（試行回数）$\times$（1回の成功確率）。`,
+    formula: {
+      title: "二項分布の期待値",
+      body: String.raw`$X\sim B(n,p)$ のとき $E(X)=np$`
+    },
+    solution: String.raw`$X$ は $B\!\left(4,\ \dfrac{2}{3}\right)$ に従うから，
+$$E(X)=4\cdot\dfrac{2}{3}=\dfrac{8}{3}.$$`,
+    answer: String.raw`$E(X)=\dfrac{8}{3}$`
+  },
+  "3-(3)": {
+    approach: String.raw`4回の目の内訳を A（赤白）・B（赤青）・C（白青）の回数 $a,b,c$ でとらえる。$X=4\iff c=0$。3色そろう確率は「ある色が欠ける」余事象で数え，条件付き確率の定義に当てはめる。`,
+    formula: {
+      title: "条件付き確率",
+      body: String.raw`$P(X=4\mid 3色そろう)=\dfrac{P(X=4\ \text{かつ}\ 3色そろう)}{P(3色そろう)}$`
+    },
+    solution: String.raw`各回の結果を A（赤白），B（赤青），C（白青）とし，その回数を $a,b,c$（$a+b+c=4$）とする。全事象は $3^{4}=81$ 通りで，各列は同様に確からしい。赤球の個数は $X=a+b$ なので $X=4\iff c=0$。
+
+色が欠けるのは次の互いに排反な場合だけ：赤が無い $\iff c=4$，白が無い $\iff b=4$，青が無い $\iff a=4$。よって
+$$P(3色そろう)=1-\dfrac{3}{81}=\dfrac{78}{81}=\dfrac{26}{27}.$$
+$X=4$ かつ3色そろうのは $c=0$ かつ $a\ge 1$ かつ $b\ge 1$，すなわち各回が A か B で「全部 A」「全部 B」を除く $2^{4}-2=14$ 通り。よって $P(X=4\ \text{かつ}\ 3色そろう)=\dfrac{14}{81}$ であり，
+$$P(X=4\mid 3色そろう)=\dfrac{14/81}{78/81}=\dfrac{14}{78}=\dfrac{7}{39}.$$`,
+    answer: String.raw`$\dfrac{7}{39}$`
+  },
+  "4-(1)": {
+    approach: String.raw`円の方程式を標準形に直して中心と半径を $a$ で表す。$x$ 軸に接する $\iff$（中心の $y$ 座標）$^{2}=$（半径）$^{2}$。`,
+    formula: {
+      title: "円の標準形と接する条件",
+      body: String.raw`平方完成で中心・半径を求める。$x$ 軸に接する $\iff (\text{中心の }y\text{ 座標})^{2}=r^{2}$`
+    },
+    solution: String.raw`平方完成すると
+$$(x-2a)^{2}+(y-a)^{2}=2a^{2}-4a+3.$$
+中心 $(2a,\ a)$，$r^{2}=2a^{2}-4a+3\ (>0)$。$x$ 軸に接するのは $a^{2}=2a^{2}-4a+3$，すなわち
+$$a^{2}-4a+3=0,\qquad (a-1)(a-3)=0.$$`,
+    answer: String.raw`$a=1,\ 3$`
+  },
+  "4-(2)": {
+    approach: String.raw`(i) 対称点は「中点が $\ell$ 上」「$\mathrm{AA'}\perp\ell$」の2条件で求める。(ii) $\mathrm{Q}\in\ell$ なら $\mathrm{QA}=\mathrm{QA'}$ なので $\mathrm{PQ}+\mathrm{QA}\ge\mathrm{PA'}$，さらに $\mathrm{P}\in C_{2}$ から下限を出す。`,
+    formula: {
+      title: "対称点と折れ線の最短",
+      body: String.raw`$\ell$ 上の点 $\mathrm{Q}$ について $\mathrm{QA}=\mathrm{QA'}$（$\mathrm{A'}$ は $\ell$ に関する $\mathrm{A}$ の対称点）。`
+    },
+    solution: String.raw`$a=3$ のとき $C_{1}$ は中心 $\mathrm{A}(6,\ 3)$，半径 $3$。$a=1$ のとき $C_{2}$ は中心 $(2,\ 1)$，半径 $1$。
+
+(i) $\mathrm{A'}(s,\ t)$ とおくと，中点 $\left(\dfrac{6+s}{2},\ \dfrac{3+t}{2}\right)$ が $\ell:\ y=x+2$ 上にあり，かつ $\mathrm{AA'}$ が $\ell$（傾き $1$）と垂直だから
+$$\dfrac{3+t}{2}=\dfrac{6+s}{2}+2,\qquad \dfrac{t-3}{s-6}=-1.$$
+これを解いて $\mathrm{A'}(1,\ 8)$。
+
+(ii) $\mathrm{Q}\in\ell$ より $\mathrm{QA}=\mathrm{QA'}$ だから $\mathrm{PQ}+\mathrm{QA}=\mathrm{PQ}+\mathrm{QA'}\ge\mathrm{PA'}$。$\mathrm{A}$ と $\mathrm{A'}$，$C_{2}$ と $\mathrm{A'}$ は $\ell$ の反対側にあるので，線分をとる $\mathrm{Q}$ で等号が成り立つ。さらに $\mathrm{P}\in C_{2}$ なので，$\mathrm{PA'}$ の最小値は $C_{2}$ の中心と $\mathrm{A'}$ の距離から半径 $1$ を引いた値：
+$$\sqrt{(2-1)^{2}+(1-8)^{2}}-1=\sqrt{50}-1=5\sqrt{2}-1.$$`,
+    answer: String.raw`(i) $\mathrm{A'}(1,\ 8)$　(ii) $5\sqrt{2}-1$`
+  },
+  "5-(1)": {
+    approach: String.raw`$S_{1}=a_{1}$ を使い，$n=1$ を条件式に代入する。`,
+    formula: {
+      title: "和と項の関係",
+      body: String.raw`$S_{1}=a_{1}$，$n\ge 2$ で $a_{n}=S_{n}-S_{n-1}$`
+    },
+    solution: String.raw`$n=1$ とすると
+$$S_{1}=a_{1}=2a_{1}+1-4=2a_{1}-3.$$
+よって $a_{1}=3$。`,
+    answer: String.raw`$a_{1}=3$`
+  },
+  "5-(2)": {
+    approach: String.raw`$a_{n+1}=S_{n+1}-S_{n}$ に条件式を代入して漸化式を作り，特性方程式（$\alpha=2\alpha-1$）で一般項を求める。`,
+    formula: {
+      title: "1次の漸化式",
+      body: String.raw`$a_{n+1}=pa_{n}+q$ は $a_{n+1}-\alpha=p(a_{n}-\alpha)$ と変形（$\alpha=p\alpha+q$）。`
+    },
+    solution: String.raw`$a_{n+1}=S_{n+1}-S_{n}=\{2a_{n+1}+(n+1)-4\}-\{2a_{n}+n-4\}=2a_{n+1}-2a_{n}+1$。整理して
+$$a_{n+1}=2a_{n}-1.$$
+$a_{n+1}-1=2(a_{n}-1)$ で $a_{1}-1=2$ だから，$\{a_{n}-1\}$ は公比 $2$ の等比数列で
+$$a_{n}-1=2\cdot 2^{n-1}=2^{n}.$$`,
+    answer: String.raw`$a_{n+1}=2a_{n}-1$，$a_{n}=2^{n}+1$`
+  },
+  "5-(3)": {
+    approach: String.raw`$a_{n}=2^{n}+1$ が $\{b_{n}\}$（$7$ で割って $2$ 余る数）に入る条件は $2^{n}\equiv 1\pmod 7$。$2^{n}\bmod 7$ の周期 $3$ から $n\equiv 0\pmod 3$ とわかり，共通項は $c_{k}=8^{k}+1$。`,
+    formula: {
+      title: "$2^{n}$ の $\bmod 7$ の周期",
+      body: String.raw`$2^{1},2^{2},2^{3}\equiv 2,4,1\pmod 7$（以後周期 $3$ で繰り返す）。`
+    },
+    solution: String.raw`$b_{n}=7n+2$ は $9$ 以上で「$7$ で割ると $2$ 余る数」全体である。$a_{n}=2^{n}+1$ がこれに入る条件は $2^{n}\equiv 1\pmod 7$。$2^{n}\bmod 7$ は $2,4,1$ の繰り返し（周期 $3$）なので $n\equiv 0\pmod 3$。
+
+$n=3k$ のとき $a_{3k}=2^{3k}+1=8^{k}+1\ (\ge 9)$ はすべて $\{b_{n}\}$ に含まれる。よって $c_{k}=8^{k}+1$，$c_{k}-1=8^{k}$ となり，
+$$(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)=8^{1}\cdot 8^{2}\cdots 8^{n}=8^{1+2+\cdots+n}=8^{\frac{n(n+1)}{2}}.$$`,
+    answer: String.raw`$8^{\frac{n(n+1)}{2}}$`
+  },
+  "6-(1)": {
+    approach: String.raw`$\overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA}$ の大きさの2乗を展開し，内積について解く。`,
+    formula: {
+      title: "内積と大きさ",
+      body: String.raw`$|\overrightarrow{OB}-\overrightarrow{OA}|^{2}=|\overrightarrow{OB}|^{2}-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+|\overrightarrow{OA}|^{2}$`
+    },
+    solution: String.raw`$|\overrightarrow{AB}|^{2}=|\overrightarrow{OB}-\overrightarrow{OA}|^{2}=|\overrightarrow{OB}|^{2}-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+|\overrightarrow{OA}|^{2}$ に $|\overrightarrow{OA}|=5$，$|\overrightarrow{OB}|=4$，$|\overrightarrow{AB}|=7$ を代入すると
+$$49=16-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+25,\qquad \overrightarrow{OA}\cdot\overrightarrow{OB}=-4.$$`,
+    answer: String.raw`$\overrightarrow{OA}\cdot\overrightarrow{OB}=-4$`
+  },
+  "6-(2)": {
+    approach: String.raw`$\overrightarrow{OC}=\dfrac{1}{4}\overrightarrow{OB}$。$H$ を直線 $AC$ 上の点として $\overrightarrow{OH}=(1-t)\overrightarrow{OA}+\dfrac{t}{4}\overrightarrow{OB}$ とおき，$\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ から $t$ を決める。面積は $\triangle OAH=t\cdot\triangle OAC=\dfrac{t}{4}\triangle OAB$。`,
+    formula: {
+      title: "垂線の足と面積比",
+      body: String.raw`直線 $AC$ 上の点は $\overrightarrow{OH}=\overrightarrow{OA}+t(\overrightarrow{OC}-\overrightarrow{OA})$。このとき $\triangle OAH:\triangle OAC=t:1$。`
+    },
+    solution: String.raw`$\overrightarrow{OA}=\vec{a}$，$\overrightarrow{OB}=\vec{b}$ とおくと $|\vec{a}|^{2}=25$，$|\vec{b}|^{2}=16$，$\vec{a}\cdot\vec{b}=-4$，$\overrightarrow{OC}=\dfrac{1}{4}\vec{b}$。
+
+(i) $\overrightarrow{OH}=(1-t)\vec{a}+\dfrac{t}{4}\vec{b}$ とおくと
+$$\overrightarrow{BH}=(1-t)\vec{a}+\left(\dfrac{t}{4}-1\right)\vec{b},\qquad \overrightarrow{AC}=\dfrac{1}{4}\vec{b}-\vec{a}.$$
+$\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ を計算すると $-26(1-t)+8\left(\dfrac{t}{4}-1\right)=28t-34=0$，$t=\dfrac{17}{14}$。よって
+$$\overrightarrow{OH}=\left(1-\dfrac{17}{14}\right)\vec{a}+\dfrac{17}{56}\vec{b}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}.$$
+
+(ii) $\cos\angle AOB=\dfrac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}=-\dfrac{1}{5}$ より $\sin\angle AOB=\dfrac{2\sqrt{6}}{5}$ なので
+$$\triangle OAB=\dfrac{1}{2}\cdot 5\cdot 4\cdot\dfrac{2\sqrt{6}}{5}=4\sqrt{6}.$$
+$\overrightarrow{AH}=t\,\overrightarrow{AC}$ だから $\triangle OAH=t\cdot\triangle OAC=t\cdot\dfrac{1}{4}\triangle OAB=\dfrac{17}{14}\cdot\dfrac{1}{4}\cdot 4\sqrt{6}=\dfrac{17\sqrt{6}}{14}.$`,
+    answer: String.raw`(i) $\overrightarrow{OH}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}$　(ii) $\dfrac{17\sqrt{6}}{14}$`
+  }
+};
