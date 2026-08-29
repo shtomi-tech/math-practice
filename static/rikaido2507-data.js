@@ -363,5 +363,12 @@ window.MATH_SCHOOLS = (window.MATH_SCHOOLS || []).concat([{
       sourceTitle: "2025年7月 理解度確認テスト",
       sourceText: "高3 数学βコース",
     },
+    {
+      key: "rikaido_2608_high1",
+      label: "2026年8月 高校1年生",
+      shortLabel: "2608 高1",
+      sourceTitle: "2026年8月 理解度確認テスト",
+      sourceText: "高校1年生 数学",
+    },
   ],
 }]);
