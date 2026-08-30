@@ -3,16 +3,17 @@ const path = require("node:path");
 const assert = require("node:assert/strict");
 const vm = require("node:vm");
 
-const root = path.resolve(__dirname, "..");
-const source = fs.readFileSync(path.join(root, "static/app.js"), "utf8");
+const { root, readAppModule, readAppSource } = require("./app-source.js");
+const source = readAppSource();
+const solutionModule = readAppModule("solution.js");
 const solutions = fs.readFileSync(path.join(root, "static/rikaido2507-solutions.js"), "utf8");
 const styles = fs.readFileSync(path.join(root, "static/styles.css"), "utf8");
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
-const start = source.indexOf("function renderSolutionModalBody");
-const end = source.indexOf("\nfunction openSolutionModal", start);
+const start = solutionModule.indexOf("function renderSolutionModalBody");
+const end = solutionModule.indexOf("export function openSolutionModal", start);
 assert.ok(start >= 0 && end > start, "解説モーダルの描画関数が見つかりません");
 
-const modalBody = source.slice(start, end);
+const modalBody = solutionModule.slice(start, end);
 assert.match(source, /const MATH_SOLUTIONS = window\.MATH_SOLUTIONS \|\| \{\};/);
 assert.match(source, /function solutionForSub\(group, sub\)/);
 
@@ -44,7 +45,8 @@ for (const key of ["1-(1)", "1-(2)", "1-(3)", "1-(4)", "1-(5)"]) {
 }
 assert.match(migratedSolutions["1-(5)"].figure, /L213\.71 48\.22 Z/);
 assert.match(migratedSolutions["1-(5)"].figure, /cx="200" cy="94\.22"/);
-assert.match(index, /static\/app\.js\?v=20260821-three-grid-problems/);
+// バージョン文字列そのものは check-app-modules.js が index.html と全importの一致を検査する。
+assert.match(index, /<script type="module" src="\.\/static\/app\/main\.js\?v=/);
 assert.equal(modalBody.includes("learningPointsHtml"), false);
 assert.equal(modalBody.includes("learning-section"), false);
 

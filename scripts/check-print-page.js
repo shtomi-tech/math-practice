@@ -4,11 +4,11 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const root = path.resolve(__dirname, "..");
+const { root, readAppSource } = require("./app-source.js");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 const printPage = read("print.html");
 const index = read("index.html");
-const app = read("static/app.js");
+const app = readAppSource();
 
 for (const required of [
   'id="printContent"',
@@ -28,7 +28,7 @@ for (const required of [
   assert.ok(printPage.includes(required), required);
 }
 
-assert.doesNotMatch(printPage, /static\/app\.js/, "print page must not load app.js");
+assert.doesNotMatch(printPage, /static\/app\//, "print page must not load the practice app modules");
 assert.match(index, /id="groupPrintLink"/, "the practice page needs a print link");
 const legacySourceName = ["print", "sources"].join("-");
 assert.doesNotMatch(index, new RegExp(legacySourceName), "the practice page must not load legacy print sources");

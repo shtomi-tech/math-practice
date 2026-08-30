@@ -1,13 +1,15 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const root = path.resolve(__dirname, "..");
-const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
+const { root, readAppSource } = require("./app-source.js");
+// アプリ本体は static/app/ のモジュール群。連結ソースをまとめて検査する。
+const APP_MODULES = "static/app/*.js";
+const read = (relative) => (relative === APP_MODULES ? readAppSource() : fs.readFileSync(path.join(root, relative), "utf8"));
 const errors = [];
 
 const forbiddenByFile = {
   "index.html": ["hintMode", "hint-strategies.js", "ヒントモード"],
-  "static/app.js": [
+  [APP_MODULES]: [
     "HINT_LEVELS",
     "renderHintBox",
     "bindHints",

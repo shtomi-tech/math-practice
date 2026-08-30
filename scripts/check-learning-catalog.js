@@ -1,9 +1,9 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const root = path.resolve(__dirname, "..");
+const { root, readAppSource } = require("./app-source.js");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
-const app = read("static/app.js");
+const app = readAppSource();
 const styles = read("static/styles.css");
 const index = read("index.html");
 const errors = [];

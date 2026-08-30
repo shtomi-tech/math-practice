@@ -21,9 +21,30 @@ URLパラメータで直接開けます。`?exam=sougou` などの過去問キ�
 
 ポータルで発行した生徒別共有URLでは、進捗・解答下書き・受験結果を共通Supabaseへ保存します。通常URLでは従来どおり端末内の生徒選択と `localStorage` を使います。Supabaseの保存先appIdは統合前と互換です（過去問: `teikyo-kakomon`、ミニ試験: `math-mini-exam` / `math-mini-exam:mini_02`）。
 
+## アプリ本体の構成
+
+`static/app/` のESモジュール群です。エントリは `static/app/main.js`（`index.html` から `type="module"` で読み込む）。問題データ（`static/*-data.js` など）は従来どおり `window.*` に登録するクラシックスクリプトで、モジュールより先に読み込みます。
+
+| ファイル | 役割 |
+| --- | --- |
+| `main.js` | 起動（状態初期化 → クラウド接続 → イベント登録 → 初回描画） |
+| `state.js` | アプリ全体で共有する可変状態（`app` オブジェクト1つに集約） |
+| `datasets.js` | `window.*` のデータを「学校→方式・年度」の2階層へ組み立てる読み取り専用の定数 |
+| `storage.js` | localStorage の読み書き、進捗・下書きの保存キー、クラウド用ペイロード |
+| `catalog.js` | 進捗キーの規約と、カタログ／大問Unitカードの状態語彙 |
+| `shell.js` | カタログ表示と演習／試験モードの切り替え、画面全体の `render()` |
+| `practice.js` | 演習モード（マス目入力・小問採点・採点レール） |
+| `exam.js` | 試験モード（タイマー・提出・結果表示） |
+| `solution.js` | 方針パネルと解説モーダル、印刷リンク |
+| `students.js` | 生徒の選択・追加・改名・削除 |
+| `keypad.js` | 演習・試験で共通のクリック式テンキー |
+| `hooks.js` | `shell.js` ↔ 各モードの相互呼び出し口（循環importの回避） |
+
+`?v=` のキャッシュ用バージョンは `index.html` のエントリと全モジュールのimportで一致させます。更新は `node scripts/bump-app-version.js <version>`、検査は `node scripts/check-app-modules.js`。
+
 ## 学校・方式の追加（演習モード）
 
-コード（`static/app.js`）を書き換えずに、データファイルを読み込むだけで出典を増やせます。
+アプリ本体（`static/app/`）を書き換えずに、データファイルを読み込むだけで出典を増やせます。
 
 1. `static/<school>-data.js` を作り、`window.MATH_DATASETS` に一意なキーで問題データを登録する。
 
@@ -71,7 +92,10 @@ URLパラメータで直接開けます。`?exam=sougou` などの過去問キ�
 node scripts/check-no-common-hints.js # 共通ヒントの削除状態
 node scripts/check-solution-modal.js  # 解説モーダルの表示区分
 node scripts/check-exam.js    # ミニ試験の配点・問題数
-node --check static/app.js
+node scripts/check-app-modules.js     # モジュール構成とキャッシュ用バージョンの整合
+node scripts/check-learning-catalog.js # カタログの状態語彙・表示契約
+node scripts/check-print-page.js       # 印刷ページの契約
+node --check static/app/main.js
 ```
 
 ## 実行
