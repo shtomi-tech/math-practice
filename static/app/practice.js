@@ -1,10 +1,10 @@
 // 演習モード（過去問）。マス目入力・小問ごとの採点・大問ナビ・採点レールを担当する。
-import { app } from "./state.js?v=20260830-modules";
-import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260830-modules";
-import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260830-modules";
-import { saveProgress, saveDrafts } from "./storage.js?v=20260830-modules";
-import { renderKeypadPanel } from "./keypad.js?v=20260830-modules";
-import { hooks } from "./hooks.js?v=20260830-modules";
+import { app } from "./state.js?v=20260903-group-nav-fix";
+import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260903-group-nav-fix";
+import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260903-group-nav-fix";
+import { saveProgress, saveDrafts } from "./storage.js?v=20260903-group-nav-fix";
+import { renderKeypadPanel } from "./keypad.js?v=20260903-group-nav-fix";
+import { hooks } from "./hooks.js?v=20260903-group-nav-fix";
 import {
   questionFigureHtml,
   solutionForSub,
@@ -12,7 +12,7 @@ import {
   groupPrintUrl,
   openSolutionModal,
   closeSolutionModal,
-} from "./solution.js?v=20260830-modules";
+} from "./solution.js?v=20260903-group-nav-fix";
 
 /* ---------- 解答欄（フィールド）とマス ---------- */
 
@@ -74,9 +74,30 @@ export function ensureAnswersForGroup() {
     });
   });
   app.answerDrafts[draftKey] = app.answers;
-  app.graded = false;
-  app.checkedSubs = {};
+  restoreChecksForGroup(group);
   setFirstAvailableActive();
+}
+
+// 大問を移動しても、正解として保存済みの小問は「正解」表示を保つ。
+// checkedSubs はセッション限りの表示状態で永続化されないため、大問を切り替えるたびに
+// 保存済みの解答（answerDrafts）と進捗（app.progress）から作り直す。
+// 保存済みの解答が今も全マス埋まっていて正解のときだけ復元し、誤答表示や未回答の先出しはしない。
+function restoreChecksForGroup(group) {
+  app.checkedSubs = {};
+  (group.sub_problems || []).forEach((sub, subIndex) => {
+    const key = subKey(app.currentGroup, subIndex);
+    if (!app.progress[key]?.correct) return;
+    const fields = createViewFields(app.currentGroup, subIndex, sub);
+    if (!fields.every(isFieldFilled) || !fields.every(isFieldCorrect)) return;
+    app.checkedSubs[key] = {
+      checked: true,
+      correct: true,
+      correctFields: fields.length,
+      total: fields.length,
+      at: app.progress[key].at || new Date().toISOString(),
+    };
+  });
+  app.graded = Object.keys(app.checkedSubs).length > 0;
 }
 
 function persistCurrentAnswers() {

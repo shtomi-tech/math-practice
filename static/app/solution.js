@@ -1,8 +1,8 @@
 // 解説の表示（方針パネル・解説モーダル・印刷リンク）。
 // HTML方式（window.MATH_SOLUTIONS）があればそれを、無ければ段階解説（DETAIL_TEXTS）を出す。
-import { app } from "./state.js?v=20260830-modules";
-import { $, escapeHtml, mdLite, solutionTextHtml, renderMath } from "./dom.js?v=20260830-modules";
-import { DETAIL_TEXTS, DETAIL_STEP_LABELS, MATH_SOLUTIONS } from "./datasets.js?v=20260830-modules";
+import { app } from "./state.js?v=20260903-group-nav-fix";
+import { $, escapeHtml, mdLite, solutionTextHtml, renderMath } from "./dom.js?v=20260903-group-nav-fix";
+import { DETAIL_TEXTS, DETAIL_STEP_LABELS, MATH_SOLUTIONS } from "./datasets.js?v=20260903-group-nav-fix";
 
 export function questionFigureHtml(sub) {
   return sub.figure

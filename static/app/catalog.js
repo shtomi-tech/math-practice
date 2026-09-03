@@ -1,9 +1,9 @@
 // 進捗キーの規約と、演習セットカタログ／大問Unitカードに出す状態の算出。
 // 「未着手・学習中・入力中・完了」「未受験・保存中・受験済み」の語彙はここが正。
-import { app } from "./state.js?v=20260830-modules";
-import { normalize, formatTimeLabel } from "./dom.js?v=20260830-modules";
-import { DATASETS, MINI_EXAMS, AVAILABLE_EXAMS, isMiniKey, hasExamData } from "./datasets.js?v=20260830-modules";
-import { loadProgressSnapshot, loadDraftSnapshot, safeStorageObject } from "./storage.js?v=20260830-modules";
+import { app } from "./state.js?v=20260903-group-nav-fix";
+import { normalize, formatTimeLabel } from "./dom.js?v=20260903-group-nav-fix";
+import { DATASETS, MINI_EXAMS, AVAILABLE_EXAMS, isMiniKey, hasExamData } from "./datasets.js?v=20260903-group-nav-fix";
+import { loadProgressSnapshot, loadDraftSnapshot, safeStorageObject } from "./storage.js?v=20260903-group-nav-fix";
 
 // 進捗・下書きの保存キー。大問番号を含めるので、大問の並び替えでも記録が壊れない。
 export function groupKey(index) {
