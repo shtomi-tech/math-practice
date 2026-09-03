@@ -33,6 +33,9 @@ rounded:
 spacing:
   sm: 8px
   md: 12px
+  gutter: 24px
+  card: 24px
+  cardInner: 16px
   sourceScale: "4/8/12/14/16/24"
 ---
 
@@ -62,7 +65,9 @@ CSS変数名は元の意味役割を保ったまま値だけ差し替えてい�
 - **Platinum Gray `--platinum` (#dedede):** リスト行の地色（大問一覧・採点結果一覧）。hover/activeは`--ice`へ
 - **Chrome Indigo `--line` (#3d4f97):** パネルのベゼル影線・パネル外枠・リンク文字色（暖色は行動喚起専用に温存するため、リンクや小ラベルの強調はここを使う）
 - **Hairline `--hairline` (#5a5f8c):** 入力欄の縁取り・ドット罫線（chrome indigoより一段軽いコントラスト）
-- **Muted Indigo `--muted` (#4d5487):** 低強調テキスト（白地での可読性を優先し、原典の値より濃色寄せ）
+- **Muted Indigo `--muted` (#4d5487):** 低強調テキスト（白地での可読性を優先し、原典の値より濃色寄せ）。白地で7.16:1
+- **Muted on Soft `--muted-on-soft` (#3a4070):** `--canvas-soft`（二段目の帯）の上の低強調テキスト。`--muted`は同面で3.75:1とAA未達のため、この面だけ差し替える（5.12:1）。`.contextbar`が`--muted`をこの値へ再定義するので、帯の中では変数名を変えずに済む
+- **Line on Soft `--line-on-soft` (#2e3b73):** `--canvas-soft`の上のリンク・操作文字。`--line`は同面で3.98:1のため差し替える（5.53:1）
 - **Signal Orange `--signal` (#f68d1f):** 提出・次へ進む等のCTAのみに使用（`.cta`）
 - **Amber `--amber` (#ecab37):** ユーティリティチップ・タグ・バッジ（`生徒・設定`ボタン等）
 - **Nav Gold `--nav-gold` (#e48600):** ダーク面（carbon背景）専用のナビ文字色・ボタンのpressed状態。白地では使わない（コントラスト不足のため）
@@ -74,7 +79,8 @@ CSS変数名は元の意味役割を保ったまま値だけ差し替えてい�
 ## Layout
 
 - **二段ナビ**: `.topbar`がcarbon地・halftone・nav-gold文字の一段目（primary bar）。直下の`.contextbar`が`--canvas-soft`のサブナビ帯（二段目）で、負のマージンで筐体の余白いっぱいにブリードする。
-- **共有グリッド**: 外側余白は16px、最大コンテナ幅は通常演習1280px・試験結果1100px、列間隔は16px。デスクトップは`280px minmax(0, 1fr) 320px`、1080px以下は`240px minmax(0, 1fr)`、760px以下は1列にする。試験導入・結果も`calc(100% - 32px)`で同じ左右レールに乗せる。
+- **共有グリッド**: 幅の計算式は`--page-max`(1280px)・`--page-gutter`(24px / 760px以下は16px)・`--space-card`(24px)の1組だけを使う。`.topbar`・`.contextbar`・`.shell`がこの同じ組を参照するため、どの画面幅でも左右レールが1本に揃う。`.topbar`と`.shell`は`max-width: var(--page-max)`＋`margin-inline: auto`で、広い画面では筐体ごと中央に寄る。`.contextbar`の負のマージンも`calc(-1 * var(--page-gutter))`で連動させる。列構成はデスクトップ`280px minmax(0, 1fr) 320px`、1080px以下は`240px minmax(0, 1fr)`、760px以下は1列。試験導入・結果は`calc(100% - var(--page-gutter) * 2)`で同じ左右レールに乗せる（最大幅は結果1100px・導入760pxの例外を保つ）。
+- **余白の3段階**: 「別のまとまり」＝`--space-card` 24px（列間・カード間・画面端）、「同じカードの中」＝16px（`.panel`のpadding）、「見出しと直後の本文」＝14px、「密接な列挙」＝8px（`.group-list`）。カード内(16)よりカード間(24)を必ず広くし、罫線を足さずに余白だけでまとまりを判別できる状態を保つ。
 - **共有タイポグラフィ**: 本文16px、構造ラベル11px mono、見出しは16/20/22px、CTAは16px・700・最小48px。結果の得点56pxだけは表示専用の例外とする。
 - **チャンファー角**: `.chamfer`ユーティリティ（`clip-path`で対角2隅を14px面取り）を、最大級のパネルだけに適用する（大問パネル・問題文ボックス・得点/タイマーパネル）。チャンファーした要素は`border`を外し、ベゼルの影線だけで縁を表現する（斜め辺に沿ってborderが引けないCSSの制約のため）。
 - **リスト行はplatinum**: 大問一覧・採点結果一覧などの「行」はplatinum地、hover/activeで`--ice`に変わる。読み物の平面（`--ice`）・カード（`--paper`）・リスト行（`--platinum`）を役割で描き分ける。
@@ -91,4 +97,21 @@ CSS変数名は元の意味役割を保ったまま値だけ差し替えてい�
 ## Do's / Don'ts
 
 - **Do:** すべての領域を「ベゼルの効いた1枚板」として扱う（白背景＋chrome-indigoの影線）。暖色（nav-gold/amber/signal）は「進む・実行する」動線だけに絞る。構造ラベル（GROUP・SOURCE・QUESTION 等）はJetBrains Mono・大文字・字間広めで統一する。角は基本シャープ、最大級のパネルだけ面取りする。
-- **Don't:** すべての角を均一に丸めない。ぼかしのドロップシャドウ（Material的な浮遊感）を使わない。signal/amberを装飾目的で使わない。実際に生徒が読む数式・解答欄のコントラストを犠牲にしない（原典のリンク文字色は暖色だが、本アプリでは可読性を優先しchrome indigoに置き換えている）。
+- **Do:** 操作できる要素（`button` / `input` / `select` / `summary` / `a` / `.cell` / `.group-item`）は必ず同じフォーカスリング（`2px solid var(--ink)` / offset 2px）にし、主要な操作領域は44px以上を確保する。carbon地の一段目（`.top-actions`）だけリング色を`--paper`にし、その上に開く白地のドロップダウン内は`--ink`へ戻す。
+- **Don't:** すべての角を均一に丸めない。ぼかしのドロップシャドウ（Material的な浮遊感）を使わない。signal/amberを装飾目的で使わない。実際に生徒が読む数式・解答欄のコントラストを犠牲にしない（原典のリンク文字色は暖色だが、本アプリでは可読性を優先しchrome indigoに置き換えている）。`white-space: nowrap`で溢れを隠さない（単元名などの可変長ラベルは折り返して全文を見せる）。同じ役割のボタンを、列幅が足りずにラベルが2行折返しになる並びへ入れない（高さが割れる）。
+
+## Role → Style（再利用ルール）
+
+新しい要素を足すときは、まずこの表の役割に当てはめる。当てはまらない場合だけ新しい行を足す。
+
+| 役割 | セレクタ | 地色 | 縁 | 文字 | 最小高 | 備考 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 主CTA | `.cta` | `--signal` | signal 1px | `--ink` / 700 / 16px | 48px | 1画面に1つだけ |
+| 副ボタン | `.ghost` | 透明 | `--ink` 1px | `--ink` / 400 / 16px | 44px | 2行折返しになる列幅へ入れない |
+| 確認ボタン | `.sub-check-button.primary` | `--ink` | ink 1px | `--paper` / 400 | 44px | 小問ごとに1つ。CTAとは太さで区別 |
+| 危険操作 | `.ghost.danger` | 透明 | `--ng` 1px | `--ng` | 44px | `.danger-zone`に置く |
+| 開閉トグル | `summary` | 役割ごと | 役割ごと | 役割ごと | **44px** | `display: inline-flex; align-items: center` |
+| リスト行 | `.group-item` | `--platinum` | `--line` 1px | `--ink` | 76px | active/hoverで`--ice`＋ink縁 |
+| カタログカード | `.exam-option` | `--paper` | `--line` 1px | `--ink` | — | activeで`--ice`＋ink縁 |
+| バッジ | `.badge` | `--ice` | `--ink` 1px | `--ink` / 11px mono | — | `max-width: 100%`で折り返す。nowrap禁止 |
+| フォーカス | 上記すべて | — | `2px solid var(--ink)` / offset 2px | — | — | carbon地の`.top-actions`のみ`--paper` |

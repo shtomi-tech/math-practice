@@ -16,6 +16,8 @@
   --ice: #c0d5e6;          /* pale ice: 読み物面のライトな差し色（stem・チップ・hover） */
   --line: #3d4f97;         /* chrome indigo: ベゼルの縁取り・影線・補助テキスト */
   --muted: #4d5487;        /* muted indigo（濃色寄せ）: 低強調テキスト。白地での可読性を優先 */
+  --muted-on-soft: #3a4070;/* --canvas-soft 上の低強調テキスト。--mutedでは3.75:1でAA未達 */
+  --line-on-soft: #2e3b73; /* --canvas-soft 上のリンク・操作文字。--lineでは3.98:1でAA未達 */
   --clay: #3d4f97;         /* chrome indigo: リンク色（暖色は行動喚起専用に温存） */
   --signal: #f68d1f;       /* signal orange: 提出・強調系のアクション色 */
   --amber: #ecab37;        /* amber: ユーティリティチップ・タブ */
@@ -32,6 +34,18 @@
   --mono: "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
   --bevel-plate: inset 0 1px 0 rgba(255, 255, 255, .55), 0 2px 0 var(--line);
   --bevel-dark: inset 0 1px 0 rgba(255, 255, 255, .16), 0 2px 0 rgba(0, 0, 0, .4);
+  /* 共有の幅レール。topbar・contextbar・shell がこの1組だけを使い、
+     計算式が複数に分岐しないようにする（DESIGN.md「共有グリッド」）。 */
+  --page-max: 1280px;      /* 通常演習の最大コンテナ幅 */
+  --page-gutter: 24px;     /* 画面端の内側余白 = 全セクション共通の左右レール */
+  --space-card: 24px;      /* 別のまとまり（カード間・列間）。カード内16pxより広くする */
+}
+
+@media (max-width: 760px) {
+  :root {
+    /* 横幅が限られる端末では画面端だけ詰める（縦方向のまとまりの差は保つ）。 */
+    --page-gutter: 16px;
+  }
 }
 
 * { box-sizing: border-box; }
@@ -57,14 +71,28 @@ select {
   font: inherit;
 }
 
+/* 操作できる要素はすべて同じリングにする。summary / a を落とすと、そこだけ
+   ブラウザ既定の橙リングになり「同じ役割なのに違う見た目」が生まれる。 */
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
+summary:focus-visible,
+a:focus-visible,
 .cell:focus-visible,
 .group-item:focus-visible,
 .modal-box:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
+}
+
+/* carbon地の一段目ではinkのリングが沈むので白に切り替える。
+   その上に開く白地のドロップダウン内はinkへ戻す。 */
+.top-actions :focus-visible {
+  outline-color: var(--paper);
+}
+
+.utility-menu-body :focus-visible {
+  outline-color: var(--ink);
 }
 
 button {
@@ -139,7 +167,9 @@ h2 {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 18px 16px;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 18px var(--page-gutter);
   background: var(--ink);
   background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
   background-size: 5px 5px;
@@ -247,9 +277,12 @@ h2 {
   align-items: stretch;
   background: var(--canvas-soft);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 2px 0 var(--line);
-  padding: 12px 16px;
-  margin: 12px -16px -18px;
-  width: calc(100% + 32px);
+  padding: 12px var(--page-gutter);
+  margin: 12px calc(-1 * var(--page-gutter)) -18px;
+  width: calc(100% + var(--page-gutter) * 2);
+  /* --canvas-soft は白地より明度が近く、--muted / --line が本文AA(4.5:1)に届かない。
+     この面に限り一段濃い値へ差し替える（役割は「低強調」のまま）。 */
+  --muted: var(--muted-on-soft);
 }
 
 .context-source-card { grid-area: source; }
@@ -320,11 +353,14 @@ h2 {
 
 .source-switch-toggle > summary {
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--line);
+  color: var(--line-on-soft);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -370,17 +406,21 @@ h2 {
 .shell {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr) 320px;
-  gap: 16px;
-  padding: 16px;
+  gap: var(--space-card);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--page-gutter);
   min-height: calc(100vh - 91px);
 }
 
+/* カード間（--space-card 24px）は必ずカード内（.panel padding 16px）より広くする。
+   罫線を足さずに「1枚のカードの中」と「別のカード」を余白だけで見分けられるようにする。 */
 .sidebar,
 .workspace,
 .resultbar {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-card);
 }
 
 @media (min-width: 1081px) {
@@ -502,23 +542,37 @@ h2 {
 
 .section-head {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: start;
   gap: 12px;
   margin-bottom: 14px;
 }
 
+/* 見出しと右肩の付随情報。狭い幅では右肩が自分の行へ落ちて幅を取り戻す
+   （落ちないと日本語のバッジが1文字単位で折れて4行になる）。 */
+.section-head > *:first-child {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
 .badge {
   display: inline-block;
+  max-width: 100%;
   border: 1px solid var(--ink);
   padding: 2px 7px;
   color: var(--ink);
   background: var(--ice);
-  white-space: nowrap;
+  /* 単元名は情報なので省略せず折り返す。nowrapのままだと長いtopic_tagで
+     パネルを押し広げ、狭い画面で横スクロールが出る。 */
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .group-heading-actions {
   display: flex;
+  flex: 1 1 160px;
+  min-width: 0;
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
@@ -730,6 +784,9 @@ details.panel[open] summary,
 }
 
 #studentManage summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: .06em;
@@ -954,6 +1011,22 @@ details.panel[open] summary,
   background: rgba(230, 0, 18, .10);
 }
 
+/* 汎用の button:hover（濃紺地）が .cell に乗ると、文字色 var(--ink) と重なって
+   選択・入力中のマスが黒く潰れ入力値が読めなくなる。記入面は常に明るい地を保ち、
+   hover は淡い色差しだけにする（正誤マスは結果色を維持）。 */
+.cell:hover {
+  background: var(--ice);
+  color: var(--ink);
+}
+
+.cell.correct:hover {
+  background: rgba(22, 163, 74, .12);
+}
+
+.cell.wrong:hover {
+  background: rgba(230, 0, 18, .10);
+}
+
 /* 色だけで正誤を伝えないよう、枠線色に加えて記号バッジも表示する（色弱ユーザー対策）。 */
 .cell.correct::after,
 .cell.wrong::after {
@@ -1013,7 +1086,8 @@ details.panel[open] summary,
 
 .actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* 2列だと列幅139pxでラベルが2行折返しになり、同じ .ghost が44pxと71pxに割れる。 */
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
 }
 
@@ -1289,6 +1363,19 @@ details.panel[open] summary,
 }
 
 @media (max-width: 760px) {
+  /* 3列だと列幅113pxでラベルが2行折返しになり、同じ .ghost が44pxと71pxに割れる。
+     位置表示を上へ出し、前後ボタンを2列で並べて高さを揃える。 */
+  .problem-nav {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "position position"
+      "prev next";
+  }
+
+  .problem-nav > button:first-child { grid-area: prev; }
+  .problem-nav > #problemPosition { grid-area: position; text-align: center; }
+  .problem-nav > button:last-child { grid-area: next; }
+
   /* :not(.hidden) を付けないと、この規則が後勝ちで .hidden の display:none を上書きしてしまう
      （演習/試験モードの出し分けがモバイル幅で壊れる既存バグの修正）。 */
   .topbar,
@@ -1316,7 +1403,8 @@ details.panel[open] summary,
       "source progress"
       "toggle toggle";
     gap: 4px 12px;
-    padding: 10px 12px;
+    /* 左右は必ず --page-gutter に合わせる（12pxにすると帯だけ4pxずれる）。 */
+    padding: 10px var(--page-gutter);
   }
 
   .context-source-card {
@@ -1551,13 +1639,13 @@ details.panel[open] summary,
   color: var(--muted);
 }
 
-.exam-shell { width: min(1100px, calc(100% - 32px)); margin: 32px auto 80px; }
+.exam-shell { width: min(1100px, calc(100% - var(--page-gutter) * 2)); margin: 32px auto 80px; }
 
 body.exam-flow .context-progress { display: none; }
 body.exam-flow .utility-menu { display: none; }
 body.exam-flow .guest-notice { display: none; }
 
-.intro-panel { width: min(760px, calc(100% - 32px)); margin: 32px auto 80px; padding: clamp(24px, 5vw, 48px); }
+.intro-panel { width: min(760px, calc(100% - var(--page-gutter) * 2)); margin: 32px auto 80px; padding: clamp(24px, 5vw, 48px); }
 .lead { font-size: 16px; color: var(--muted); }
 .intro-panel > h2,
 .result-hero > h2 {
@@ -1752,7 +1840,7 @@ body.exam-flow .guest-notice { display: none; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
 @media (max-width: 640px) {
-  .exam-shell { width: calc(100% - 32px); margin-top: 20px; }
+  .exam-shell { width: calc(100% - var(--page-gutter) * 2); margin-top: 20px; }
   .intro-panel, .exam-group, .result-group { padding: 16px; }
   .result-hero { padding: 16px; }
   .intro-grid { grid-template-columns: 1fr; }
