@@ -64,7 +64,7 @@ window.MATH_DATASETS.rikaido_2608_high1 = {
             {"format": "integer", "value": "15", "boxes": ["シ", "ス"]},
             {"format": "integer", "value": "3", "boxes": ["セ"]}
           ],
-          "figure": String.raw`<svg class="solution-figure-svg" viewBox="0 0 330 220" role="img" aria-label="円錐の展開図"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M48 174 L142 46 A160 160 0 0 1 208 174 Z"/><path d="M48 174 L208 174"/><path d="M236 105 A43 43 0 1 0 322 105 A43 43 0 1 0 236 105"/><path d="M48 174 L60 158 L76 169"/></g><g fill="currentColor" font-family="Arial, sans-serif" font-size="15"><text x="90" y="116" text-anchor="middle">4</text><text x="76" y="166">90°</text></g></svg>`
+          "figure": String.raw`<svg class="solution-figure-svg" viewBox="0 0 360 230" role="img" aria-label="半径4，中心角90度の扇形と底面の円からなる円錐の展開図"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M72 170 L72 50 A120 120 0 0 1 192 170 Z"/><path d="M72 154 L88 154 L88 170"/><circle cx="285" cy="110" r="30"/></g><g fill="currentColor" font-family="Arial, sans-serif" font-size="16"><text x="58" y="112" text-anchor="end">4</text><text x="100" y="139">90°</text></g></svg>`
         }
       ]
     },
