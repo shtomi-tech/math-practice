@@ -1,7 +1,7 @@
 // 生徒の選択・追加・改名・削除。進捗はここで選ばれた生徒名ごとに保存される。
 // ポータル発行の共有URL（クラウド保存）では生徒名が固定され、選択UIは無効になる。
-import { app } from "./state.js?v=20260903-group-nav-fix";
-import { $, escapeHtml } from "./dom.js?v=20260903-group-nav-fix";
+import { app } from "./state.js?v=20260907-ui-audit";
+import { $, escapeHtml } from "./dom.js?v=20260907-ui-audit";
 import {
   normalizeStudentName,
   saveStudents,
@@ -9,9 +9,9 @@ import {
   loadProgressFor,
   progressKeyFor,
   writeJson,
-} from "./storage.js?v=20260903-group-nav-fix";
-import { ensureAnswersForGroup } from "./practice.js?v=20260903-group-nav-fix";
-import { hooks } from "./hooks.js?v=20260903-group-nav-fix";
+} from "./storage.js?v=20260907-ui-audit";
+import { ensureAnswersForGroup } from "./practice.js?v=20260907-ui-audit";
+import { hooks } from "./hooks.js?v=20260907-ui-audit";
 
 export function renderStudentMenu() {
   const sel = $("#studentSel");

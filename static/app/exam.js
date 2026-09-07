@@ -5,12 +5,12 @@
      旧アプリと完全互換。既存の受験データ・生徒別クラウド進捗をそのまま引き継ぐ。
    - 受験画面は演習モードと同じ3カラム構成（大問ナビ／問題カード／採点レール）。
    ============================================================ */
-import { app } from "./state.js?v=20260903-group-nav-fix";
-import { $, $$, escapeHtml, renderMath, normalize, formatCatalogNumber, formatClock } from "./dom.js?v=20260903-group-nav-fix";
-import { MINI_EXAMS } from "./datasets.js?v=20260903-group-nav-fix";
-import { isQuestionAnswered } from "./catalog.js?v=20260903-group-nav-fix";
-import { renderKeypadPanel } from "./keypad.js?v=20260903-group-nav-fix";
-import { hooks } from "./hooks.js?v=20260903-group-nav-fix";
+import { app } from "./state.js?v=20260907-ui-audit";
+import { $, $$, escapeHtml, renderMath, normalize, formatCatalogNumber, formatClock } from "./dom.js?v=20260907-ui-audit";
+import { MINI_EXAMS } from "./datasets.js?v=20260907-ui-audit";
+import { isQuestionAnswered } from "./catalog.js?v=20260907-ui-audit";
+import { renderKeypadPanel } from "./keypad.js?v=20260907-ui-audit";
+import { hooks } from "./hooks.js?v=20260907-ui-audit";
 
 let EXAM = null;
 let state = null;
@@ -445,9 +445,15 @@ function renderResult(auto) {
   renderMath($("#resultSheet"));
   const next = nextExam();
   const nextButton = $("#nextExamBtn");
+  const chooseButton = $("#chooseExamBtn");
   if (nextButton) {
     nextButton.classList.toggle("hidden", !next);
     nextButton.textContent = next ? `第${next.seriesNumber}回へ進む` : "";
+  }
+  if (chooseButton) {
+    chooseButton.classList.toggle("cta", !next);
+    chooseButton.classList.toggle("ghost", Boolean(next));
+    chooseButton.textContent = next ? "別の演習を選ぶ" : "次の演習を選ぶ";
   }
   hooks.renderExamShell();
   window.scrollTo({ top: 0, behavior: "auto" });

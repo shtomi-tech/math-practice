@@ -1,6 +1,6 @@
 // エントリポイント。状態の初期化 → クラウド接続 → イベント登録 → 初回描画。
-import { app } from "./state.js?v=20260903-group-nav-fix";
-import { isMiniKey } from "./datasets.js?v=20260903-group-nav-fix";
+import { app } from "./state.js?v=20260907-ui-audit";
+import { isMiniKey } from "./datasets.js?v=20260907-ui-audit";
 import {
   loadStudents,
   loadCurrentStudent,
@@ -8,14 +8,15 @@ import {
   saveStudents,
   loadProgressFor,
   loadDraftsFor,
+  loadPracticePosition,
   migrateLegacyProgress,
   cloudPayload,
   applyCloudPayload,
-} from "./storage.js?v=20260903-group-nav-fix";
-import { loadCurrentExam, loadPracticeExam, render } from "./shell.js?v=20260903-group-nav-fix";
-import { ensureAnswersForGroup, bindPracticeEvents, setPhysicalKeyGuard } from "./practice.js?v=20260903-group-nav-fix";
-import { bindStudentEvents } from "./students.js?v=20260903-group-nav-fix";
-import { examFlow } from "./exam.js?v=20260903-group-nav-fix";
+} from "./storage.js?v=20260907-ui-audit";
+import { loadCurrentExam, loadPracticeExam, render } from "./shell.js?v=20260907-ui-audit";
+import { ensureAnswersForGroup, bindPracticeEvents, setPhysicalKeyGuard, restorePracticePosition } from "./practice.js?v=20260907-ui-audit";
+import { bindStudentEvents } from "./students.js?v=20260907-ui-audit";
+import { examFlow } from "./exam.js?v=20260907-ui-audit";
 
 app.currentExamKey = loadCurrentExam();
 loadPracticeExam();
@@ -42,6 +43,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   app.progress = loadProgressFor(app.currentStudentName);
   app.answerDrafts = loadDraftsFor(app.currentStudentName);
+  app.lastPracticePosition = loadPracticePosition(app.currentExamKey, app.currentStudentName);
+  restorePracticePosition();
   await examFlow.initClouds();
   bindPracticeEvents();
   bindStudentEvents();

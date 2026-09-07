@@ -8,6 +8,7 @@ export const app = {
   data: { problem_groups: [] },
   groups: [],
   currentGroup: 0,
+  lastPracticePosition: null,
 
   // 演習モードの入力状態
   answers: {},

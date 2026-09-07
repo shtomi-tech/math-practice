@@ -1,10 +1,15 @@
 // 演習モード（過去問）。マス目入力・小問ごとの採点・大問ナビ・採点レールを担当する。
-import { app } from "./state.js?v=20260903-group-nav-fix";
-import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260903-group-nav-fix";
-import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260903-group-nav-fix";
-import { saveProgress, saveDrafts } from "./storage.js?v=20260903-group-nav-fix";
-import { renderKeypadPanel } from "./keypad.js?v=20260903-group-nav-fix";
-import { hooks } from "./hooks.js?v=20260903-group-nav-fix";
+import { app } from "./state.js?v=20260907-ui-audit";
+import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260907-ui-audit";
+import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260907-ui-audit";
+import {
+  clearPracticePosition,
+  savePracticePosition,
+  saveProgress,
+  saveDrafts,
+} from "./storage.js?v=20260907-ui-audit";
+import { renderKeypadPanel } from "./keypad.js?v=20260907-ui-audit";
+import { hooks } from "./hooks.js?v=20260907-ui-audit";
 import {
   questionFigureHtml,
   solutionForSub,
@@ -12,7 +17,7 @@ import {
   groupPrintUrl,
   openSolutionModal,
   closeSolutionModal,
-} from "./solution.js?v=20260903-group-nav-fix";
+} from "./solution.js?v=20260907-ui-audit";
 
 /* ---------- 解答欄（フィールド）とマス ---------- */
 
@@ -105,6 +110,54 @@ function persistCurrentAnswers() {
   saveDrafts();
 }
 
+function currentPracticePosition() {
+  const position = { groupIndex: app.currentGroup };
+  if (app.active?.uid) {
+    const parts = String(app.active.uid).split("-").map(Number);
+    if (parts.length === 3 && parts.every(Number.isInteger)) {
+      position.fieldUid = app.active.uid;
+      position.subIndex = parts[1];
+      position.cellIndex = app.active.cellIndex;
+    }
+  }
+  return position;
+}
+
+function rememberCurrentPosition() {
+  const position = savePracticePosition(currentPracticePosition());
+  if (position) app.lastPracticePosition = position;
+}
+
+function lastPositionIsUsable(position = app.lastPracticePosition) {
+  return Boolean(
+    position
+    && Number.isInteger(position.groupIndex)
+    && position.groupIndex >= 0
+    && position.groupIndex < app.groups.length
+  );
+}
+
+function restoreActivePracticePosition(position = app.lastPracticePosition) {
+  if (!lastPositionIsUsable(position) || position.groupIndex !== app.currentGroup || !position.fieldUid) return false;
+  const entry = fieldEntries().find(({ field, cellIndex }) =>
+    field.uid === position.fieldUid && cellIndex === position.cellIndex
+  );
+  if (!entry) return false;
+  app.active = { uid: entry.field.uid, cellIndex: entry.cellIndex };
+  return true;
+}
+
+export function restorePracticePosition() {
+  if (!app.lastPracticePosition) return false;
+  if (!lastPositionIsUsable()) {
+    app.lastPracticePosition = null;
+    app.currentGroup = 0;
+    return false;
+  }
+  app.currentGroup = app.lastPracticePosition.groupIndex;
+  return true;
+}
+
 /* ---------- 進捗の集計 ---------- */
 
 function allSubProblems() {
@@ -141,6 +194,7 @@ export function renderGroups() {
     button.addEventListener("click", () => {
       app.currentGroup = Number(button.dataset.group);
       ensureAnswersForGroup();
+      rememberCurrentPosition();
       app.groupListOpen = false;
       hooks.renderApp();
       $("#groupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -255,6 +309,7 @@ function bindCells() {
   $$(".cell").forEach((cell) => {
     cell.addEventListener("click", () => {
       app.active = { uid: cell.dataset.cell, cellIndex: Number(cell.dataset.cellIndex) };
+      rememberCurrentPosition();
       app.keypadOpen = true;
       renderProblem();
       renderKeypad();
@@ -323,6 +378,7 @@ function handleKey(key) {
     moveNextCell();
   }
   persistCurrentAnswers();
+  rememberCurrentPosition();
   if (changesAnswer && $("#instantCheck").checked && editedSubIndex != null) {
     gradeSubProblem(editedSubIndex);
     saveProgress();
@@ -558,6 +614,8 @@ function clearCurrent() {
   if (!confirm("この大問の入力内容をすべて消します。正解済みの進捗（完了記録）は保持されます。")) return;
   app.answerDrafts[groupDraftKey(app.currentGroup)] = {};
   saveDrafts();
+  clearPracticePosition();
+  app.lastPracticePosition = null;
   ensureAnswersForGroup();
   hooks.renderApp();
 }
@@ -570,10 +628,16 @@ function firstUnfinishedGroupIndex() {
 
 function continueStudying() {
   const hasUnfinished = completedCount() < totalCount();
-  app.currentGroup = firstUnfinishedGroupIndex();
-  ensureAnswersForGroup();
+  const hasSavedPosition = lastPositionIsUsable();
+  if (!hasSavedPosition) {
+    app.lastPracticePosition = null;
+    app.currentGroup = firstUnfinishedGroupIndex();
+  }
   hooks.renderApp();
-  if (hasUnfinished) focusFirstBlank();
+  if (hasUnfinished) {
+    if (hasSavedPosition && restoreActivePracticePosition()) focusActiveCell();
+    else focusFirstBlank();
+  }
   else $("#groupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -588,8 +652,9 @@ export function renderContinuePanel() {
     hint.textContent = "";
     return;
   }
+  const hasSavedPosition = lastPositionIsUsable();
   // 初回訪問（進捗ゼロ）は「最初に選ぶべき行動」を明示する（ヒックの法則）。
-  if (done === 0) {
+  if (done === 0 && !hasSavedPosition) {
     btn.textContent = "▶ 最初の問題へ進む";
     hint.textContent = "最初の入力欄へ移動します。";
     return;
@@ -601,8 +666,16 @@ export function renderContinuePanel() {
     return;
   }
   btn.textContent = "▶ つづきから解く";
-  const target = app.groups[firstUnfinishedGroupIndex()];
-  hint.textContent = target ? `次は [${target.group_number}] ${target.title} です。` : "";
+  if (lastPositionIsUsable()) {
+    const target = app.groups[app.lastPracticePosition.groupIndex];
+    const sub = target?.sub_problems?.[app.lastPracticePosition.subIndex];
+    hint.textContent = target
+      ? `${target.group_number} ${sub?.label || "大問"}から再開します。`
+      : "";
+  } else {
+    const target = app.groups[firstUnfinishedGroupIndex()];
+    hint.textContent = target ? `次は [${target.group_number}] ${target.title} です。` : "";
+  }
 }
 
 function resetProgress() {
@@ -612,6 +685,8 @@ function resetProgress() {
   app.answerDrafts = {};
   saveProgress();
   saveDrafts();
+  clearPracticePosition();
+  app.lastPracticePosition = null;
   ensureAnswersForGroup();
   hooks.renderApp();
 }
@@ -620,6 +695,7 @@ function focusFirstBlank() {
   const blank = fieldEntries().find(({ field, cellIndex }) => !app.answers[field.uid]?.[cellIndex]);
   if (!blank) return;
   app.active = { uid: blank.field.uid, cellIndex: blank.cellIndex };
+  rememberCurrentPosition();
   renderProblem();
   renderActiveLabel();
   focusActiveCell();
@@ -630,6 +706,7 @@ function focusFirstWrong() {
   const wrong = fieldEntries().find(({ field }) => !isFieldCorrect(field));
   if (!wrong) return;
   app.active = { uid: wrong.field.uid, cellIndex: wrong.cellIndex };
+  rememberCurrentPosition();
   renderProblem();
   renderActiveLabel();
   focusActiveCell();
@@ -645,6 +722,7 @@ function moveGroup(offset) {
   if (next < 0 || next >= app.groups.length) return;
   app.currentGroup = next;
   ensureAnswersForGroup();
+  rememberCurrentPosition();
   hooks.renderApp();
   $("#groupTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -681,12 +759,14 @@ function handlePhysicalKey(event) {
   } else if (event.key === "ArrowRight") {
     event.preventDefault();
     moveNextCell();
+    rememberCurrentPosition();
     renderProblem();
     renderActiveLabel();
     focusActiveCell();
   } else if (event.key === "ArrowLeft") {
     event.preventDefault();
     movePrevCell();
+    rememberCurrentPosition();
     renderProblem();
     renderActiveLabel();
     focusActiveCell();
@@ -696,6 +776,9 @@ function handlePhysicalKey(event) {
 /* ---------- 描画とイベント登録 ---------- */
 
 export function renderPractice() {
+  restorePracticePosition();
+  ensureAnswersForGroup();
+  restoreActivePracticePosition();
   renderGroups();
   renderProgress();
   renderContinuePanel();

@@ -1,7 +1,7 @@
 // 画面の外枠：出典・回のカタログ表示と、演習モード／試験モードの切り替え。
 // 両モードから呼ばれる関数はここで hooks に登録し、モジュール間の循環importを避ける。
-import { app } from "./state.js?v=20260903-group-nav-fix";
-import { $, $$, escapeHtml, formatCatalogNumber } from "./dom.js?v=20260903-group-nav-fix";
+import { app } from "./state.js?v=20260907-ui-audit";
+import { $, $$, escapeHtml, formatCatalogNumber } from "./dom.js?v=20260907-ui-audit";
 import {
   DATASETS,
   MINI_EXAMS,
@@ -12,19 +12,19 @@ import {
   isMiniKey,
   hasExamData,
   groupCountFor,
-} from "./datasets.js?v=20260903-group-nav-fix";
+} from "./datasets.js?v=20260907-ui-audit";
 import {
   catalogStateForExam,
   catalogStateClass,
   catalogSummaryText,
   catalogProgressText,
   schoolCatalogSummary,
-} from "./catalog.js?v=20260903-group-nav-fix";
-import { CURRENT_EXAM_KEY, loadProgressFor, loadDraftsFor, migrateLegacyProgress } from "./storage.js?v=20260903-group-nav-fix";
-import { ensureAnswersForGroup, renderPractice } from "./practice.js?v=20260903-group-nav-fix";
-import { renderStudentMenu } from "./students.js?v=20260903-group-nav-fix";
-import { examFlow } from "./exam.js?v=20260903-group-nav-fix";
-import { hooks } from "./hooks.js?v=20260903-group-nav-fix";
+} from "./catalog.js?v=20260907-ui-audit";
+import { CURRENT_EXAM_KEY, loadProgressFor, loadDraftsFor, loadPracticePosition, migrateLegacyProgress } from "./storage.js?v=20260907-ui-audit";
+import { ensureAnswersForGroup, renderPractice, restorePracticePosition } from "./practice.js?v=20260907-ui-audit";
+import { renderStudentMenu } from "./students.js?v=20260907-ui-audit";
+import { examFlow } from "./exam.js?v=20260907-ui-audit";
+import { hooks } from "./hooks.js?v=20260907-ui-audit";
 
 export function loadCurrentExam() {
   const requested = new URLSearchParams(window.location.search).get("exam");
@@ -60,9 +60,13 @@ export function setCurrentExam(key) {
   app.currentGroup = 0;
   app.progress = loadProgressFor(app.currentStudentName);
   app.answerDrafts = loadDraftsFor(app.currentStudentName);
+  app.lastPracticePosition = loadPracticePosition(app.currentExamKey, app.currentStudentName);
+  restorePracticePosition();
   migrateLegacyProgress();
   app.progress = loadProgressFor(app.currentStudentName);
   app.answerDrafts = loadDraftsFor(app.currentStudentName);
+  app.lastPracticePosition = loadPracticePosition(app.currentExamKey, app.currentStudentName);
+  restorePracticePosition();
   ensureAnswersForGroup();
   render();
 }
