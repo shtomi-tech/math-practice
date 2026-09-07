@@ -1,7 +1,7 @@
 // localStorage への保存・読み出しと、クラウド保存用ペイロードの組み立て。
 // 保存キーは旧アプリ（teikyo-kakomon / math-mini-exam）と互換のため変更しない。
-import { app } from "./state.js?v=20260907-ui-audit";
-import { DATASETS, EXAMS, AVAILABLE_EXAMS, hasExamData, isMiniKey } from "./datasets.js?v=20260907-ui-audit";
+import { app } from "./state.js?v=20260907-keep-check-result";
+import { DATASETS, EXAMS, AVAILABLE_EXAMS, hasExamData, isMiniKey } from "./datasets.js?v=20260907-keep-check-result";
 
 export const CURRENT_EXAM_KEY = "teikyo_2026_math_current_exam_v1";
 const LEGACY_PROGRESS_KEY = "teikyo_2026_math_practice_v1";

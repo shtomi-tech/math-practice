@@ -1,15 +1,15 @@
 // 演習モード（過去問）。マス目入力・小問ごとの採点・大問ナビ・採点レールを担当する。
-import { app } from "./state.js?v=20260907-ui-audit";
-import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260907-ui-audit";
-import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260907-ui-audit";
+import { app } from "./state.js?v=20260907-keep-check-result";
+import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260907-keep-check-result";
+import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260907-keep-check-result";
 import {
   clearPracticePosition,
   savePracticePosition,
   saveProgress,
   saveDrafts,
-} from "./storage.js?v=20260907-ui-audit";
-import { renderKeypadPanel } from "./keypad.js?v=20260907-ui-audit";
-import { hooks } from "./hooks.js?v=20260907-ui-audit";
+} from "./storage.js?v=20260907-keep-check-result";
+import { renderKeypadPanel } from "./keypad.js?v=20260907-keep-check-result";
+import { hooks } from "./hooks.js?v=20260907-keep-check-result";
 import {
   questionFigureHtml,
   solutionForSub,
@@ -17,7 +17,7 @@ import {
   groupPrintUrl,
   openSolutionModal,
   closeSolutionModal,
-} from "./solution.js?v=20260907-ui-audit";
+} from "./solution.js?v=20260907-keep-check-result";
 
 /* ---------- 解答欄（フィールド）とマス ---------- */
 
@@ -83,11 +83,32 @@ export function ensureAnswersForGroup() {
   setFirstAvailableActive();
 }
 
+function checksScopeKey() {
+  return `${app.currentExamKey}|${app.currentStudentName}|${groupKey(app.currentGroup)}`;
+}
+
+// 採点結果（誤答を含む）を破棄する。入力の全消去や進捗リセットのように、
+// 表示中の採点結果が意味を失う操作の前に呼ぶ。
+function resetGroupChecks() {
+  app.checkedSubs = {};
+  app.checkedScope = "";
+  app.graded = false;
+}
+
 // 大問を移動しても、正解として保存済みの小問は「正解」表示を保つ。
 // checkedSubs はセッション限りの表示状態で永続化されないため、大問を切り替えるたびに
 // 保存済みの解答（answerDrafts）と進捗（app.progress）から作り直す。
 // 保存済みの解答が今も全マス埋まっていて正解のときだけ復元し、誤答表示や未回答の先出しはしない。
 function restoreChecksForGroup(group) {
+  const scope = checksScopeKey();
+  // renderPractice() は再描画のたびに ensureAnswersForGroup() を呼ぶ。ここで毎回作り直すと、
+  // 進捗に残らない誤答の採点結果が採点直後の再描画で消えてしまうため、
+  // 同じ生徒・回・大問を描き直しているだけのときは今の採点結果を保つ。
+  if (app.checkedScope === scope) {
+    app.graded = Object.keys(app.checkedSubs).length > 0;
+    return;
+  }
+  app.checkedScope = scope;
   app.checkedSubs = {};
   (group.sub_problems || []).forEach((sub, subIndex) => {
     const key = subKey(app.currentGroup, subIndex);
@@ -614,6 +635,7 @@ function clearCurrent() {
   if (!confirm("この大問の入力内容をすべて消します。正解済みの進捗（完了記録）は保持されます。")) return;
   app.answerDrafts[groupDraftKey(app.currentGroup)] = {};
   saveDrafts();
+  resetGroupChecks();
   clearPracticePosition();
   app.lastPracticePosition = null;
   ensureAnswersForGroup();
@@ -685,6 +707,7 @@ function resetProgress() {
   app.answerDrafts = {};
   saveProgress();
   saveDrafts();
+  resetGroupChecks();
   clearPracticePosition();
   app.lastPracticePosition = null;
   ensureAnswersForGroup();

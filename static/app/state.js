@@ -16,6 +16,8 @@ export const app = {
   graded: false,
   active: null,
   checkedSubs: {},
+  // checkedSubs がどの生徒・回・大問のものかを表す識別子（再描画で作り直さないための判定に使う）
+  checkedScope: "",
 
   // UIの開閉状態
   keypadOpen: false,

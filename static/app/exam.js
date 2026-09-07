@@ -5,12 +5,12 @@
      旧アプリと完全互換。既存の受験データ・生徒別クラウド進捗をそのまま引き継ぐ。
    - 受験画面は演習モードと同じ3カラム構成（大問ナビ／問題カード／採点レール）。
    ============================================================ */
-import { app } from "./state.js?v=20260907-ui-audit";
-import { $, $$, escapeHtml, renderMath, normalize, formatCatalogNumber, formatClock } from "./dom.js?v=20260907-ui-audit";
-import { MINI_EXAMS } from "./datasets.js?v=20260907-ui-audit";
-import { isQuestionAnswered } from "./catalog.js?v=20260907-ui-audit";
-import { renderKeypadPanel } from "./keypad.js?v=20260907-ui-audit";
-import { hooks } from "./hooks.js?v=20260907-ui-audit";
+import { app } from "./state.js?v=20260907-keep-check-result";
+import { $, $$, escapeHtml, renderMath, normalize, formatCatalogNumber, formatClock } from "./dom.js?v=20260907-keep-check-result";
+import { MINI_EXAMS } from "./datasets.js?v=20260907-keep-check-result";
+import { isQuestionAnswered } from "./catalog.js?v=20260907-keep-check-result";
+import { renderKeypadPanel } from "./keypad.js?v=20260907-keep-check-result";
+import { hooks } from "./hooks.js?v=20260907-keep-check-result";
 
 let EXAM = null;
 let state = null;
