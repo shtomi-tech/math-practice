@@ -1,7 +1,7 @@
 // 画面の外枠：出典・回のカタログ表示と、演習モード／試験モードの切り替え。
 // 両モードから呼ばれる関数はここで hooks に登録し、モジュール間の循環importを避ける。
-import { app } from "./state.js?v=20260907-keep-check-result";
-import { $, $$, escapeHtml, formatCatalogNumber } from "./dom.js?v=20260907-keep-check-result";
+import { app } from "./state.js?v=20260908-explainer-links";
+import { $, $$, escapeHtml, formatCatalogNumber } from "./dom.js?v=20260908-explainer-links";
 import {
   DATASETS,
   MINI_EXAMS,
@@ -12,19 +12,19 @@ import {
   isMiniKey,
   hasExamData,
   groupCountFor,
-} from "./datasets.js?v=20260907-keep-check-result";
+} from "./datasets.js?v=20260908-explainer-links";
 import {
   catalogStateForExam,
   catalogStateClass,
   catalogSummaryText,
   catalogProgressText,
   schoolCatalogSummary,
-} from "./catalog.js?v=20260907-keep-check-result";
-import { CURRENT_EXAM_KEY, loadProgressFor, loadDraftsFor, loadPracticePosition, migrateLegacyProgress } from "./storage.js?v=20260907-keep-check-result";
-import { ensureAnswersForGroup, renderPractice, restorePracticePosition } from "./practice.js?v=20260907-keep-check-result";
-import { renderStudentMenu } from "./students.js?v=20260907-keep-check-result";
-import { examFlow } from "./exam.js?v=20260907-keep-check-result";
-import { hooks } from "./hooks.js?v=20260907-keep-check-result";
+} from "./catalog.js?v=20260908-explainer-links";
+import { CURRENT_EXAM_KEY, loadProgressFor, loadDraftsFor, loadPracticePosition, migrateLegacyProgress } from "./storage.js?v=20260908-explainer-links";
+import { ensureAnswersForGroup, renderPractice, restorePracticePosition } from "./practice.js?v=20260908-explainer-links";
+import { renderStudentMenu } from "./students.js?v=20260908-explainer-links";
+import { examFlow } from "./exam.js?v=20260908-explainer-links";
+import { hooks } from "./hooks.js?v=20260908-explainer-links";
 
 export function loadCurrentExam() {
   const requested = new URLSearchParams(window.location.search).get("exam");

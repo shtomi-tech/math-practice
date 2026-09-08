@@ -382,6 +382,7 @@ $\overrightarrow{AH}=t\,\overrightarrow{AC}$ だから $\triangle OAH=t\cdot\tri
 
 window.MATH_SOLUTIONS.kawai_2026_zenkijutsu2_typeIII = {
   "1-(1)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-1-1-divisors-explainer-basic.html",
     approach: String.raw`約数を1個ずつ書き出す代わりに，まず素因数分解します。約数は，素因数の指数をそれぞれ何通りに選べるかで数えられます。総和も，同じ選び方を積の形にまとめれば計算できます。`,
     formula: {
       title: "素因数分解から約数を数える",
@@ -396,6 +397,7 @@ $$(1+2+2^{2}+2^{3}+2^{4})(1+31)=31\times32=992.$$`,
     answer: String.raw`約数は $10$ 個，総和は $992$`
   },
   "1-(2)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-1-2-dice-probability-explainer-basic.html",
     approach: String.raw`3回の出目は順序を区別します。和が $6$ になる組を，小さい順に並べた形で整理してから，並べ替えの数を足しましょう。条件付き確率では，「和が $6$ になった場合」だけを新しい全体として数え直します。`,
     formula: {
       title: "条件付き確率",
@@ -413,6 +415,7 @@ $$\dfrac{6}{10}=\dfrac{3}{5}.$$`,
     answer: String.raw`(i) $\dfrac{5}{108}$　(ii) $\dfrac{3}{5}$`
   },
   "1-(3)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-1-3-log-explainer-basic.html",
     approach: String.raw`「何桁か」も「最高位はいくつか」も，$\log_{10}$ をとると1本の数にまとまります。$\log_{10}N$ を整数の部分と小数の部分に分けると，整数の部分が桁数を，小数の部分が最高位を決めるからです。(i) は整数の部分だけを見ます。(ii) は「$22$ 桁」が整数の部分の情報，「最高位が $4$」が小数の部分の情報なので，$\log_{10}(2^{n})=0.301n$ を1本用意すれば，どちらも $n$ の1次不等式に直せます。`,
     formula: {
       title: "桁数と最高位の数（使う道具は3つ）",
@@ -448,6 +451,7 @@ $$\dfrac{21.602}{0.301}=71.76\ldots,\qquad \dfrac{21.699}{0.301}=72.08\ldots$$
     answer: String.raw`(i) $31$ 桁　(ii) $n=72$`
   },
   "1-(4)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-1-4-tangent-inequality-explainer-basic.html",
     approach: String.raw`式全体が $\tan\theta$ の2次式なので，$u=\tan\theta$ とおいて普通の2次不等式として解きます。その後，単位円上で $\tan\theta$ が定義される区間ごとに，得られた値の範囲を角度へ戻します。`,
     formula: {
       title: "2次不等式と tan の周期",

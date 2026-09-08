@@ -1,6 +1,6 @@
 // 演習モードと試験モードで共通のクリック式テンキー。
 // 配列・ラベル・パネル開閉の作法を1か所に集約し、両モードで見た目と操作を一致させる。
-import { $, $$ } from "./dom.js?v=20260907-keep-check-result";
+import { $, $$ } from "./dom.js?v=20260908-explainer-links";
 
 const KEY_LABELS = { "消去": "全部消す" };
 const KEY_ARIA = { "消去": "この欄を消去" };

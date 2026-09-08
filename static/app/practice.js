@@ -1,15 +1,15 @@
 // 演習モード（過去問）。マス目入力・小問ごとの採点・大問ナビ・採点レールを担当する。
-import { app } from "./state.js?v=20260907-keep-check-result";
-import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260907-keep-check-result";
-import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260907-keep-check-result";
+import { app } from "./state.js?v=20260908-explainer-links";
+import { $, $$, escapeHtml, mdLite, renderMath, normalize, formatCatalogNumber, truncateTitle } from "./dom.js?v=20260908-explainer-links";
+import { groupKey, groupDraftKey, subKey, practiceGroupState } from "./catalog.js?v=20260908-explainer-links";
 import {
   clearPracticePosition,
   savePracticePosition,
   saveProgress,
   saveDrafts,
-} from "./storage.js?v=20260907-keep-check-result";
-import { renderKeypadPanel } from "./keypad.js?v=20260907-keep-check-result";
-import { hooks } from "./hooks.js?v=20260907-keep-check-result";
+} from "./storage.js?v=20260908-explainer-links";
+import { renderKeypadPanel } from "./keypad.js?v=20260908-explainer-links";
+import { hooks } from "./hooks.js?v=20260908-explainer-links";
 import {
   questionFigureHtml,
   solutionForSub,
@@ -17,7 +17,7 @@ import {
   groupPrintUrl,
   openSolutionModal,
   closeSolutionModal,
-} from "./solution.js?v=20260907-keep-check-result";
+} from "./solution.js?v=20260908-explainer-links";
 
 /* ---------- 解答欄（フィールド）とマス ---------- */
 
@@ -600,7 +600,16 @@ function bindSubChecks() {
 function bindSolutionButtons() {
   $$("[data-open-solution]").forEach((button) => {
     button.addEventListener("click", () => {
-      openSolutionModal(app.currentGroup, Number(button.dataset.openSolution));
+      const subIndex = Number(button.dataset.openSolution);
+      const group = app.groups[app.currentGroup];
+      const sub = group?.sub_problems?.[subIndex];
+      const solution = sub ? solutionForSub(group, sub) : null;
+      if (solution?.explainerUrl) {
+        const url = new URL(solution.explainerUrl, window.location.href);
+        window.open(url.href, "_blank", "noopener");
+        return;
+      }
+      openSolutionModal(app.currentGroup, subIndex);
     });
   });
 }

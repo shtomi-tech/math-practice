@@ -1,6 +1,6 @@
 // エントリポイント。状態の初期化 → クラウド接続 → イベント登録 → 初回描画。
-import { app } from "./state.js?v=20260907-keep-check-result";
-import { isMiniKey } from "./datasets.js?v=20260907-keep-check-result";
+import { app } from "./state.js?v=20260908-explainer-links";
+import { isMiniKey } from "./datasets.js?v=20260908-explainer-links";
 import {
   loadStudents,
   loadCurrentStudent,
@@ -12,11 +12,11 @@ import {
   migrateLegacyProgress,
   cloudPayload,
   applyCloudPayload,
-} from "./storage.js?v=20260907-keep-check-result";
-import { loadCurrentExam, loadPracticeExam, render } from "./shell.js?v=20260907-keep-check-result";
-import { ensureAnswersForGroup, bindPracticeEvents, setPhysicalKeyGuard, restorePracticePosition } from "./practice.js?v=20260907-keep-check-result";
-import { bindStudentEvents } from "./students.js?v=20260907-keep-check-result";
-import { examFlow } from "./exam.js?v=20260907-keep-check-result";
+} from "./storage.js?v=20260908-explainer-links";
+import { loadCurrentExam, loadPracticeExam, render } from "./shell.js?v=20260908-explainer-links";
+import { ensureAnswersForGroup, bindPracticeEvents, setPhysicalKeyGuard, restorePracticePosition } from "./practice.js?v=20260908-explainer-links";
+import { bindStudentEvents } from "./students.js?v=20260908-explainer-links";
+import { examFlow } from "./exam.js?v=20260908-explainer-links";
 
 app.currentExamKey = loadCurrentExam();
 loadPracticeExam();

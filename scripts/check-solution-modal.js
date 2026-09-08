@@ -6,7 +6,9 @@ const vm = require("node:vm");
 const { root, readAppModule, readAppSource } = require("./app-source.js");
 const source = readAppSource();
 const solutionModule = readAppModule("solution.js");
+const practiceModule = readAppModule("practice.js");
 const solutions = fs.readFileSync(path.join(root, "static/rikaido2507-solutions.js"), "utf8");
+const kawaiSolutionsSource = fs.readFileSync(path.join(root, "static/kawai-solutions.js"), "utf8");
 const styles = fs.readFileSync(path.join(root, "static/styles.css"), "utf8");
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const start = solutionModule.indexOf("function renderSolutionModalBody");
@@ -30,6 +32,9 @@ const legacyUrlFunction = ["print", "UrlFor"].join("");
 assert.equal(modalBody.includes(legacyUrlFunction), false);
 assert.match(source, /data-open-strategy/);
 assert.match(source, /aria-expanded/);
+assert.match(practiceModule, /solution\?\.explainerUrl/);
+assert.match(practiceModule, /window\.open\(url\.href, "_blank", "noopener"\)/);
+assert.match(practiceModule, /openSolutionModal\(app\.currentGroup, subIndex\)/);
 assert.match(styles, /\.sub-strategy-button\s*\{[\s\S]*?min-height:\s*44px/);
 for (const key of ["1-(1)", "1-(2)", "1-(3)", "1-(4)", "1-(5)"]) {
   assert.equal(solutions.includes(`"${key}":`), true, `${key} の解説データがありません`);
@@ -45,6 +50,21 @@ for (const key of ["1-(1)", "1-(2)", "1-(3)", "1-(4)", "1-(5)"]) {
 }
 assert.match(migratedSolutions["1-(5)"].figure, /L213\.71 48\.22 Z/);
 assert.match(migratedSolutions["1-(5)"].figure, /cx="200" cy="94\.22"/);
+
+const kawaiContext = { window: {} };
+vm.runInNewContext(kawaiSolutionsSource, kawaiContext);
+const kawaiTypeIII = kawaiContext.window.MATH_SOLUTIONS.kawai_2026_zenkijutsu2_typeIII;
+const expectedExplainers = {
+  "1-(1)": "kawai-2026-typeIII-1-1-divisors-explainer-basic.html",
+  "1-(2)": "kawai-2026-typeIII-1-2-dice-probability-explainer-basic.html",
+  "1-(3)": "kawai-2026-typeIII-1-3-log-explainer-basic.html",
+  "1-(4)": "kawai-2026-typeIII-1-4-tangent-inequality-explainer-basic.html",
+};
+for (const [key, fileName] of Object.entries(expectedExplainers)) {
+  assert.equal(kawaiTypeIII[key].explainerUrl, `./explainers/${fileName}`, `${key} の解説URLが不正です`);
+  assert.equal(fs.existsSync(path.join(root, "explainers", fileName)), true, `${key} の解説HTMLがありません`);
+}
+assert.equal(kawaiTypeIII["2-(1)"].explainerUrl, undefined, "大問2は従来モーダルのままにします");
 // バージョン文字列そのものは check-app-modules.js が index.html と全importの一致を検査する。
 assert.match(index, /<script type="module" src="\.\/static\/app\/main\.js\?v=/);
 assert.equal(modalBody.includes("learningPointsHtml"), false);
