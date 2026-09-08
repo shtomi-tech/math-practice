@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図でわかる 整式の因数分解｜帝京大2026 大問1(1)</title>
+<link rel="stylesheet" href="./sougou-basic.css">
+<script>window.MathJax={tex:{inlineMath:[["$","$"]],displayMath:[["$$","$$"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body><div class="wrap">
+<header class="doc-head"><p class="eyebrow">整式 ・ はじめて学ぶ人向け</p><h1>図でわかる　2次式の因数分解</h1><p class="sub">帝京大学 2026年度 総合型選抜 薬・理工学部 数学・大問1(1) ／ やさしい解説版</p></header>
+
+<section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div>
+<p class="lead">整式 $x^{2}-xy-6y^{2}+6x-8y+8$ を因数分解すると、</p>
+<p class="lead">$(x+\boxed{ア}y+\boxed{イ})(x-\boxed{ウ}y+\boxed{エ})$ となる。</p>
+<details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">ア=2　イ=4　ウ=3　エ=2</span></details>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">1</span><h2>因数分解の見取り図</h2></div>
+<p class="lead">$x$についての2次式として見ると、形は $x^2+(A+B)x+AB$ です。定数項を積に分け、その2つの式の和を確かめます。</p>
+<figure><svg class="dg" viewBox="0 0 900 220" role="img" aria-label="xの2次式を、定数項の積とxの係数の和を手がかりに2つの因数へ分ける図">
+<rect x="40" y="72" width="220" height="70" rx="10" class="box-hi"/><text x="150" y="103" text-anchor="middle" font-size="20" class="b700">x² ＋ (A＋B)x</text><text x="150" y="128" text-anchor="middle" font-size="18">＋ AB</text>
+<path class="ln" d="M280 107 L380 107"/><text x="330" y="92" text-anchor="middle" class="t-sm">積と和を見る</text>
+<rect x="400" y="30" width="200" height="70" rx="10" class="box"/><text x="500" y="72" text-anchor="middle" font-size="20" class="b700">定数項 AB</text>
+<rect x="400" y="120" width="200" height="70" rx="10" class="box"/><text x="500" y="162" text-anchor="middle" font-size="20" class="b700">和 A＋B</text>
+<path class="ln" d="M620 107 L720 107"/><rect x="740" y="72" width="120" height="70" rx="10" class="box-hi"/><text x="800" y="103" text-anchor="middle" font-size="18" class="b700">(x＋A)</text><text x="800" y="128" text-anchor="middle" font-size="18" class="b700">(x＋B)</text>
+</svg><figcaption>図1　定数項の「積」と、$x$ の係数になる「和」をそろえる。</figcaption></figure>
+<div class="strategy"><span class="lbl">方針</span><br>$x$について整理し、定数項を2つの式の積に分けます。その和が $x$ の係数になる組を選びます。</div>
+<div class="formula-box"><h4>使う形</h4><div class="fb">$$x^2+(A+B)x+AB=(x+A)(x+B)$$</div></div>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">2</span><h2>定数項を2つの式に分ける</h2></div>
+<ol class="steps"><li>与式を $x$ の次数の順に並べると、$$x^2+(6-y)x+(-6y^2-8y+8)$$ となります。</li>
+<li>定数項を因数分解します。$$-6y^2-8y+8=(2y+4)(-3y+2)$$</li>
+<li>2つの式の和は、$$(2y+4)+(-3y+2)=6-y$$ です。これは $x$ の係数と一致します。</li></ol>
+<figure><svg class="dg" viewBox="0 0 900 180" role="img" aria-label="定数項を2yプラス4とマイナス3yプラス2に分け、その和が6マイナスyになる図">
+<rect x="40" y="55" width="250" height="70" rx="10" class="box"/><text x="165" y="98" text-anchor="middle" font-size="20" class="b700">−6y²−8y＋8</text>
+<path class="ln" d="M310 90 L390 90"/><rect x="410" y="20" width="180" height="55" rx="10" class="box-hi"/><text x="500" y="55" text-anchor="middle" font-size="19" class="b700">2y＋4</text>
+<rect x="410" y="105" width="180" height="55" rx="10" class="box-hi"/><text x="500" y="140" text-anchor="middle" font-size="19" class="b700">−3y＋2</text>
+<path class="ln" d="M610 90 L690 90"/><rect x="710" y="55" width="150" height="70" rx="10" class="box-hi"/><text x="785" y="98" text-anchor="middle" font-size="19" class="b700">和 ＝ 6−y</text>
+</svg><figcaption>図2　積は定数項、和は $x$ の係数に対応する。</figcaption></figure>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">3</span><h2>因数の形に戻す</h2></div>
+<p class="lead">$A=2y+4$、$B=-3y+2$ とおけば、$A+B=6-y$、$AB=-6y^2-8y+8$ です。</p>
+<p class="lead">したがって、$$x^2+(6-y)x-6y^2-8y+8=(x+2y+4)(x-3y+2)$$</p>
+<div class="check"><strong>確認：</strong>2つの因数を掛けたとき、$x$ の係数は $(2y+4)+(-3y+2)=6-y$、定数項は $(2y+4)(-3y+2)$ になります。</div>
+<p><span class="ans">答え　ア=2　イ=4　ウ=3　エ=2</span></p>
+</section>
+<section class="card"><div class="card-h"><span class="num">✓</span><h2>まとめ</h2></div><p class="lead">2次式の因数分解では、定数項を分けた2つの式について、<strong>積が定数項、和が真ん中の係数</strong>になるかを確認します。</p></section>
+<footer>出典：帝京大学 2026年度 総合型選抜 薬・理工学部 数学・大問1(1)<br>15歳前後を対象としたやさしい解説版。問題文・解答は学習用に整形しています。</footer>
+</div></body></html>

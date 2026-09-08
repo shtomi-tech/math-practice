@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図でわかる 対数の計算｜帝京大2026 大問1(3)</title>
+<link rel="stylesheet" href="./sougou-basic.css">
+<script>window.MathJax={tex:{inlineMath:[["$","$"]],displayMath:[["$$","$$"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body><div class="wrap">
+<header class="doc-head"><p class="eyebrow">対数 ・ はじめて学ぶ人向け</p><h1>図でわかる　底をそろえる対数計算</h1><p class="sub">帝京大学 2026年度 総合型選抜 薬・理工学部 数学・大問1(3) ／ やさしい解説版</p></header>
+<section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div><p class="lead">次の値を計算せよ。$$ (\log_{3}25+\log_{9}5)(\log_{5}27+\log_{25}3) $$</p><p class="lead">答えは $\dfrac{\boxed{キ}\boxed{ク}}{\boxed{ケ}}$ の形で表す。</p><details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$\dfrac{35}{4}$（キ=3、ク=5、ケ=4）</span></details></section>
+
+<section class="card"><div class="card-h"><span class="num">1</span><h2>まず、同じ括弧の中で底をそろえる</h2></div>
+<p class="lead">$25=5^2$、$9=3^2$、$27=3^3$ なので、1つ目は $\log_3 5$、2つ目は $\log_5 3$ を中心に書き直せます。</p>
+<figure><svg class="dg" viewBox="0 0 900 210" role="img" aria-label="対数の底をそろえ、最初の括弧を5分の2ログ3の5、次の括弧を7分の2ログ5の3に変える図">
+<rect x="35" y="60" width="190" height="90" rx="10" class="box"/><text x="130" y="98" text-anchor="middle" font-size="18" class="b700">第1の括弧</text><text x="130" y="128" text-anchor="middle" font-size="18">log₃5 をそろえる</text>
+<path class="ln" d="M245 105 L320 105"/><rect x="340" y="60" width="220" height="90" rx="10" class="box-hi"/><text x="450" y="98" text-anchor="middle" font-size="20" class="b700">5/2 log₃5</text><path class="ln" d="M580 105 L655 105"/>
+<rect x="675" y="60" width="190" height="90" rx="10" class="box"/><text x="770" y="98" text-anchor="middle" font-size="18" class="b700">第2の括弧</text><text x="770" y="128" text-anchor="middle" font-size="18">log₅3 をそろえる</text>
+</svg><figcaption>図1　それぞれの括弧の中で、底を一つにそろえる。</figcaption></figure>
+<div class="strategy"><span class="lbl">方針</span><br>$9$ と $25$ を平方として見て、各括弧を1種類の対数にします。最後に互いに逆の対数の積を使います。</div>
+<div class="formula-box"><h4>対数の基本変形</h4><div class="fb"><div>$\log_{a^m}b=\dfrac{1}{m}\log_a b$</div><div>$\log_a b\cdot\log_b a=1$</div></div></div>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">2</span><h2>各括弧を計算しやすい形にする</h2></div>
+<ol class="steps"><li>$25=5^2$、$9=3^2$ より、$$\log_3 25=2\log_3 5,\qquad \log_9 5=\dfrac12\log_3 5$$ です。したがって第1の括弧は $$\log_3 25+\log_9 5=\dfrac52\log_3 5.$$</li>
+<li>$27=3^3$、$25=5^2$ より、$$\log_5 27=3\log_5 3,\qquad \log_{25}3=\dfrac12\log_5 3$$ です。したがって第2の括弧は $$\log_5 27+\log_{25}3=\dfrac72\log_5 3.$$</li></ol>
+<div class="flow"><span class="step">第1の括弧</span><span class="arw">→</span><span class="step hl">$\dfrac52\log_3 5$</span><span class="arw">　×　</span><span class="step">第2の括弧</span><span class="arw">→</span><span class="step hl">$\dfrac72\log_5 3$</span></div>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">3</span><h2>互いに逆の対数を掛ける</h2></div>
+<p class="lead">以上を元の式に戻すと、$$\dfrac52\log_3 5\cdot\dfrac72\log_5 3=\dfrac{35}{4}(\log_3 5\cdot\log_5 3).$$</p>
+<p class="lead">ここで $\log_3 5$ と $\log_5 3$ は互いに逆なので、積は $1$ です。よって、$$\dfrac{35}{4}\times1=\dfrac{35}{4}.$$</p>
+<div class="check"><strong>確認：</strong>底を入れ替えた2つの対数は、掛けると $1$ になります。最後に残る数は係数の $\dfrac52$ と $\dfrac72$ の積です。</div>
+<p><span class="ans">答え　$\dfrac{35}{4}$（キ=3、ク=5、ケ=4）</span></p>
+</section>
+<section class="card"><div class="card-h"><span class="num">✓</span><h2>まとめ</h2></div><p class="lead">対数の計算では、まず<strong>底をそろえる</strong>。そのあと、$\log_a b\cdot\log_b a=1$ を見つけると計算が短くなります。</p></section>
+<footer>出典：帝京大学 2026年度 総合型選抜 薬・理工学部 数学・大問1(3)<br>15歳前後を対象としたやさしい解説版。問題文・解答は学習用に整形しています。</footer>
+</div></body></html>

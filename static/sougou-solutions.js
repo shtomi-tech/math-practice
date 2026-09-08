@@ -1,6 +1,7 @@
 window.MATH_SOLUTIONS = window.MATH_SOLUTIONS || {};
 window.MATH_SOLUTIONS.sougou = {
   "1-(1)": {
+    explainerUrl: "./explainers/sougou-2026-1-1-factorization-explainer-basic.html",
     approach: String.raw`$x$についての2次式として整理します。定数項を2つの式の積に分け，その2つの式の和が$x$の係数になる組を探すと，積の形へ移せます。`,
     formula: {
       title: "2次式の因数分解",
@@ -25,6 +26,7 @@ $$`,
     answer: String.raw`ア=2，イ=4，ウ=3，エ=2`
   },
   "1-(2)": {
+    explainerUrl: "./explainers/sougou-2026-1-2-divisors-explainer-basic.html",
     approach: String.raw`正の約数の個数は，素因数分解したときの各指数から決まります。まず素因数分解を行い，各指数に1を足して掛け合わせます。`,
     formula: {
       title: "正の約数の個数",
@@ -41,6 +43,7 @@ $$`,
     answer: String.raw`オ=2，カ=4`
   },
   "1-(3)": {
+    explainerUrl: "./explainers/sougou-2026-1-3-logarithms-explainer-basic.html",
     approach: String.raw`対数の底がそろっていないので，$9=3^2$と$25=5^2$を使って，それぞれの括弧の中で底をそろえます。最後に互いに逆になる対数の積を使います。`,
     formula: {
       title: "対数の基本変形",
@@ -66,6 +69,7 @@ $$`,
     answer: String.raw`キ=3，ク=5，ケ=4`
   },
   "1-(4)": {
+    explainerUrl: "./explainers/sougou-2026-1-4-common-tangents-explainer-basic.html",
     approach: String.raw`共通接線を$y=mx+c$とおき，それぞれの放物線との交点が重なる条件を使います。各放物線との交点を表す2次方程式の判別式を0とし，2本の条件を連立します。`,
     formula: {
       title: "接する条件",
@@ -99,6 +103,7 @@ $$
     answer: String.raw`コ=2，サ=2，シ=-，ス=4，セ=5`
   },
   "1-(5)": {
+    explainerUrl: "./explainers/sougou-2026-1-5-integral-equation-explainer-basic.html",
     approach: String.raw`積分の範囲が固定されているので，積分全体は$x$によらない定数です。その定数を置いていったん$f(x)$を表し，定積分へ代入し直して定数を決めます。`,
     formula: {
       title: "定積分の定数置換",

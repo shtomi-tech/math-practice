@@ -9,6 +9,7 @@ const solutionModule = readAppModule("solution.js");
 const practiceModule = readAppModule("practice.js");
 const solutions = fs.readFileSync(path.join(root, "static/rikaido2507-solutions.js"), "utf8");
 const kawaiSolutionsSource = fs.readFileSync(path.join(root, "static/kawai-solutions.js"), "utf8");
+const sougouSolutionsSource = fs.readFileSync(path.join(root, "static/sougou-solutions.js"), "utf8");
 const styles = fs.readFileSync(path.join(root, "static/styles.css"), "utf8");
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const start = solutionModule.indexOf("function renderSolutionModalBody");
@@ -68,6 +69,21 @@ const expectedExplainers = {
 for (const [key, fileName] of Object.entries(expectedExplainers)) {
   assert.equal(kawaiTypeIII[key].explainerUrl, `./explainers/${fileName}`, `${key} の解説URLが不正です`);
   assert.equal(fs.existsSync(path.join(root, "explainers", fileName)), true, `${key} の解説HTMLがありません`);
+}
+
+const sougouContext = { window: {} };
+vm.runInNewContext(sougouSolutionsSource, sougouContext);
+const sougou = sougouContext.window.MATH_SOLUTIONS.sougou;
+const expectedSougouExplainers = {
+  "1-(1)": "sougou-2026-1-1-factorization-explainer-basic.html",
+  "1-(2)": "sougou-2026-1-2-divisors-explainer-basic.html",
+  "1-(3)": "sougou-2026-1-3-logarithms-explainer-basic.html",
+  "1-(4)": "sougou-2026-1-4-common-tangents-explainer-basic.html",
+  "1-(5)": "sougou-2026-1-5-integral-equation-explainer-basic.html",
+};
+for (const [key, fileName] of Object.entries(expectedSougouExplainers)) {
+  assert.equal(sougou[key].explainerUrl, `./explainers/${fileName}`, `総合型選抜 ${key} の解説URLが不正です`);
+  assert.equal(fs.existsSync(path.join(root, "explainers", fileName)), true, `総合型選抜 ${key} の解説HTMLがありません`);
 }
 // バージョン文字列そのものは check-app-modules.js が index.html と全importの一致を検査する。
 assert.match(index, /<script type="module" src="\.\/static\/app\/main\.js\?v=/);

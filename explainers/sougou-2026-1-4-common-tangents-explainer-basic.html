@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図でわかる 2つの放物線の共通接線｜帝京大2026 大問1(4)</title>
+<link rel="stylesheet" href="./sougou-basic.css">
+<script>window.MathJax={tex:{inlineMath:[["$","$"]],displayMath:[["$$","$$"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body><div class="wrap">
+<header class="doc-head"><p class="eyebrow">2次関数 ・ はじめて学ぶ人向け</p><h1>図でわかる　放物線の共通接線</h1><p class="sub">帝京大学 2026年度 総合型選抜 薬・理工学部 数学・大問1(4) ／ やさしい解説版</p></header>
+<section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div><p class="lead">2つの放物線 $y=-x^{2}+1$、$y=x^{2}-2x+6$ の両方に接する直線を求めよ。</p><p class="lead">答えは $y=\boxed{コ}x+\boxed{サ}$、$y=\boxed{シ}\boxed{ス}x+\boxed{セ}$ の形で表す。</p><details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$y=2x+2$、$y=-4x+5$</span></details></section>
+
+<section class="card"><div class="card-h"><span class="num">1</span><h2>接線を $y=mx+c$ とおく</h2></div>
+<p class="lead">共通接線の傾きを $m$、切片を $c$ とします。1本の直線がそれぞれの放物線に接するので、交点を表す2次方程式が両方とも重解をもちます。</p>
+<figure><svg class="dg" viewBox="0 0 900 220" role="img" aria-label="直線yイコールmxプラスcを2つの放物線に接する条件として、2つの判別式を0にする流れを示す図">
+<rect x="40" y="65" width="220" height="90" rx="10" class="box-hi"/><text x="150" y="105" text-anchor="middle" font-size="22" class="b700">直線 y＝mx＋c</text><text x="150" y="133" text-anchor="middle" font-size="17">m と c を決める</text>
+<path class="ln" d="M285 110 L365 110"/><rect x="385" y="25" width="200" height="70" rx="10" class="box"/><text x="485" y="68" text-anchor="middle" font-size="19" class="b700">放物線1</text><text x="485" y="88" text-anchor="middle" class="t-sm">判別式＝0</text>
+<rect x="385" y="125" width="200" height="70" rx="10" class="box"/><text x="485" y="168" text-anchor="middle" font-size="19" class="b700">放物線2</text><text x="485" y="188" text-anchor="middle" class="t-sm">判別式＝0</text>
+<path class="ln" d="M610 110 L690 110"/><rect x="710" y="65" width="150" height="90" rx="10" class="box-hi"/><text x="785" y="103" text-anchor="middle" font-size="20" class="b700">m を決定</text><text x="785" y="132" text-anchor="middle" font-size="17">c も決定</text>
+</svg><figcaption>図1　接する条件を、2本の2次方程式の判別式に置き換える。</figcaption></figure>
+<div class="strategy"><span class="lbl">方針</span><br>直線を $y=mx+c$ とおき、各放物線との交点の2次方程式で判別式を $0$ にします。2つの条件を連立して $m,c$ を求めます。</div>
+<div class="formula-box"><h4>接する条件</h4><div class="fb">$$ax^2+bx+d=0 \text{ が重解をもつとき } b^2-4ad=0$$</div></div>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">2</span><h2>2つの判別式を $0$ にする</h2></div>
+<ol class="steps"><li>$y=-x^2+1$ と直線を連立すると、$$x^2+mx+(c-1)=0.$$ よって $$m^2-4(c-1)=0、\qquad c=1+\dfrac{m^2}{4}.$$</li>
+<li>$y=x^2-2x+6$ と直線を連立すると、$$x^2-(m+2)x+(6-c)=0.$$ よって $$(m+2)^2-4(6-c)=0、\qquad c=6-\dfrac{(m+2)^2}{4}.$$</li>
+<li>同じ直線の切片 $c$ なので、$$1+\dfrac{m^2}{4}=6-\dfrac{(m+2)^2}{4}.$$ 整理すると、$$m^2+2m-8=0、\qquad (m+4)(m-2)=0.$$</li></ol>
+<div class="flow"><span class="step">判別式1＝0</span><span class="arw">＋</span><span class="step">判別式2＝0</span><span class="arw">→</span><span class="step hl">$m=2$ または $m=-4$</span></div>
+</section>
+
+<section class="card"><div class="card-h"><span class="num">3</span><h2>切片を求めて直線を完成する</h2></div>
+<p class="lead">$c=1+\dfrac{m^2}{4}$ に戻します。</p><p class="lead">$m=2$ のとき $c=2$ なので $y=2x+2$。$m=-4$ のとき $c=5$ なので $y=-4x+5$ です。</p>
+<figure><svg class="dg" viewBox="0 0 900 190" role="img" aria-label="傾き2から直線yイコール2xプラス2、傾きマイナス4から直線yイコールマイナス4xプラス5を得る図">
+<rect x="35" y="50" width="230" height="90" rx="10" class="box-hi"/><text x="150" y="88" text-anchor="middle" font-size="20" class="b700">m＝2</text><text x="150" y="119" text-anchor="middle" font-size="18">c＝2</text><path class="ln" d="M285 95 L355 95"/><rect x="375" y="50" width="220" height="90" rx="10" class="box"/><text x="485" y="103" text-anchor="middle" font-size="21" class="b700">y＝2x＋2</text><path class="ln" d="M615 95 L685 95"/><rect x="705" y="50" width="160" height="90" rx="10" class="box-hi"/><text x="785" y="88" text-anchor="middle" font-size="20" class="b700">m＝−4</text><text x="785" y="119" text-anchor="middle" font-size="18">c＝5</text>
+</svg><figcaption>図2　傾きごとに切片を戻せば、2本の直線になる。</figcaption></figure>
+<p><span class="ans">答え　$y=2x+2$、$y=-4x+5$（コ=2、サ=2、シ=−、ス=4、セ=5）</span></p>
+</section>
+<section class="card"><div class="card-h"><span class="num">✓</span><h2>まとめ</h2></div><p class="lead">放物線と直線の接点を直接探す代わりに、交点の2次方程式を作り、<strong>判別式を0</strong>にすると接する条件を式で表せます。</p></section>
+<footer>出典：帝京大学 2026年度 総合型選抜 薬・理工学部 数学・大問1(4)<br>15歳前後を対象としたやさしい解説版。問題文・解答は学習用に整形しています。</footer>
+</div></body></html>
