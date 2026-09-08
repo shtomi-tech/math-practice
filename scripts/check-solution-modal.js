@@ -59,12 +59,14 @@ const expectedExplainers = {
   "1-(2)": "kawai-2026-typeIII-1-2-dice-probability-explainer-basic.html",
   "1-(3)": "kawai-2026-typeIII-1-3-log-explainer-basic.html",
   "1-(4)": "kawai-2026-typeIII-1-4-tangent-inequality-explainer-basic.html",
+  "2-(1)": "kawai-2026-typeIII-2-1-first-term-explainer-basic.html",
+  "2-(2)": "kawai-2026-typeIII-2-2-recurrence-explainer-basic.html",
+  "2-(3)": "kawai-2026-typeIII-2-3-common-terms-explainer-basic.html",
 };
 for (const [key, fileName] of Object.entries(expectedExplainers)) {
   assert.equal(kawaiTypeIII[key].explainerUrl, `./explainers/${fileName}`, `${key} の解説URLが不正です`);
   assert.equal(fs.existsSync(path.join(root, "explainers", fileName)), true, `${key} の解説HTMLがありません`);
 }
-assert.equal(kawaiTypeIII["2-(1)"].explainerUrl, undefined, "大問2は従来モーダルのままにします");
 // バージョン文字列そのものは check-app-modules.js が index.html と全importの一致を検査する。
 assert.match(index, /<script type="module" src="\.\/static\/app\/main\.js\?v=/);
 assert.equal(modalBody.includes("learningPointsHtml"), false);

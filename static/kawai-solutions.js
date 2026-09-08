@@ -469,6 +469,7 @@ $$0\le\theta<\dfrac{\pi}{3},\qquad \dfrac{5}{6}\pi<\theta<\dfrac{4}{3}\pi,\qquad
     answer: String.raw`$0\le\theta<\dfrac{\pi}{3}$，$\dfrac{5}{6}\pi<\theta<\dfrac{4}{3}\pi$，$\dfrac{11}{6}\pi<\theta<2\pi$`
   },
   "2-(1)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-2-1-first-term-explainer-basic.html",
     approach: String.raw`$S_{1}=a_{1}$ を使い，$n=1$ を条件式に代入する。`,
     formula: {
       title: "和と項の関係",
@@ -480,6 +481,7 @@ $$S_{1}=a_{1}=2a_{1}+1-4=2a_{1}-3.$$
     answer: String.raw`$a_{1}=3$`
   },
   "2-(2)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-2-2-recurrence-explainer-basic.html",
     approach: String.raw`$a_{n+1}=S_{n+1}-S_{n}$ に条件式を代入して漸化式を作り，特性方程式（$\alpha=2\alpha-1$）で一般項を求める。`,
     formula: {
       title: "1次の漸化式",
@@ -492,6 +494,7 @@ $$a_{n}-1=2\cdot 2^{n-1}=2^{n}.$$`,
     answer: String.raw`$a_{n+1}=2a_{n}-1$，$a_{n}=2^{n}+1$`
   },
   "2-(3)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-2-3-common-terms-explainer-basic.html",
     approach: String.raw`$a_{n}=2^{n}+1$ が $\{b_{n}\}$（$7$ で割って $2$ 余る数）に入る条件は $2^{n}\equiv 1\pmod 7$。$2^{n}\bmod 7$ の周期 $3$ から $n\equiv 0\pmod 3$ とわかり，共通項は $c_{k}=8^{k}+1$。`,
     formula: {
       title: "$2^{n}$ の $\bmod 7$ の周期",

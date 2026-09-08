@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>図でわかる 2つの数列の共通項と積｜やさしい版</title>
+<style>
+  :root{color-scheme:light;--ink:#1f2328;--muted:#5c646d;--line:#dce0e4;--line-bold:#9aa2ab;--paper:#fff;--bg:#eef0f2;--review:#f5f6f7;--accent:#2f6db3;--accent-weak:#e7eff8;--accent-ink:#255a95;--navy:#000080;--cream:#fff8f0;--choco:#c9601f}
+  *{box-sizing:border-box}html{background:var(--bg)}
+  body{margin:0;color:var(--ink);background:var(--bg);font-family:"Yu Gothic","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;font-size:16px;line-height:1.9;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 18px 72px}.doc-head{padding:6px 4px 14px}.eyebrow{margin:0;font-size:12px;letter-spacing:.14em;color:var(--accent-ink);font-weight:700}
+  h1{margin:.15em 0 .12em;font-size:27px;line-height:1.35}.doc-head .sub{margin:0;color:var(--muted);font-size:13px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:16px 0;box-shadow:0 1px 3px rgb(31 35 40 / 5%)}
+  .card-h{display:flex;align-items:center;gap:12px;margin:0 0 6px}.card-h h2{margin:0;font-size:20px;line-height:1.4}.num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:15px}
+  .card p{margin:.55em 0}.lead{font-size:17px}figure{margin:18px 0 8px;padding:16px;background:var(--review);border:1px solid var(--line);border-radius:10px}figcaption{margin-top:10px;font-size:12.5px;color:var(--muted);text-align:center}
+  .dg{display:block;width:100%;height:auto}.dg text{font-family:inherit;fill:var(--ink)}.dg .box{fill:var(--paper);stroke:var(--line-bold);stroke-width:1.5}.dg .box-hi{fill:var(--accent-weak);stroke:var(--accent);stroke-width:2.5}.dg .ln{stroke:var(--ink);stroke-width:1.8;fill:none}.dg .ln-hi{stroke:var(--accent);stroke-width:2.5;fill:none}.dg .muted{fill:var(--muted)}.dg .accent{fill:var(--accent-ink)}.dg .b700{font-weight:700}
+  .strategy{margin:16px 0;padding:14px 18px;background:#eef4fb;border-left:5px solid var(--accent-ink);border-radius:0 8px 8px 0;font-size:15.5px}.strategy .lbl{display:inline-block;margin-bottom:6px;padding:3px 10px;border-radius:5px;background:var(--accent-ink);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.06em}
+  .formula-box{margin:16px 0;border:1.5px solid var(--choco);border-radius:8px;overflow:hidden}.formula-box h4{margin:0;padding:7px 14px;background:var(--navy);color:#fff;font-size:14px}.formula-box .fb{padding:12px 16px;background:var(--cream);font-size:15px}.ans{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:7px 16px;background:var(--accent-weak);border:1px solid var(--accent);border-radius:999px;font-weight:700;color:var(--accent-ink);font-size:16px}
+  .answer-toggle{margin-top:12px}.answer-toggle summary{cursor:pointer;display:inline-block;list-style:none;padding:8px 14px;font-size:13px;font-weight:700;color:var(--muted);background:var(--review);border:1px solid var(--line);border-radius:8px}.answer-toggle summary::-webkit-details-marker{display:none}.answer-toggle summary::before{content:"▶ ";font-size:10px}.answer-toggle[open] summary::before{content:"▼ "}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}.flow .step{padding:9px 14px;background:var(--review);border:1px solid var(--line);border-radius:8px;font-size:14px}.flow .step.hl{background:var(--accent-weak);border-color:var(--accent);font-weight:700}.flow .arw{color:var(--muted);font-weight:700}.note{font-size:13px;color:var(--muted)}footer{margin-top:22px;padding:0 6px;font-size:11.5px;color:var(--muted)}
+  @media(max-width:640px){.wrap{padding:16px 10px 48px}h1{font-size:21px}.card{padding:16px 14px}.card-h h2{font-size:17px}body{font-size:15px}}
+  @media print{html,body{background:#fff}.wrap{max-width:none;padding:0}.card{border:none;box-shadow:none;padding:6mm 0;margin:0;break-inside:avoid}figure{break-inside:avoid;background:#fff;border:1px solid #ccc}@page{size:A4;margin:14mm}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[["$","$"]],displayMath:[["$$","$$"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body><div class="wrap">
+  <header class="doc-head">
+    <p class="eyebrow">数列 ・ はじめて学ぶ人向け</p>
+    <h1>図でわかる　2つの数列に共通する数と，その積</h1>
+    <p class="sub">河合塾 2026年度 第2回 全国記述模試 数学 III型・大問2(3) ／ やさしい解説版</p>
+  </header>
+
+  <section class="card">
+    <div class="card-h"><span class="num">問</span><h2>この問題</h2></div>
+    <p class="lead">$b_{n}=7n+2$（$n=1,2,3,\ldots$）とする。$\{a_{n}\}$ と $\{b_{n}\}$ に共通に含まれる数を小さい順に並べた数列を $\{c_{n}\}$ とするとき，積 $(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)$ を求めよ。</p>
+    <p class="note">前の (2) で $a_{n}=2^{n}+1$ が分かっています。</p>
+    <details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$8^{\frac{n(n+1)}{2}}$</span></details>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">1</span><h2>まず，2つの数列を並べて見る</h2></div>
+    <p class="lead">$a_{n}=2^{n}+1$ は $2$ 倍ずつ増えていく列，$b_{n}=7n+2$ は $7$ ずつ増えていく列です。書き出すと，ときどき同じ数が現れます。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="aの列3、5、9、17、33、65、129、257、513とbの列9、16、23、30、37、44、51、58、65を並べ、9と65が共通であることを示す図">
+        <text x="52" y="70" font-size="18" class="b700">aₙ</text>
+        <g font-size="18">
+          <rect x="110" y="44" width="78" height="44" rx="8" class="box"></rect><text x="149" y="73" text-anchor="middle">3</text>
+          <rect x="196" y="44" width="78" height="44" rx="8" class="box"></rect><text x="235" y="73" text-anchor="middle">5</text>
+          <rect x="282" y="44" width="78" height="44" rx="8" class="box-hi"></rect><text x="321" y="73" text-anchor="middle" class="b700">9</text>
+          <rect x="368" y="44" width="78" height="44" rx="8" class="box"></rect><text x="407" y="73" text-anchor="middle">17</text>
+          <rect x="454" y="44" width="78" height="44" rx="8" class="box"></rect><text x="493" y="73" text-anchor="middle">33</text>
+          <rect x="540" y="44" width="78" height="44" rx="8" class="box-hi"></rect><text x="579" y="73" text-anchor="middle" class="b700">65</text>
+          <rect x="626" y="44" width="78" height="44" rx="8" class="box"></rect><text x="665" y="73" text-anchor="middle">129</text>
+          <rect x="712" y="44" width="78" height="44" rx="8" class="box"></rect><text x="751" y="73" text-anchor="middle">257</text>
+          <rect x="798" y="44" width="78" height="44" rx="8" class="box-hi"></rect><text x="837" y="73" text-anchor="middle" class="b700">513</text>
+        </g>
+
+        <text x="52" y="236" font-size="18" class="b700">bₙ</text>
+        <g font-size="18">
+          <rect x="110" y="210" width="78" height="44" rx="8" class="box-hi"></rect><text x="149" y="239" text-anchor="middle" class="b700">9</text>
+          <rect x="196" y="210" width="78" height="44" rx="8" class="box"></rect><text x="235" y="239" text-anchor="middle">16</text>
+          <rect x="282" y="210" width="78" height="44" rx="8" class="box"></rect><text x="321" y="239" text-anchor="middle">23</text>
+          <rect x="368" y="210" width="78" height="44" rx="8" class="box"></rect><text x="407" y="239" text-anchor="middle">30</text>
+          <rect x="454" y="210" width="78" height="44" rx="8" class="box"></rect><text x="493" y="239" text-anchor="middle">37</text>
+          <rect x="540" y="210" width="78" height="44" rx="8" class="box"></rect><text x="579" y="239" text-anchor="middle">44</text>
+          <rect x="626" y="210" width="78" height="44" rx="8" class="box"></rect><text x="665" y="239" text-anchor="middle">51</text>
+          <rect x="712" y="210" width="78" height="44" rx="8" class="box"></rect><text x="751" y="239" text-anchor="middle">58</text>
+          <rect x="798" y="210" width="78" height="44" rx="8" class="box-hi"></rect><text x="837" y="239" text-anchor="middle" class="b700">65</text>
+        </g>
+
+        <path d="M321 88 L160 206" class="ln-hi"></path>
+        <path d="M579 88 L830 206" class="ln-hi"></path>
+        <text x="450" y="150" text-anchor="middle" font-size="19" class="accent b700">共通する数 … 9, 65, 513, …</text>
+      </svg>
+      <figcaption>図1　上が $a_{n}=2^{n}+1$，下が $b_{n}=7n+2$。共通する数を小さい順に並べたものが $\{c_{n}\}$。</figcaption>
+    </figure>
+    <p class="lead">ただし「書き出して見つける」だけでは，本当にそれで全部なのかが分かりません。共通になる条件を式で言いかえます。</p>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">2</span><h2>$\{b_{n}\}$ は「$7$ で割ると $2$ 余る数」の全部</h2></div>
+    <p class="lead">$b_{n}=7n+2$ は，$7$ の倍数に $2$ を足した数です。$n=1,2,3,\ldots$ を入れると $9,16,23,30,\ldots$ となり，これは $9$ 以上で $7$ で割った余りが $2$ になる数を，もれなく並べたものです。</p>
+    <p class="lead">したがって，$a_{n}$ が $\{b_{n}\}$ に入る条件は</p>
+    <p class="lead">$$a_{n}=2^{n}+1\ \text{を}\ 7\ \text{で割った余りが}\ 2\ \text{（かつ}\ a_{n}\geqq9\text{）}$$</p>
+    <p class="lead">です。$+1$ の分をずらして考えれば，これは $2^{n}$ を $7$ で割った余りが $1$ になることと同じです。</p>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">3</span><h2>$2^{n}$ を $7$ で割った余りは $2,4,1$ のくり返し</h2></div>
+    <p class="lead">$2^{n}$ の余りは，前の余りを $2$ 倍して，$7$ 以上なら $7$ を引けば求まります。$1$ に戻った瞬間から，同じ並びがくり返されます。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="2のn乗を7で割った余りが2、4、1、2、4、1と周期3でくり返すことを示す図">
+        <text x="450" y="34" text-anchor="middle" font-size="19" class="b700">2ⁿ を 7 で割った余り</text>
+        <g font-size="20">
+          <rect x="70" y="60" width="112" height="56" rx="10" class="box"></rect><text x="126" y="97" text-anchor="middle" class="b700">n＝1 : 2</text>
+          <rect x="202" y="60" width="112" height="56" rx="10" class="box"></rect><text x="258" y="97" text-anchor="middle" class="b700">n＝2 : 4</text>
+          <rect x="334" y="60" width="112" height="56" rx="10" class="box-hi"></rect><text x="390" y="97" text-anchor="middle" class="b700">n＝3 : 1</text>
+          <rect x="466" y="60" width="112" height="56" rx="10" class="box"></rect><text x="522" y="97" text-anchor="middle" class="b700">n＝4 : 2</text>
+          <rect x="598" y="60" width="112" height="56" rx="10" class="box"></rect><text x="654" y="97" text-anchor="middle" class="b700">n＝5 : 4</text>
+          <rect x="730" y="60" width="112" height="56" rx="10" class="box-hi"></rect><text x="786" y="97" text-anchor="middle" class="b700">n＝6 : 1</text>
+        </g>
+        <path d="M182 88 H202" class="ln"></path><path d="M314 88 H334" class="ln"></path><path d="M446 88 H466" class="ln"></path><path d="M578 88 H598" class="ln"></path><path d="M710 88 H730" class="ln"></path>
+        <path d="M390 116 V160 H786 V116" class="ln-hi"></path>
+        <text x="588" y="186" text-anchor="middle" font-size="19" class="accent b700">3 つ進むごとに 余り 1 が現れる</text>
+        <rect x="180" y="216" width="540" height="58" rx="12" class="box-hi"></rect>
+        <text x="450" y="253" text-anchor="middle" font-size="21" class="b700">余りが 1 ⟺ n が 3 の倍数</text>
+      </svg>
+      <figcaption>図2　余りは $2\to4\to1$ の周期 $3$。$2\cdot2=4$，$4\cdot2=8=7+1$ なので $1$ に戻る。</figcaption>
+    </figure>
+    <div class="formula-box"><h4>余りのくり返し</h4><div class="fb">$2^{1},2^{2},2^{3}$ を $7$ で割った余りは順に $2,4,1$。余りが $1$ に戻った次からは同じ並びがくり返すので，$2^{n}$ を $7$ で割った余りが $1$ となるのは $n$ が $3$ の倍数のときに限る。</div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">4</span><h2>共通する数は $8^{k}+1$ の形</h2></div>
+    <p class="lead">$n=3k$（$k=1,2,3,\ldots$）のとき，</p>
+    <p class="lead">$$a_{3k}=2^{3k}+1=(2^{3})^{k}+1=8^{k}+1.$$</p>
+    <p class="lead">$k=1,2,3,\ldots$ で $9,65,513,\ldots$ となり，どれも $9$ 以上なので確かに $\{b_{n}\}$ に含まれます。$k$ が大きくなるほど値も大きくなるので，これが小さい順の並びそのもので $c_{k}=8^{k}+1$ です。</p>
+    <p class="lead">ここで欲しいのは $c_{k}-1$ でした。$+1$ がちょうど消えて</p>
+    <p class="lead">$$c_{k}-1=8^{k}$$</p>
+    <p class="lead">という，きれいな形になります。</p>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">5</span><h2>方針と解答</h2></div>
+    <div class="strategy"><span class="lbl">方針</span><div>共通項を書き出しで探さず，「$7$ で割った余り」で条件に直します。$2^{n}$ の余りが $2,4,1$ とくり返すことから，共通になる番号は $3$ の倍数だけと決まります。積は，指数どうしを足す規則にまとめます。</div></div>
+    <p class="lead"><strong>解答。</strong>　$b_{n}=7n+2$ は，$9$ 以上で $7$ で割ると $2$ 余る数の全体である。よって $a_{n}=2^{n}+1$ が $\{b_{n}\}$ に含まれるのは，$2^{n}$ を $7$ で割った余りが $1$ となるときである。</p>
+    <p class="lead">$2^{n}$ を $7$ で割った余りは，$n=1,2,3,\ldots$ に対して $2,4,1$ をくり返す（周期 $3$）。したがって，余りが $1$ となるのは $n$ が $3$ の倍数のときに限る。</p>
+    <p class="lead">$n=3k$（$k=1,2,3,\ldots$）とすると</p>
+    <p class="lead">$$a_{3k}=2^{3k}+1=8^{k}+1\ (\geqq9)$$</p>
+    <p class="lead">であり，$k$ について単調に増加するから</p>
+    <p class="lead">$$c_{k}=8^{k}+1,\qquad c_{k}-1=8^{k}.$$</p>
+    <p class="lead">よって，求める積は</p>
+    <p class="lead">$$(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)=8^{1}\cdot8^{2}\cdots8^{n}=8^{1+2+\cdots+n}$$</p>
+    <p class="lead">$$=8^{\frac{n(n+1)}{2}}\qquad\cdots\text{（答）}$$</p>
+    <p class="note">たしかめ：$n=2$ のとき左辺は $(9-1)(65-1)=8\cdot64=512$。右辺は $8^{\frac{2\cdot3}{2}}=8^{3}=512$ で一致する。○</p>
+  </section>
+
+  <section class="card"><div class="card-h"><span class="num">6</span><h2>手順のまとめ</h2></div><div class="flow"><span class="step">$b_{n}$ を「余り $2$ の数」と言いかえ</span><span class="arw">→</span><span class="step hl">$2^{n}$ の余りの周期を調べる</span><span class="arw">→</span><span class="step">$n$ は $3$ の倍数</span><span class="arw">→</span><span class="step">$c_{k}-1=8^{k}$</span><span class="arw">→</span><span class="step">指数を足して $8^{\frac{n(n+1)}{2}}$</span></div></section>
+  <footer>出典：河合塾 2026年度 第2回 全国記述模試 数学 III型・大問2(3)。このHTMLは15歳前後を対象としたやさしい解説版。</footer>
+</div></body></html>
