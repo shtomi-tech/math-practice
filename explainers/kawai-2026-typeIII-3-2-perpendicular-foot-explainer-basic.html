@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>図でわかる 垂線の足と三角形の面積｜やさしい版</title>
+<style>
+  :root{color-scheme:light;--ink:#1f2328;--muted:#5c646d;--line:#dce0e4;--line-bold:#9aa2ab;--paper:#fff;--bg:#eef0f2;--review:#f5f6f7;--accent:#2f6db3;--accent-weak:#e7eff8;--accent-ink:#255a95;--navy:#000080;--cream:#fff8f0;--choco:#c9601f}
+  *{box-sizing:border-box}html{background:var(--bg)}
+  body{margin:0;color:var(--ink);background:var(--bg);font-family:"Yu Gothic","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;font-size:16px;line-height:1.9;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 18px 72px}.doc-head{padding:6px 4px 14px}.eyebrow{margin:0;font-size:12px;letter-spacing:.14em;color:var(--accent-ink);font-weight:700}
+  h1{margin:.15em 0 .12em;font-size:27px;line-height:1.35}.doc-head .sub{margin:0;color:var(--muted);font-size:13px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:16px 0;box-shadow:0 1px 3px rgb(31 35 40 / 5%)}
+  .card-h{display:flex;align-items:center;gap:12px;margin:0 0 6px}.card-h h2{margin:0;font-size:20px;line-height:1.4}.num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:15px}
+  .card p{margin:.55em 0}.lead{font-size:17px}figure{margin:18px 0 8px;padding:16px;background:var(--review);border:1px solid var(--line);border-radius:10px}figcaption{margin-top:10px;font-size:12.5px;color:var(--muted);text-align:center}
+  .dg{display:block;width:100%;height:auto}.dg text{font-family:inherit;fill:var(--ink)}.dg .box{fill:var(--paper);stroke:var(--line-bold);stroke-width:1.5}.dg .box-hi{fill:var(--accent-weak);stroke:var(--accent);stroke-width:2.5}.dg .ln{stroke:var(--ink);stroke-width:1.8;fill:none}.dg .ln-hi{stroke:var(--accent);stroke-width:2.5;fill:none}.dg .muted{fill:var(--muted)}.dg .accent{fill:var(--accent-ink)}.dg .b700{font-weight:700}
+  .strategy{margin:16px 0;padding:14px 18px;background:#eef4fb;border-left:5px solid var(--accent-ink);border-radius:0 8px 8px 0;font-size:15.5px}.strategy .lbl{display:inline-block;margin-bottom:6px;padding:3px 10px;border-radius:5px;background:var(--accent-ink);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.06em}
+  .formula-box{margin:16px 0;border:1.5px solid var(--choco);border-radius:8px;overflow:hidden}.formula-box h4{margin:0;padding:7px 14px;background:var(--navy);color:#fff;font-size:14px}.formula-box .fb{padding:12px 16px;background:var(--cream);font-size:15px}.ans{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:7px 16px;background:var(--accent-weak);border:1px solid var(--accent);border-radius:999px;font-weight:700;color:var(--accent-ink);font-size:16px}
+  .answer-toggle{margin-top:12px}.answer-toggle summary{cursor:pointer;display:inline-block;list-style:none;padding:8px 14px;font-size:13px;font-weight:700;color:var(--muted);background:var(--review);border:1px solid var(--line);border-radius:8px}.answer-toggle summary::-webkit-details-marker{display:none}.answer-toggle summary::before{content:"▶ ";font-size:10px}.answer-toggle[open] summary::before{content:"▼ "}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}.flow .step{padding:9px 14px;background:var(--review);border:1px solid var(--line);border-radius:8px;font-size:14px}.flow .step.hl{background:var(--accent-weak);border-color:var(--accent);font-weight:700}.flow .arw{color:var(--muted);font-weight:700}.note{font-size:13px;color:var(--muted)}footer{margin-top:22px;padding:0 6px;font-size:11.5px;color:var(--muted)}
+  @media(max-width:640px){.wrap{padding:16px 10px 48px}h1{font-size:21px}.card{padding:16px 14px}.card-h h2{font-size:17px}body{font-size:15px}}
+  @media print{html,body{background:#fff}.wrap{max-width:none;padding:0}.card{border:none;box-shadow:none;padding:6mm 0;margin:0;break-inside:avoid}figure{break-inside:avoid;background:#fff;border:1px solid #ccc}@page{size:A4;margin:14mm}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[["$","$"]],displayMath:[["$$","$$"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body><div class="wrap">
+  <header class="doc-head">
+    <p class="eyebrow">ベクトル ・ はじめて学ぶ人向け</p>
+    <h1>図でわかる　垂線の足の位置ベクトルと，三角形の面積</h1>
+    <p class="sub">河合塾 2026年度 第2回 全国記述模試 数学 III型・大問3(2) ／ やさしい解説版</p>
+  </header>
+
+  <section class="card">
+    <div class="card-h"><span class="num">問</span><h2>この問題</h2></div>
+    <p class="lead">線分 $OB$ を $1:3$ に内分する点を $C$ とする。$B$ から直線 $AC$ に引いた垂線と直線 $AC$ の交点を $H$ とする。(i) $\overrightarrow{OH}$ を $\overrightarrow{OA}$，$\overrightarrow{OB}$ を用いて表せ。(ii) 三角形 $OAH$ の面積を求めよ。</p>
+    <p class="note">前の (1) より $\overrightarrow{OA}\cdot\overrightarrow{OB}=-4$，$|\overrightarrow{OA}|=5$，$|\overrightarrow{OB}|=4$ が分かっています。</p>
+    <details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">(i) $\overrightarrow{OH}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}$　(ii) $\dfrac{17\sqrt{6}}{14}$</span></details>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">1</span><h2>点 $C$ の位置を，$\overrightarrow{OB}$ の何倍かで表す</h2></div>
+    <p class="lead">「$OB$ を $1:3$ に内分する」とは，$O$ から $B$ までを $4$ 等分した最初の区切りが $C$ だということです。だから $\overrightarrow{OC}$ は $\overrightarrow{OB}$ をちょうど $\dfrac14$ 倍したものになります。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 200" role="img" aria-label="線分OBを1対3に内分する点Cが、Oに近いほうの区切りにあることを示す図">
+        <path d="M80 100 H820" class="ln"></path>
+        <circle cx="80" cy="100" r="7" class="box-hi"></circle><text x="80" y="70" text-anchor="middle" font-size="22" class="b700">O</text>
+        <circle cx="820" cy="100" r="7" class="box"></circle><text x="820" y="70" text-anchor="middle" font-size="22" class="b700">B</text>
+        <circle cx="265" cy="100" r="8" class="box-hi"></circle><text x="265" y="70" text-anchor="middle" font-size="22" class="accent b700">C</text>
+        <text x="172" y="150" text-anchor="middle" font-size="20" class="accent b700">1</text>
+        <text x="545" y="150" text-anchor="middle" font-size="20" class="muted b700">3</text>
+        <path d="M85 130 H260" class="ln-hi"></path><path d="M270 130 H815" class="ln"></path>
+        <text x="450" y="185" text-anchor="middle" font-size="22" class="b700">OC ＝ (1／4) OB</text>
+      </svg>
+      <figcaption>図1　$OC:CB=1:3$ より，$O$ から $B$ までの $\dfrac14$ の位置に $C$ がある。</figcaption>
+    </figure>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">2</span><h2>直線 $AC$ 上の点は，$1$ つの数 $t$ で表せる</h2></div>
+    <p class="lead">$H$ は直線 $AC$ 上のどこかにありますが，正確な位置はまだ分かりません。そこで「$A$ から $C$ へ向かう割合」を表す数 $t$ を1つ用意して，直線 $AC$ 上の点をすべて $t$ だけで書けるようにします。$t=0$ なら点 $A$，$t=1$ なら点 $C$ にあたります。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 220" role="img" aria-label="直線AC上の点Hが、tが0のときA、tが1のときCにあたるように、Aからの割合tで動くことを示す図">
+        <path d="M80 130 H820" class="ln"></path>
+        <circle cx="80" cy="130" r="7" class="box-hi"></circle><text x="80" y="100" text-anchor="middle" font-size="22" class="b700">A</text><text x="80" y="180" text-anchor="middle" font-size="17" class="muted">t＝0</text>
+        <circle cx="820" cy="130" r="7" class="box-hi"></circle><text x="820" y="100" text-anchor="middle" font-size="22" class="b700">C</text><text x="820" y="180" text-anchor="middle" font-size="17" class="muted">t＝1</text>
+        <circle cx="500" cy="130" r="8" class="box-hi"></circle><text x="500" y="100" text-anchor="middle" font-size="22" class="accent b700">H</text><text x="500" y="180" text-anchor="middle" font-size="17" class="accent">t＝?</text>
+        <text x="450" y="40" text-anchor="middle" font-size="22" class="b700">OH ＝ (1−t)・OA ＋ t・OC</text>
+      </svg>
+      <figcaption>図2　$\overrightarrow{OH}=(1-t)\overrightarrow{OA}+t\,\overrightarrow{OC}$ とおけば，$H$ が直線 $AC$ 上にあることが自動的に保証される。</figcaption>
+    </figure>
+    <div class="formula-box"><h4>直線上の点の表し方</h4><div class="fb">$2$ 点 $A,C$ を通る直線上の点は，適当な実数 $t$ を用いて $\overrightarrow{OH}=(1-t)\overrightarrow{OA}+t\,\overrightarrow{OC}$ と表せる。</div></div>
+    <p class="lead">$\overrightarrow{OC}=\dfrac14\overrightarrow{OB}$ を代入すれば，$\overrightarrow{OH}=(1-t)\overrightarrow{OA}+\dfrac{t}{4}\overrightarrow{OB}$ となり，未知数は $t$ ただ1つです。</p>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">3</span><h2>「垂線」を「内積 $=0$」に言いかえる</h2></div>
+    <p class="lead">$H$ が「$B$ から直線 $AC$ に引いた垂線の足」であるとは，矢印 $\overrightarrow{BH}$ が直線 $AC$（＝矢印 $\overrightarrow{AC}$ の向き）に対して直角に交わるということです。$2$ つの矢印が直角であることは，内積が $0$ になることと同じ意味です。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 320" role="img" aria-label="直線ACに対してBからHへの矢印が直角に交わり、その内積がゼロになることを示す図">
+        <path d="M120 260 H780" class="ln"></path>
+        <text x="120" y="290" font-size="21" class="b700">A</text><text x="780" y="290" font-size="21" class="b700">C</text>
+        <circle cx="480" cy="260" r="7" class="box-hi"></circle><text x="480" y="290" text-anchor="middle" font-size="21" class="accent b700">H</text>
+        <circle cx="480" cy="70" r="7" class="box"></circle><text x="510" y="70" font-size="21" class="b700">B</text>
+        <path d="M480 260 L480 77" class="ln-hi" marker-end="url(#ah2)"></path>
+        <defs><marker id="ah2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="accent"></path></marker></defs>
+        <rect x="465" y="230" width="30" height="30" fill="none" stroke="var(--accent)" stroke-width="2"></rect>
+        <text x="450" y="150" text-anchor="middle" font-size="20" class="accent b700">直角</text>
+        <text x="450" y="185" text-anchor="middle" font-size="18" class="muted">BH ⊥ AC</text>
+        <rect x="560" y="60" width="300" height="90" rx="12" fill="var(--review)" stroke="var(--line)"></rect>
+        <text x="710" y="100" text-anchor="middle" font-size="22" class="b700">BH ・ AC ＝ 0</text>
+        <text x="710" y="130" text-anchor="middle" font-size="16" class="muted">この式を解けば t が決まる</text>
+      </svg>
+      <figcaption>図3　垂直条件は内積 $\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ という方程式になる。</figcaption>
+    </figure>
+    <p class="lead">$\overrightarrow{BH}=\overrightarrow{OH}-\overrightarrow{OB}$，$\overrightarrow{AC}=\overrightarrow{OC}-\overrightarrow{OA}$ をそれぞれ $\overrightarrow{OA}$，$\overrightarrow{OB}$ で書き，(1) で求めた $|\overrightarrow{OA}|^{2}=25$，$|\overrightarrow{OB}|^{2}=16$，$\overrightarrow{OA}\cdot\overrightarrow{OB}=-4$ を使って展開すると，$t$ だけの1次方程式になります。</p>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">4</span><h2>面積は「同じ頂点を共有する三角形の比」で求める</h2></div>
+    <p class="lead">三角形 $OAH$ と三角形 $OAC$ は，頂点 $O,A$ を共有し，もう1つの頂点 $H,C$ が同じ直線 $AC$ 上にあります。このとき，面積の比は底辺の比 $AH:AC$（$=t:1$）と同じになります。同様に，三角形 $OAC$ と三角形 $OAB$ も，頂点 $O,A$ を共有し，$C,B$ が同じ直線 $OB$ 上にあるので，面積比は $OC:OB=1:4$ です。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 260" role="img" aria-label="三角形OAHは三角形OACのt倍、三角形OACは三角形OABの4分の1であることを示す図">
+        <text x="120" y="40" font-size="20" class="b700">△OAH ＝ t ・ △OAC</text>
+        <polygon points="80,220 380,220 130,80" fill="var(--accent-weak)" stroke="var(--accent)" stroke-width="2"></polygon>
+        <text x="70" y="240" font-size="17">O</text><text x="390" y="240" font-size="17">A</text><text x="120" y="70" font-size="17" class="accent b700">H,C</text>
+
+        <text x="620" y="40" font-size="20" class="b700">△OAC ＝ (1／4) ・ △OAB</text>
+        <polygon points="480,220 780,220 780,60" fill="none" class="box"></polygon>
+        <polygon points="480,220 780,220 780,170" fill="var(--accent-weak)" stroke="var(--accent)" stroke-width="2"></polygon>
+        <text x="470" y="240" font-size="17">O</text><text x="790" y="240" font-size="17">A</text><text x="790" y="60" font-size="17">B</text><text x="790" y="175" font-size="17" class="accent b700">C</text>
+      </svg>
+      <figcaption>図4　底辺が同じ直線上にあれば，三角形の面積比は底辺の比に等しい。</figcaption>
+    </figure>
+    <div class="formula-box"><h4>共通の頂点をもつ三角形の面積比</h4><div class="fb">$2$ 点 $P,Q$ が同じ直線上にあり，$\overrightarrow{OQ}=k\,\overrightarrow{OP}$ のとき，$\triangle OXQ = k\cdot\triangle OXP$（$X$ は共通の頂点）。</div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">5</span><h2>方針と解答</h2></div>
+    <div class="strategy"><span class="lbl">方針</span><div>(i) 直線 $AC$ 上の点を $t$ で表し，垂直条件 $\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ から $t$ を求めます。(ii) 三角形の面積は，同じ底辺上の点の比を使って $\triangle OAB$ から段階的に縮小します。</div></div>
+    <p class="lead"><strong>解答。</strong>　$\overrightarrow{OA}=\vec{a}$，$\overrightarrow{OB}=\vec{b}$ とおくと，$|\vec{a}|^{2}=25$，$|\vec{b}|^{2}=16$，$\vec{a}\cdot\vec{b}=-4$，$\overrightarrow{OC}=\dfrac14\vec{b}$。</p>
+    <p class="lead">(i)　$\overrightarrow{OH}=(1-t)\vec{a}+\dfrac{t}{4}\vec{b}$ とおくと</p>
+    <p class="lead">$$\overrightarrow{BH}=(1-t)\vec{a}+\left(\dfrac{t}{4}-1\right)\vec{b},\qquad \overrightarrow{AC}=\dfrac14\vec{b}-\vec{a}.$$</p>
+    <p class="lead">$\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ を展開すると</p>
+    <p class="lead">$$(1-t)\left(\dfrac14\vec{a}\cdot\vec{b}-|\vec{a}|^{2}\right)+\left(\dfrac{t}{4}-1\right)\left(\dfrac14|\vec{b}|^{2}-\vec{a}\cdot\vec{b}\right)=0.$$</p>
+    <p class="lead">数値を代入すると $(1-t)(-26)+\left(\dfrac{t}{4}-1\right)(8)=28t-34=0$ より $t=\dfrac{17}{14}$。よって</p>
+    <p class="lead">$$\overrightarrow{OH}=\left(1-\dfrac{17}{14}\right)\vec{a}+\dfrac{17}{56}\vec{b}=-\dfrac{3}{14}\overrightarrow{OA}+\dfrac{17}{56}\overrightarrow{OB}\qquad\cdots\text{（答）}$$</p>
+    <p class="lead">(ii)　$\cos\angle AOB=\dfrac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}=\dfrac{-4}{5\cdot4}=-\dfrac15$ より $\sin\angle AOB=\sqrt{1-\dfrac{1}{25}}=\dfrac{2\sqrt6}{5}$。よって</p>
+    <p class="lead">$$\triangle OAB=\dfrac12\cdot5\cdot4\cdot\dfrac{2\sqrt6}{5}=4\sqrt6.$$</p>
+    <p class="lead">$H$ は $\overrightarrow{AH}=t\,\overrightarrow{AC}$ をみたすから $\triangle OAH=t\cdot\triangle OAC$。また $\overrightarrow{OC}=\dfrac14\overrightarrow{OB}$ より $\triangle OAC=\dfrac14\triangle OAB$。よって</p>
+    <p class="lead">$$\triangle OAH=\dfrac{17}{14}\cdot\dfrac14\cdot4\sqrt6=\dfrac{17\sqrt6}{14}\qquad\cdots\text{（答）}$$</p>
+    <p class="note">たしかめ：$t=\dfrac{17}{14}>1$ なので，$H$ は線分 $AC$ の延長上（$C$ を越えた側）にある。図2で $t$ の目盛りが $1$ を超える位置になる。</p>
+  </section>
+
+  <section class="card"><div class="card-h"><span class="num">6</span><h2>手順のまとめ</h2></div><div class="flow"><span class="step">$C$ を $OB$ の $\frac14$ 倍で表す</span><span class="arw">→</span><span class="step">直線 $AC$ 上の点を $t$ で表す</span><span class="arw">→</span><span class="step hl">垂直条件（内積 $=0$）を解く</span><span class="arw">→</span><span class="step">$OH$ が決まる</span><span class="arw">→</span><span class="step">面積比で $\triangle OAH$ を求める</span></div></section>
+  <footer>出典：河合塾 2026年度 第2回 全国記述模試 数学 III型・大問3(2)。このHTMLは15歳前後を対象としたやさしい解説版。</footer>
+</div></body></html>

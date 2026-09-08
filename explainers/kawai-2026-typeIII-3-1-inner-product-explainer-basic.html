@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>図でわかる 辺の長さから内積を求める｜やさしい版</title>
+<style>
+  :root{color-scheme:light;--ink:#1f2328;--muted:#5c646d;--line:#dce0e4;--line-bold:#9aa2ab;--paper:#fff;--bg:#eef0f2;--review:#f5f6f7;--accent:#2f6db3;--accent-weak:#e7eff8;--accent-ink:#255a95;--navy:#000080;--cream:#fff8f0;--choco:#c9601f}
+  *{box-sizing:border-box}html{background:var(--bg)}
+  body{margin:0;color:var(--ink);background:var(--bg);font-family:"Yu Gothic","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;font-size:16px;line-height:1.9;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 18px 72px}.doc-head{padding:6px 4px 14px}.eyebrow{margin:0;font-size:12px;letter-spacing:.14em;color:var(--accent-ink);font-weight:700}
+  h1{margin:.15em 0 .12em;font-size:27px;line-height:1.35}.doc-head .sub{margin:0;color:var(--muted);font-size:13px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:16px 0;box-shadow:0 1px 3px rgb(31 35 40 / 5%)}
+  .card-h{display:flex;align-items:center;gap:12px;margin:0 0 6px}.card-h h2{margin:0;font-size:20px;line-height:1.4}.num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:15px}
+  .card p{margin:.55em 0}.lead{font-size:17px}figure{margin:18px 0 8px;padding:16px;background:var(--review);border:1px solid var(--line);border-radius:10px}figcaption{margin-top:10px;font-size:12.5px;color:var(--muted);text-align:center}
+  .dg{display:block;width:100%;height:auto}.dg text{font-family:inherit;fill:var(--ink)}.dg .box{fill:var(--paper);stroke:var(--line-bold);stroke-width:1.5}.dg .box-hi{fill:var(--accent-weak);stroke:var(--accent);stroke-width:2.5}.dg .ln{stroke:var(--ink);stroke-width:1.8;fill:none}.dg .ln-hi{stroke:var(--accent);stroke-width:2.5;fill:none}.dg .muted{fill:var(--muted)}.dg .accent{fill:var(--accent-ink)}.dg .b700{font-weight:700}
+  .strategy{margin:16px 0;padding:14px 18px;background:#eef4fb;border-left:5px solid var(--accent-ink);border-radius:0 8px 8px 0;font-size:15.5px}.strategy .lbl{display:inline-block;margin-bottom:6px;padding:3px 10px;border-radius:5px;background:var(--accent-ink);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.06em}
+  .formula-box{margin:16px 0;border:1.5px solid var(--choco);border-radius:8px;overflow:hidden}.formula-box h4{margin:0;padding:7px 14px;background:var(--navy);color:#fff;font-size:14px}.formula-box .fb{padding:12px 16px;background:var(--cream);font-size:15px}.ans{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:7px 16px;background:var(--accent-weak);border:1px solid var(--accent);border-radius:999px;font-weight:700;color:var(--accent-ink);font-size:16px}
+  .answer-toggle{margin-top:12px}.answer-toggle summary{cursor:pointer;display:inline-block;list-style:none;padding:8px 14px;font-size:13px;font-weight:700;color:var(--muted);background:var(--review);border:1px solid var(--line);border-radius:8px}.answer-toggle summary::-webkit-details-marker{display:none}.answer-toggle summary::before{content:"▶ ";font-size:10px}.answer-toggle[open] summary::before{content:"▼ "}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}.flow .step{padding:9px 14px;background:var(--review);border:1px solid var(--line);border-radius:8px;font-size:14px}.flow .step.hl{background:var(--accent-weak);border-color:var(--accent);font-weight:700}.flow .arw{color:var(--muted);font-weight:700}.note{font-size:13px;color:var(--muted)}footer{margin-top:22px;padding:0 6px;font-size:11.5px;color:var(--muted)}
+  @media(max-width:640px){.wrap{padding:16px 10px 48px}h1{font-size:21px}.card{padding:16px 14px}.card-h h2{font-size:17px}body{font-size:15px}}
+  @media print{html,body{background:#fff}.wrap{max-width:none;padding:0}.card{border:none;box-shadow:none;padding:6mm 0;margin:0;break-inside:avoid}figure{break-inside:avoid;background:#fff;border:1px solid #ccc}@page{size:A4;margin:14mm}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[["$","$"]],displayMath:[["$$","$$"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body><div class="wrap">
+  <header class="doc-head">
+    <p class="eyebrow">ベクトル ・ はじめて学ぶ人向け</p>
+    <h1>図でわかる　辺の長さから内積を求める</h1>
+    <p class="sub">河合塾 2026年度 第2回 全国記述模試 数学 III型・大問3(1) ／ やさしい解説版</p>
+  </header>
+
+  <section class="card">
+    <div class="card-h"><span class="num">問</span><h2>この問題</h2></div>
+    <p class="lead">$OA=5$，$OB=4$，$AB=7$ である三角形 $OAB$ がある。内積 $\overrightarrow{OA}\cdot\overrightarrow{OB}$ の値を求めよ。</p>
+    <details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$\overrightarrow{OA}\cdot\overrightarrow{OB}=-4$</span></details>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">1</span><h2>辺 $AB$ をベクトルの引き算で表す</h2></div>
+    <p class="lead">問題文には「$3$ つの辺の長さ」しか書かれていません。内積を求めるには，辺の長さと内積を結ぶ式が必要です。まず，辺 $AB$ を，原点 $O$ から見た $2$ つの矢印（ベクトル）$\overrightarrow{OA}$，$\overrightarrow{OB}$ の引き算として書き直します。</p>
+    <figure>
+      <svg class="dg" viewBox="0 0 900 320" role="img" aria-label="三角形OABで、頂点Oから頂点Aへの矢印と頂点Bへの矢印を引くと、辺ABへの矢印になることを示す図">
+        <polygon points="120,260 420,260 260,60" fill="none" stroke-width="2" class="ln"></polygon>
+        <text x="95" y="285" font-size="24" class="b700">O</text>
+        <text x="440" y="285" font-size="24" class="b700">A</text>
+        <text x="260" y="45" text-anchor="middle" font-size="24" class="b700">B</text>
+        <path d="M130 262 L410 262" class="ln-hi" marker-end="url(#ah1)"></path>
+        <path d="M130 258 L255 65" class="ln-hi" marker-end="url(#ah1)"></path>
+        <path d="M420 255 L268 68" class="ln" marker-end="url(#ah1)"></path>
+        <defs><marker id="ah1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="accent"></path></marker></defs>
+        <text x="270" y="240" text-anchor="middle" font-size="20" class="accent b700">OA</text>
+        <text x="150" y="150" font-size="20" class="accent b700">OB</text>
+        <text x="380" y="150" font-size="20" class="muted b700">AB</text>
+
+        <rect x="560" y="60" width="300" height="200" rx="12" fill="var(--review)" stroke="var(--line)"></rect>
+        <text x="710" y="100" text-anchor="middle" font-size="20" class="b700">AB ＝ OB − OA</text>
+        <text x="710" y="150" text-anchor="middle" font-size="18" class="muted">O からいったん B へ行き，</text>
+        <text x="710" y="178" text-anchor="middle" font-size="18" class="muted">そこから A まで戻る矢印が</text>
+        <text x="710" y="206" text-anchor="middle" font-size="18" class="muted">辺 A→B にあたる</text>
+      </svg>
+      <figcaption>図1　辺 $AB$ の矢印は $\overrightarrow{OB}-\overrightarrow{OA}$ に等しい。</figcaption>
+    </figure>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">2</span><h2>「長さの2乗」を「内積」で書き表す</h2></div>
+    <p class="lead">ベクトル $\vec{v}$ の長さ $|\vec{v}|$ は，2乗すると $\vec{v}\cdot\vec{v}$ に一致します。$\overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA}$ を2乗すると，ふつうの $(x-y)^{2}=x^{2}-2xy+y^{2}$ と同じ形の展開ができ，途中に内積 $\overrightarrow{OA}\cdot\overrightarrow{OB}$ が現れます。</p>
+    <div class="formula-box"><h4>ベクトルの引き算の2乗</h4><div class="fb">$|\overrightarrow{OB}-\overrightarrow{OA}|^{2}=|\overrightarrow{OB}|^{2}-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+|\overrightarrow{OA}|^{2}$</div></div>
+    <p class="lead">左辺の $|\overrightarrow{OB}-\overrightarrow{OA}|$ は辺 $AB$ の長さそのものなので，$|\overrightarrow{AB}|^{2}=49$ です。右辺には $|\overrightarrow{OA}|=5$，$|\overrightarrow{OB}|=4$ という分かっている値と，求めたい内積が並びます。つまりこの等式は，内積 $1$ つだけを未知数とする方程式になっています。</p>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span class="num">3</span><h2>方針と解答</h2></div>
+    <div class="strategy"><span class="lbl">方針</span><div>与えられた $3$ 辺の長さを直接使う式がないので，辺 $AB$ をベクトルの引き算 $\overrightarrow{OB}-\overrightarrow{OA}$ に直し，その大きさの2乗を展開して内積の入った方程式を作ります。</div></div>
+    <p class="lead"><strong>解答。</strong>　$\overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA}$ より</p>
+    <p class="lead">$$|\overrightarrow{AB}|^{2}=|\overrightarrow{OB}-\overrightarrow{OA}|^{2}=|\overrightarrow{OB}|^{2}-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+|\overrightarrow{OA}|^{2}.$$</p>
+    <p class="lead">$|\overrightarrow{OA}|=5$，$|\overrightarrow{OB}|=4$，$|\overrightarrow{AB}|=7$ を代入すると</p>
+    <p class="lead">$$49=16-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+25=41-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}.$$</p>
+    <p class="lead">よって $2\,\overrightarrow{OA}\cdot\overrightarrow{OB}=41-49=-8$ より</p>
+    <p class="lead">$$\overrightarrow{OA}\cdot\overrightarrow{OB}=-4\qquad\cdots\text{（答）}$$</p>
+    <p class="note">たしかめ：$\cos\angle AOB=\dfrac{-4}{5\cdot4}=-\dfrac15$ は $-1$ 以上 $1$ 以下の範囲に収まっており，三角形として矛盾しない。○</p>
+  </section>
+
+  <section class="card"><div class="card-h"><span class="num">4</span><h2>手順のまとめ</h2></div><div class="flow"><span class="step">辺 $AB$ を $OB-OA$ に直す</span><span class="arw">→</span><span class="step hl">2乗して展開する</span><span class="arw">→</span><span class="step">辺の長さを代入</span><span class="arw">→</span><span class="step">内積について解く</span></div></section>
+  <footer>出典：河合塾 2026年度 第2回 全国記述模試 数学 III型・大問3(1)。このHTMLは15歳前後を対象としたやさしい解説版。</footer>
+</div></body></html>

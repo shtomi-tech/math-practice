@@ -62,6 +62,8 @@ const expectedExplainers = {
   "2-(1)": "kawai-2026-typeIII-2-1-first-term-explainer-basic.html",
   "2-(2)": "kawai-2026-typeIII-2-2-recurrence-explainer-basic.html",
   "2-(3)": "kawai-2026-typeIII-2-3-common-terms-explainer-basic.html",
+  "3-(1)": "kawai-2026-typeIII-3-1-inner-product-explainer-basic.html",
+  "3-(2)": "kawai-2026-typeIII-3-2-perpendicular-foot-explainer-basic.html",
 };
 for (const [key, fileName] of Object.entries(expectedExplainers)) {
   assert.equal(kawaiTypeIII[key].explainerUrl, `./explainers/${fileName}`, `${key} の解説URLが不正です`);

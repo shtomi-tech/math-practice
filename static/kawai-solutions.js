@@ -507,6 +507,7 @@ $$(c_{1}-1)(c_{2}-1)\cdots(c_{n}-1)=8^{1}\cdot 8^{2}\cdots 8^{n}=8^{1+2+\cdots+n
     answer: String.raw`$8^{\frac{n(n+1)}{2}}$`
   },
   "3-(1)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-3-1-inner-product-explainer-basic.html",
     approach: String.raw`$\overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA}$ の大きさの2乗を展開し，内積について解く。`,
     formula: {
       title: "内積と大きさ",
@@ -517,6 +518,7 @@ $$49=16-2\,\overrightarrow{OA}\cdot\overrightarrow{OB}+25,\qquad \overrightarrow
     answer: String.raw`$\overrightarrow{OA}\cdot\overrightarrow{OB}=-4$`
   },
   "3-(2)": {
+    explainerUrl: "./explainers/kawai-2026-typeIII-3-2-perpendicular-foot-explainer-basic.html",
     approach: String.raw`$\overrightarrow{OC}=\dfrac{1}{4}\overrightarrow{OB}$。$H$ を直線 $AC$ 上の点として $\overrightarrow{OH}=(1-t)\overrightarrow{OA}+\dfrac{t}{4}\overrightarrow{OB}$ とおき，$\overrightarrow{BH}\cdot\overrightarrow{AC}=0$ から $t$ を決める。面積は $\triangle OAH=t\cdot\triangle OAC=\dfrac{t}{4}\triangle OAB$。`,
     formula: {
       title: "垂線の足と面積比",
