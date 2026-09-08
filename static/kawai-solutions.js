@@ -382,57 +382,86 @@ $\overrightarrow{AH}=t\,\overrightarrow{AC}$ だから $\triangle OAH=t\cdot\tri
 
 window.MATH_SOLUTIONS.kawai_2026_zenkijutsu2_typeIII = {
   "1-(1)": {
-    approach: String.raw`素因数分解してから，約数の個数と総和の公式を用いる。`,
+    approach: String.raw`約数を1個ずつ書き出す代わりに，まず素因数分解します。約数は，素因数の指数をそれぞれ何通りに選べるかで数えられます。総和も，同じ選び方を積の形にまとめれば計算できます。`,
     formula: {
-      title: "約数の個数と総和",
-      body: String.raw`$N=p^{a}q^{b}$ のとき，正の約数の個数は $(a+1)(b+1)$，総和は $(1+p+\cdots+p^{a})(1+q+\cdots+q^{b})$。`
+      title: "素因数分解から約数を数える",
+      body: String.raw`$N=p^{a}q^{b}$ の正の約数は $p^{i}q^{j}$（$0\le i\le a$，$0\le j\le b$）と書ける。したがって，個数は $(a+1)(b+1)$，総和は $(1+p+\cdots+p^{a})(1+q+\cdots+q^{b})$。`
     },
-    solution: String.raw`$496=2^{4}\times 31$ である。正の約数の個数は
-$$(4+1)(1+1)=10.$$
-総和は
-$$(1+2+4+8+16)(1+31)=31\times 32=992.$$`,
+    solution: String.raw`$496$ を素因数分解すると
+$$496=16\times31=2^{4}\times31^{1}.$$
+正の約数は $2$ の指数を $0,1,2,3,4$ の $5$ 通り，$31$ の指数を $0,1$ の $2$ 通りから選んで作る。よって個数は
+$$(4+1)(1+1)=5\times2=10.$$
+また，すべての約数の和は，各指数の選び方をまとめて
+$$(1+2+2^{2}+2^{3}+2^{4})(1+31)=31\times32=992.$$`,
     answer: String.raw`約数は $10$ 個，総和は $992$`
   },
   "1-(2)": {
-    approach: String.raw`(i) 和が $6$ になる目の順序つきの組を，$4+1+1$ 型・$3+2+1$ 型・$2+2+2$ 型に分けて数える。(ii) その中で3つとも異なるのは $3+2+1$ 型だけ。`,
+    approach: String.raw`3回の出目は順序を区別します。和が $6$ になる組を，小さい順に並べた形で整理してから，並べ替えの数を足しましょう。条件付き確率では，「和が $6$ になった場合」だけを新しい全体として数え直します。`,
     formula: {
       title: "条件付き確率",
-      body: String.raw`$P(A\mid B)=\dfrac{P(A\cap B)}{P(B)}=\dfrac{n(A\cap B)}{n(B)}$（$B$ が起きた場合の数で割る）`
+      body: String.raw`同様に確からしい場合には，$P(A\mid B)=\dfrac{n(A\cap B)}{n(B)}$。条件 $B$ を満たす場合の数を分母に置く。`
     },
-    solution: String.raw`3回の目を順序つきで考えると全事象は $6^{3}=216$ 通り。
+    solution: String.raw`3回の出目を順序つきの組 $(1回目,2回目,3回目)$ で表すと，全体は $6^{3}=216$ 通りであり，どの組も同様に確からしい。
 
-(i) 和が $6$ になるのは，$\{4,1,1\}$（$3$ 通り），$\{3,2,1\}$（$6$ 通り），$\{2,2,2\}$（$1$ 通り）の合計 $10$ 通り。よって
+(i) 和が $6$ になる出目を小さい順に並べると
+$$1+1+4，\qquad 1+2+3，\qquad 2+2+2$$
+の3種類である。$1,1,4$ の並べ替えは $3$ 通り，$1,2,3$ の並べ替えは $3!=6$ 通り，$2,2,2$ は $1$ 通りなので，合計は $3+6+1=10$ 通り。したがって
 $$P(\text{和}=6)=\dfrac{10}{216}=\dfrac{5}{108}.$$
 
-(ii) 和が $6$ の $10$ 通りのうち，3つとも異なるのは $\{3,2,1\}$ の $6$ 通り。よって求める条件付き確率は
+(ii) 分母は，(i) で数えた「和が $6$」の $10$ 通りである。そのうち3つの目がすべて異なるのは，$1,2,3$ を並べ替えた $6$ 通りだけである。よって求める条件付き確率は
 $$\dfrac{6}{10}=\dfrac{3}{5}.$$`,
     answer: String.raw`(i) $\dfrac{5}{108}$　(ii) $\dfrac{3}{5}$`
   },
   "1-(3)": {
-    approach: String.raw`桁数は $\log_{10}$ の整数部分 $+1$。最高位の数は $\log_{10}(2^{n})$ の小数部分が $[\log_{10}4,\ \log_{10}5)$ に入ることで判定する。`,
+    approach: String.raw`「何桁か」も「最高位はいくつか」も，$\log_{10}$ をとると1本の数にまとまります。$\log_{10}N$ を整数の部分と小数の部分に分けると，整数の部分が桁数を，小数の部分が最高位を決めるからです。(i) は整数の部分だけを見ます。(ii) は「$22$ 桁」が整数の部分の情報，「最高位が $4$」が小数の部分の情報なので，$\log_{10}(2^{n})=0.301n$ を1本用意すれば，どちらも $n$ の1次不等式に直せます。`,
     formula: {
-      title: "桁数と最高位の数",
-      body: String.raw`$10^{k-1}\le N<10^{k}$ なら $N$ は $k$ 桁。$\log_{10}N=k-1+\alpha$ で $\log_{10}d\le\alpha<\log_{10}(d+1)$ なら最高位は $d$。`
-    },
-    solution: String.raw`(i) $\log_{10}(2^{100})=100\times 0.301=30.1$ だから $10^{30}<2^{100}<10^{31}$。よって $31$ 桁。
+      title: "桁数と最高位の数（使う道具は3つ）",
+      body: String.raw`(1) 桁数：$N$ が $k$ 桁 $\iff 10^{k-1}\le N<10^{k}$（$k$ 桁の最小値が $10^{k-1}$ だから）。すなわち $\log_{10}N$ の整数の部分が $k-1$。
 
-(ii) $2^{n}$ が $22$ 桁だから $21\le 0.301n<22$。最高位が $4$ だから，$0.301n$ の小数部分は
-$$\log_{10}4\le(\text{小数部分})<\log_{10}5,\quad\text{すなわち}\quad 0.602\le(\text{小数部分})<0.699$$
-（$\log_{10}5=1-0.301=0.699$）。あわせて $21.602\le 0.301n<21.699$ より
-$$\dfrac{21.602}{0.301}\le n<\dfrac{21.699}{0.301},\qquad 71.7\ldots\le n<72.0\ldots.$$
-正の整数は $n=72$（このとき $0.301\times 72=21.672$ で条件を満たす）。`,
+(2) 最高位：$N=a\times10^{k-1}$（$1\le a<10$）と書くと先頭の数字は $a$ の整数部分で，$\log_{10}N=(k-1)+\log_{10}a$。$0\le\log_{10}a<1$ だから $\log_{10}a$ が小数の部分。よって小数の部分を $\alpha$ とすると，最高位が $d$ $\iff \log_{10}d\le\alpha<\log_{10}(d+1)$。
+
+(3) 指数を下ろす：$\log_{10}(a^{m})=m\log_{10}a$。`
+    },
+    solution: String.raw`(i) 桁数だけが問われているので，必要なのは整数の部分だけである。
+$$\log_{10}(2^{100})=100\log_{10}2=100\times 0.301=30.1.$$
+整数の部分が $30$ だから $10^{30}\le 2^{100}<10^{31}$，よって $31$ 桁。
+
+(ii) $\log_{10}(2^{n})=n\log_{10}2=0.301n$ とおく。
+
+1. 「$22$ 桁」を式にする。$22$ 桁 $\iff 10^{21}\le 2^{n}<10^{22}$ であり，各辺の常用対数をとると
+$$21\le 0.301n<22.$$
+$0.301n$ は $21$ 以上 $22$ 未満だから，その整数の部分は $21$。小数の部分を $f$（$0\le f<1$）とおくと $0.301n=21+f$。
+
+2. 「最高位の数が $4$」を式にする。最高位が $4$ とは，$2^{n}=a\times10^{21}$ と書いたときの $a$ が $4\le a<5$ であること（$4$ 台なら先頭は $4$，$5$ になった瞬間に繰り上がる）。$a=10^{f}$ なので $4\le 10^{f}<5$，各辺の常用対数をとると（$\log_{10}$ は増加関数なので向きは変わらず）
+$$\log_{10}4\le f<\log_{10}5.$$
+$\log_{10}2=0.301$ より $\log_{10}4=2\log_{10}2=0.602$，$\log_{10}5=\log_{10}\dfrac{10}{2}=1-0.301=0.699$ だから
+$$0.602\le f<0.699.$$
+
+3. 2つを合わせる。$f=0.301n-21$ を代入して
+$$0.602\le 0.301n-21<0.699,\qquad 21.602\le 0.301n<21.699.$$
+各辺を正の数 $0.301$ で割ると（正の数で割るので不等号の向きは変わらない）
+$$\dfrac{21.602}{0.301}=71.76\ldots,\qquad \dfrac{21.699}{0.301}=72.08\ldots$$
+より $71.76\ldots\le n<72.08\ldots$。この範囲にある正の整数は $n=72$ だけである。
+
+検算：$0.301\times 72=21.672$。整数の部分が $21$ なので $21+1=22$ 桁，小数の部分 $0.672$ は $0.602\le 0.672<0.699$ を満たすので最高位は $4$。（実際 $2^{72}=4722366482869645213696$ で $22$ 桁・先頭 $4$。）`,
+    figure: String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 168" role="img" aria-label="log10 N を整数の部分と小数の部分に分けると、整数の部分から桁数が、小数の部分から最高位の数が決まる"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="105" y="6" width="110" height="30" rx="6"/><rect x="8" y="66" width="140" height="30" rx="6"/><rect x="172" y="66" width="140" height="30" rx="6"/><rect x="8" y="128" width="140" height="30" rx="6"/><rect x="172" y="128" width="140" height="30" rx="6"/><path d="M160 36 L160 50 M78 50 L242 50 M78 50 L78 60 M242 50 L242 60 M78 96 L78 122 M242 96 L242 122"/></g><g fill="currentColor"><path d="M74 60 L82 60 L78 66 Z"/><path d="M238 60 L246 60 L242 66 Z"/><path d="M74 122 L82 122 L78 128 Z"/><path d="M238 122 L246 122 L242 128 Z"/></g><g fill="currentColor"><text x="160" y="26" text-anchor="middle" font-size="14" font-weight="700">log&#8321;&#8320;N</text><text x="78" y="86" text-anchor="middle" font-size="12">整数の部分</text><text x="242" y="86" text-anchor="middle" font-size="12">小数の部分</text><text x="78" y="148" text-anchor="middle" font-size="12" font-weight="700">桁数</text><text x="242" y="148" text-anchor="middle" font-size="12" font-weight="700">最高位の数</text></g></svg><svg class="solution-figure-svg" viewBox="0 0 320 124" role="img" aria-label="小数の部分は0から1まで。先頭の数字1から9で9つの区間に分かれ、4の区間は0.602以上0.699未満"><g fill="currentColor" stroke="none"><rect x="10" y="18" width="90.3" height="34" fill-opacity="0.06"/><rect x="100.3" y="18" width="52.8" height="34" fill-opacity="0.12"/><rect x="153.1" y="18" width="37.5" height="34" fill-opacity="0.06"/><rect x="219.7" y="18" width="23.7" height="34" fill-opacity="0.12"/><rect x="243.4" y="18" width="20.1" height="34" fill-opacity="0.06"/><rect x="263.5" y="18" width="17.4" height="34" fill-opacity="0.12"/><rect x="280.9" y="18" width="15.3" height="34" fill-opacity="0.06"/><rect x="296.2" y="18" width="13.8" height="34" fill-opacity="0.12"/></g><rect x="190.6" y="18" width="29.1" height="34" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.5"/><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 52 L310 52 M190.6 52 L190.6 62 M219.7 52 L219.7 78"/></g><g fill="currentColor"><text x="55.2" y="42" text-anchor="middle" font-size="12">1</text><text x="126.7" y="42" text-anchor="middle" font-size="12">2</text><text x="171.9" y="42" text-anchor="middle" font-size="11">3</text><text x="205.2" y="42" text-anchor="middle" font-size="13" font-weight="700">4</text><text x="231.6" y="42" text-anchor="middle" font-size="10">5</text><text x="253.5" y="42" text-anchor="middle" font-size="9">6</text><text x="272.2" y="42" text-anchor="middle" font-size="9">7</text><text x="288.6" y="42" text-anchor="middle" font-size="9">8</text><text x="303.1" y="42" text-anchor="middle" font-size="9">9</text><text x="10" y="64" font-size="9">0</text><text x="310" y="64" text-anchor="end" font-size="9">1</text><text x="190.6" y="72" text-anchor="middle" font-size="10">0.602</text><text x="219.7" y="88" text-anchor="middle" font-size="10">0.699</text><text x="160" y="12" text-anchor="middle" font-size="9">先頭の数字</text><text x="160" y="108" text-anchor="middle" font-size="9">小数の部分</text></g></svg>`,
     answer: String.raw`(i) $31$ 桁　(ii) $n=72$`
   },
   "1-(4)": {
-    approach: String.raw`$u=\tan\theta$ の2次不等式として因数分解し，$-\dfrac{1}{\sqrt{3}}<\tan\theta<\sqrt{3}$ を導く。あとは $0\le\theta<2\pi$ で $\tan\theta$ の値の変化を区間ごとに調べる。`,
+    approach: String.raw`式全体が $\tan\theta$ の2次式なので，$u=\tan\theta$ とおいて普通の2次不等式として解きます。その後，単位円上で $\tan\theta$ が定義される区間ごとに，得られた値の範囲を角度へ戻します。`,
     formula: {
-      title: "tan の2次不等式",
-      body: String.raw`$\sqrt{3}u^{2}-2u-\sqrt{3}=\sqrt{3}\left(u-\sqrt{3}\right)\left(u+\dfrac{1}{\sqrt{3}}\right)$`
+      title: "2次不等式と tan の周期",
+      body: String.raw`上に開く2次式 $(u-\alpha)(u-\beta)$ は，2つの解の間で負になる。また，$\tan\theta$ は周期 $\pi$ で，各区間 $\left(-\dfrac{\pi}{2}+k\pi,\dfrac{\pi}{2}+k\pi\right)$ で増加する。`
     },
-    solution: String.raw`$u=\tan\theta$ とおくと $\sqrt{3}u^{2}-2u-\sqrt{3}=\sqrt{3}\left(u-\sqrt{3}\right)\left(u+\dfrac{1}{\sqrt{3}}\right)$。$\sqrt{3}>0$ なので不等式は
+    solution: String.raw`$u=\tan\theta$ とおく。左辺を因数分解すると
+$$\sqrt{3}u^{2}-2u-\sqrt{3}=\sqrt{3}\left(u-\sqrt{3}\right)\left(u+\dfrac{1}{\sqrt{3}}\right).$$
+$\sqrt{3}>0$ であり，上に開く2次式は2つの解の間で負になるから
 $$-\dfrac{1}{\sqrt{3}}<\tan\theta<\sqrt{3}.$$
-$\tan\theta=-\dfrac{1}{\sqrt{3}}$ となるのは $\theta=\dfrac{5}{6}\pi,\ \dfrac{11}{6}\pi$，$\tan\theta=\sqrt{3}$ となるのは $\theta=\dfrac{\pi}{3},\ \dfrac{4}{3}\pi$。$\tan\theta$ は $\left(-\dfrac{\pi}{2},\dfrac{\pi}{2}\right)$，$\left(\dfrac{\pi}{2},\dfrac{3}{2}\pi\right)$，$\left(\dfrac{3}{2}\pi,\dfrac{5}{2}\pi\right)$ の各区間で増加だから，$0\le\theta<2\pi$ での解は
+$\tan\theta=\sqrt{3}$ となる角は $\theta=\dfrac{\pi}{3},\dfrac{4\pi}{3}$，$\tan\theta=-\dfrac{1}{\sqrt{3}}$ となる角は $\theta=\dfrac{5\pi}{6},\dfrac{11\pi}{6}$ である。
+
+$\tan\theta$ は $\theta=\dfrac{\pi}{2},\dfrac{3\pi}{2}$ では定義されないので，$0\le\theta<2\pi$ をそこで区切る。各区間で $\tan\theta$ は増加するため，条件を満たす範囲は
 $$0\le\theta<\dfrac{\pi}{3},\qquad \dfrac{5}{6}\pi<\theta<\dfrac{4}{3}\pi,\qquad \dfrac{11}{6}\pi<\theta<2\pi.$$`,
+    figure: String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 112" role="img" aria-label="0から2πまでの数直線上で，不等式を満たす3つの角度範囲を示す"><g stroke="currentColor" fill="none" stroke-width="1.4"><path d="M14 55 H306"/><path d="M14 50 V60 M62 50 V60 M87 46 V64 M135 50 V60 M208 50 V60 M233 46 V64 M281 50 V60 M306 50 V60"/><path d="M14 32 H62 M135 32 H208 M281 32 H306" stroke-width="5"/><circle cx="62" cy="32" r="4" fill="white"/><circle cx="135" cy="32" r="4" fill="white"/><circle cx="208" cy="32" r="4" fill="white"/><circle cx="281" cy="32" r="4" fill="white"/></g><g fill="currentColor" font-size="10"><text x="14" y="76" text-anchor="middle">0</text><text x="62" y="76" text-anchor="middle">π/3</text><text x="87" y="94" text-anchor="middle">π/2</text><text x="135" y="76" text-anchor="middle">5π/6</text><text x="208" y="76" text-anchor="middle">4π/3</text><text x="233" y="94" text-anchor="middle">3π/2</text><text x="281" y="76" text-anchor="middle">11π/6</text><text x="306" y="76" text-anchor="middle">2π</text><text x="160" y="18" text-anchor="middle" font-size="11">不等式を満たす範囲</text></g></svg>`,
     answer: String.raw`$0\le\theta<\dfrac{\pi}{3}$，$\dfrac{5}{6}\pi<\theta<\dfrac{4}{3}\pi$，$\dfrac{11}{6}\pi<\theta<2\pi$`
   },
   "2-(1)": {
