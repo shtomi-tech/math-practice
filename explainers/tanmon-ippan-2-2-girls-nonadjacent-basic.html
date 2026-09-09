@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図でわかる 女子3人が互いに隣り合わない並び方｜単問演習</title>
+<link rel="stylesheet" href="./sougou-basic.css">
+<script>window.MathJax={tex:{inlineMath:[["$","$"], ["\\(","\\)"]],displayMath:[["$$","$$"], ["\\[","\\]"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head><body><div class="wrap">
+<header class="doc-head"><p class="eyebrow">単問演習　場合の数・確率 ・ はじめて学ぶ人向け</p><h1>図でわかる　女子3人が互いに隣り合わない並び方</h1><p class="sub">順列・すき間 ／ やさしい解説版</p></header>
+<section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div><p class="lead">男子5人と女子3人の計8人を一列に並べる。女子3人が互いに隣り合わない並び方を求める。</p><p class="lead"><strong>求めるもの：</strong>女子同士が隣接しない並び方</p><details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$14400$通り</span></details></section>
+<section class="card"><div class="card-h"><span class="num">1</span><h2>まず、条件を図にする</h2></div><p class="lead">男子を先に並べると、両端と男子の間に6個のすき間ができます。女子同士を隣り合わせないため、3人を別々のすき間へ1人ずつ入れます。</p><figure><svg class="dg" viewBox="0 0 900 330" role="img" aria-label="男子5人を並べると両端と男子の間に6個のすき間ができ、そのうち3個へ女子を入れる図">
+<text x="450" y="38" text-anchor="middle" font-size="21" class="muted">男子を先に並べる</text>
+<g fill="currentColor" font-size="28" class="b700"><text x="80" y="105">M</text><text x="240" y="105">M</text><text x="400" y="105">M</text><text x="560" y="105">M</text><text x="720" y="105">M</text></g>
+<g stroke="#2f6db3" stroke-width="4"><path d="M55 140V196"/><path d="M215 140V196"/><path d="M375 140V196"/><path d="M535 140V196"/><path d="M695 140V196"/><path d="M855 140V196"/></g>
+<text x="450" y="178" text-anchor="middle" font-size="21" fill="#255a95" class="b700">6個のすき間から3個を選ぶ</text><text x="450" y="240" text-anchor="middle" font-size="23" class="accent b700">5! × C(6,3) × 3! ＝ 14400通り</text></svg><figcaption>図　すき間を選べば、女子同士の隣接が自動的に防げる。</figcaption></figure></section>
+<section class="card"><div class="card-h"><span class="num">2</span><h2>使う公式と考え方</h2></div><div class="formula-box"><h4>すき間法</h4><div class="fb">先に男子を並べ、できたすき間から必要な個数を選び、選んだすき間へ女子を並べる。</div></div><p class="note">公式は、問題の条件を数えるための道具です。式を置く前に、何を1回として数えているかを確認します。</p></section>
+<section class="card"><div class="card-h"><span class="num">3</span><h2>解答</h2></div><p class="lead">男子5人の並べ方は $5!$ 通り。すると、女子を入れられるすき間は6個あり、そのうち3個を選ぶ方法は $\binom{6}{3}$ 通り。選んだ3個のすき間へ女子3人を並べる方法は $3!$ 通り。</p>
+<p class="lead">$$5!\cdot\binom{6}{3}\cdot3!=120\cdot20\cdot6=14400\quad\cdots\text{（答）}$$</p><p><span class="ans">$14400$通り</span></p></section>
+<section class="card"><div class="card-h"><span class="num">✓</span><h2>検算とまとめ</h2></div><div class="check"><strong>条件チェック：</strong>すき間を3個選ぶので、女子が同じすき間に入ることはない。6個のすき間には両端も含まれる。</div><div class="flow"><span class="step">条件を整理</span><span class="arw">→</span><span class="step">公式を選ぶ</span><span class="arw">→</span><span class="step hl">計算</span><span class="arw">→</span><span class="step hl">条件を再確認</span></div><p class="note">男子を並べる → すき間を選ぶ → 女子を並べる。</p></section>
+<footer>出典：単問演習「場合の数・確率」自作類題。問題データの条件・答え欄に合わせた15歳前後向けのやさしい解説版。</footer>
+</div></body></html>

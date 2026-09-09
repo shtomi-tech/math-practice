@@ -85,6 +85,41 @@ for (const [key, fileName] of Object.entries(expectedSougouExplainers)) {
   assert.equal(sougou[key].explainerUrl, `./explainers/${fileName}`, `総合型選抜 ${key} の解説URLが不正です`);
   assert.equal(fs.existsSync(path.join(root, "explainers", fileName)), true, `総合型選抜 ${key} の解説HTMLがありません`);
 }
+const tanmonSolutionsSource = fs.readFileSync(path.join(root, "static/tanmon-solutions.js"), "utf8");
+const tanmonContext = { window: {} };
+vm.runInNewContext(tanmonSolutionsSource, tanmonContext);
+const tanmon = tanmonContext.window.MATH_SOLUTIONS.tanmon_ippan;
+const expectedTanmonExplainers = {
+  "1-(1)": "tanmon-ippan-1-1-three-digit-basic.html",
+  "1-(2)": "tanmon-ippan-1-2-five-multiple-basic.html",
+  "2-(1)": "tanmon-ippan-2-1-girls-ends-basic.html",
+  "2-(2)": "tanmon-ippan-2-2-girls-nonadjacent-basic.html",
+  "3-(1)": "tanmon-ippan-3-1-circle-blocks-basic.html",
+  "3-(2)": "tanmon-ippan-3-2-circle-alternate-basic.html",
+  "3-(3)": "tanmon-ippan-3-3-circle-adjacent-basic.html",
+  "3-(4)": "tanmon-ippan-3-4-circle-nonadjacent-basic.html",
+  "4-(1)": "tanmon-ippan-4-1-combination-basic.html",
+  "4-(2)": "tanmon-ippan-4-2-at-least-girl-basic.html",
+  "5-(1)": "tanmon-ippan-5-1-radar-basic.html",
+  "5-(2)": "tanmon-ippan-5-2-pqr-all-basic.html",
+  "5-(3)": "tanmon-ippan-5-3-pq-four-basic.html",
+  "5-(4)": "tanmon-ippan-5-4-pqr-five-basic.html",
+  "6-(1)": "tanmon-ippan-6-1-grid-shortest-basic.html",
+  "7-(1)": "tanmon-ippan-7-1-grid-via-c-basic.html",
+  "8-(1)": "tanmon-ippan-8-1-pqr-all-basic.html",
+  "8-(2)": "tanmon-ippan-8-2-via-p-basic.html",
+  "8-(3)": "tanmon-ippan-8-3-via-r-basic.html",
+  "8-(4)": "tanmon-ippan-8-4-via-p-or-q-basic.html",
+  "8-(5)": "tanmon-ippan-8-5-via-pqr-basic.html",
+  "9-(1)": "tanmon-ippan-9-1-staff-users-basic.html",
+  "9-(2)": "tanmon-ippan-9-2-adults-students-basic.html",
+  "10-(1)": "tanmon-ippan-10-1-two-rooms-basic.html",
+  "10-(2)": "tanmon-ippan-10-2-pencils-basic.html",
+};
+for (const [key, fileName] of Object.entries(expectedTanmonExplainers)) {
+  assert.equal(tanmon[key].explainerUrl, `./explainers/${fileName}`, `単問演習 ${key} の解説URLが不正です`);
+  assert.equal(fs.existsSync(path.join(root, "explainers", fileName)), true, `単問演習 ${key} の解説HTMLがありません`);
+}
 // バージョン文字列そのものは check-app-modules.js が index.html と全importの一致を検査する。
 assert.match(index, /<script type="module" src="\.\/static\/app\/main\.js\?v=/);
 assert.equal(modalBody.includes("learningPointsHtml"), false);

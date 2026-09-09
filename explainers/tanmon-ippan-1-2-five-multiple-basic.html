@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図でわかる 5の倍数になる3桁の整数｜単問演習</title>
+<link rel="stylesheet" href="./sougou-basic.css">
+<script>window.MathJax={tex:{inlineMath:[["$","$"], ["\\(","\\)"]],displayMath:[["$$","$$"], ["\\[","\\]"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head><body><div class="wrap">
+<header class="doc-head"><p class="eyebrow">単問演習　場合の数・確率 ・ はじめて学ぶ人向け</p><h1>図でわかる　5の倍数になる3桁の整数</h1><p class="sub">倍数条件・場合分け ／ やさしい解説版</p></header>
+<section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div><p class="lead">同じ7個の数字から作る3桁の整数のうち、5の倍数の個数を求める。</p><p class="lead"><strong>求めるもの：</strong>5の倍数となる整数の個数</p><details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$55$個</span></details></section>
+<section class="card"><div class="card-h"><span class="num">1</span><h2>まず、条件を図にする</h2></div><p class="lead">5の倍数は一の位が $0$ または $5$ です。末尾を先に固定し、2つの場合が重ならないように分けてから、百の位と十の位を数えます。</p><figure><svg class="dg" viewBox="0 0 900 340" role="img" aria-label="5の倍数を一の位が0の場合と5の場合に分けて数える図">
+<rect x="40" y="35" width="820" height="68" rx="12" class="box-hi"/><text x="450" y="78" text-anchor="middle" font-size="24" class="b700">5の倍数 → 一の位は 0 または 5</text>
+<rect x="70" y="145" width="330" height="86" rx="12" class="box"/><text x="235" y="181" text-anchor="middle" font-size="20" class="b700">一の位 0</text><text x="235" y="214" text-anchor="middle" font-size="22" class="accent b700">6×5＝30</text>
+<rect x="500" y="145" width="330" height="86" rx="12" class="box"/><text x="665" y="181" text-anchor="middle" font-size="20" class="b700">一の位 5</text><text x="665" y="214" text-anchor="middle" font-size="22" class="accent b700">5×5＝25</text>
+<path class="ln" d="M450 103V130 M450 130H235 M450 130H665"/><text x="450" y="300" text-anchor="middle" font-size="25" class="accent b700">30＋25＝55通り</text></svg><figcaption>図　末尾0と末尾5の2ケースは重ならないので、最後に足す。</figcaption></figure></section>
+<section class="card"><div class="card-h"><span class="num">2</span><h2>使う公式と考え方</h2></div><div class="formula-box"><h4>5の倍数の条件</h4><div class="fb">10進法の整数が5の倍数であるための条件は、一の位が0または5であること。</div></div><p class="note">公式は、問題の条件を数えるための道具です。式を置く前に、何を1回として数えているかを確認します。</p></section>
+<section class="card"><div class="card-h"><span class="num">3</span><h2>解答</h2></div><p class="lead">一の位が $0$ のとき、百の位は $1$〜$6$ の $6$ 通り、十の位は残り $5$ 通りなので $6\cdot5=30$ 通り。</p>
+<p class="lead">一の位が $5$ のとき、百の位は $1,2,3,4,6$ の $5$ 通り、十の位は残り $5$ 通りなので $5\cdot5=25$ 通り。</p>
+<p class="lead">したがって、$$30+25=55\quad\cdots\text{（答）}$$</p><p><span class="ans">$55$個</span></p></section>
+<section class="card"><div class="card-h"><span class="num">✓</span><h2>検算とまとめ</h2></div><div class="check"><strong>条件チェック：</strong>末尾0・末尾5は同時には起こらないため、和で数えてよい。百の位については0だけでなく、末尾に使った数字も除いている。</div><div class="flow"><span class="step">条件を整理</span><span class="arw">→</span><span class="step">公式を選ぶ</span><span class="arw">→</span><span class="step hl">計算</span><span class="arw">→</span><span class="step hl">条件を再確認</span></div><p class="note">倍数条件から末尾を決める。重ならない場合に分け、各場合を足す。</p></section>
+<footer>出典：単問演習「場合の数・確率」自作類題。問題データの条件・答え欄に合わせた15歳前後向けのやさしい解説版。</footer>
+</div></body></html>

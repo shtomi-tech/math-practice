@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図でわかる PまたはQを経由する最短経路｜単問演習</title>
+<link rel="stylesheet" href="./sougou-basic.css">
+<script>window.MathJax={tex:{inlineMath:[["$","$"], ["\\(","\\)"]],displayMath:[["$$","$$"], ["\\[","\\]"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head><body><div class="wrap">
+<header class="doc-head"><p class="eyebrow">単問演習　場合の数・確率 ・ はじめて学ぶ人向け</p><h1>図でわかる　PまたはQを経由する最短経路</h1><p class="sub">最短経路・包除 ／ やさしい解説版</p></header>
+<section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div><p class="lead">図の点PまたはQを経由して、AからBまで最短で進む道順の個数を求める。</p><p class="lead"><strong>求めるもの：</strong>PまたはQを通る経路の和集合</p><details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$149$通り</span></details></section>
+<section class="card"><div class="card-h"><span class="num">1</span><h2>まず、条件を図にする</h2></div><p class="lead">Pを通る経路とQを通る経路を足すと、PとQの両方を通る経路を2回数えます。その重複分を1回引く包除原理を使います。</p><figure><svg class="dg" viewBox="0 0 900 390" role="img" aria-label="6列4行の格子状の道と、P、Q、Rを示す図">
+<g fill="none" stroke="currentColor" stroke-width="2"><path d="M60 80V320 M160 80V320 M260 80V320 M360 80V320 M460 80V320 M560 80V320 M660 80V320"/><path d="M60 80H660 M60 140H660 M60 200H660 M60 260H660 M60 320H660"/></g>
+<g fill="currentColor" font-size="26" class="b700"><text x="28" y="352">A</text><text x="675" y="68">B</text></g><circle cx="360" cy="260" r="7" fill="currentColor"/><text x="369" y="275" font-size="24" class="b700">P</text><circle cx="460" cy="140" r="7" fill="currentColor"/><text x="469" y="155" font-size="24" class="b700">Q</text><circle cx="260" cy="140" r="7" fill="currentColor"/><text x="269" y="155" font-size="24" class="b700">R</text>
+<text x="360" y="374" text-anchor="middle" font-size="20" class="muted">右へ6回，上へ4回の最短経路</text>
+ </svg><figcaption>図　P・Qそれぞれを通る経路と、両方を通る重複を整理する。</figcaption></figure></section>
+<section class="card"><div class="card-h"><span class="num">2</span><h2>使う公式と考え方</h2></div><div class="formula-box"><h4>2条件の包除原理</h4><div class="fb">PまたはQの数＝Pの数＋Qの数−PとQの両方の数。</div></div><p class="note">公式は、問題の条件を数えるための道具です。式を置く前に、何を1回として数えているかを確認します。</p></section>
+<section class="card"><div class="card-h"><span class="num">3</span><h2>解答</h2></div><p class="lead">Pを通る数は (2) より $80$。QへはAから右4回・上3回、QからBは右2回・上1回なので $\binom{7}{3}\cdot\binom{3}{1}=35\cdot3=105$。</p>
+<p class="lead">PとQの両方を通る数は、A→Pが4通り、P→Qが右1回・上2回で3通り、Q→Bが3通りなので $4\cdot3\cdot3=36$。</p>
+<p class="lead">$$80+105-36=149\quad\cdots\text{（答）}$$</p><p><span class="ans">$149$通り</span></p></section>
+<section class="card"><div class="card-h"><span class="num">✓</span><h2>検算とまとめ</h2></div><div class="check"><strong>条件チェック：</strong>PとQの両方を通る経路は足し算で二重になるため、36を1回引いている。P→Qは右・上だけで進める向きである。</div><div class="flow"><span class="step">条件を整理</span><span class="arw">→</span><span class="step">公式を選ぶ</span><span class="arw">→</span><span class="step hl">計算</span><span class="arw">→</span><span class="step hl">条件を再確認</span></div><p class="note">足す → 重複を引く。</p></section>
+<footer>出典：単問演習「場合の数・確率」自作類題。問題データの条件・答え欄に合わせた15歳前後向けのやさしい解説版。</footer>
+</div></body></html>

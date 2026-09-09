@@ -1,367 +1,49 @@
 window.MATH_SOLUTIONS = window.MATH_SOLUTIONS || {};
+
+const TANMON_DIGIT_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="百の位、十の位、一の位を順に決める図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="32" width="68" height="58" rx="5"/><rect x="86" y="32" width="68" height="58" rx="5"/><rect x="164" y="32" width="68" height="58" rx="5"/><rect x="242" y="32" width="68" height="58" rx="5"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="42" y="54">百の位</text><text x="42" y="75">6通り</text><text x="120" y="54">十の位</text><text x="120" y="75">6通り</text><text x="198" y="54">一の位</text><text x="198" y="75">5通り</text><text x="276" y="54">全体</text><text x="276" y="75">180通り</text><text x="80" y="67">×</text><text x="158" y="67">×</text><text x="236" y="67">＝</text><text x="42" y="109">0は不可</text></g></svg>`;
+const TANMON_FIVE_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="一の位が0または5の場合に分ける図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="18" y="20" width="284" height="30" rx="5"/><rect x="20" y="72" width="130" height="52" rx="5"/><rect x="170" y="72" width="130" height="52" rx="5"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="160" y="40">5の倍数 → 一の位は0または5</text><text x="85" y="94">末尾0</text><text x="85" y="113">6×5＝30</text><text x="235" y="94">末尾5</text><text x="235" y="113">5×5＝25</text><text x="160" y="143">30＋25＝55</text></g></svg>`;
+const TANMON_END_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="女子を左右の端に置き、残り6人を中央に並べる図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="40" width="68" height="58" rx="5"/><rect x="86" y="40" width="68" height="58" rx="5"/><rect x="164" y="40" width="68" height="58" rx="5"/><rect x="242" y="40" width="68" height="58" rx="5"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="42" y="62">左端</text><text x="42" y="82">3通り</text><text x="120" y="62">右端</text><text x="120" y="82">2通り</text><text x="198" y="62">中央</text><text x="198" y="82">6!通り</text><text x="276" y="62">積</text><text x="276" y="82">4320通り</text><text x="80" y="75">×</text><text x="158" y="75">×</text><text x="236" y="75">＝</text></g></svg>`;
+const TANMON_GAPS_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="男子5人の並びに6個のすき間ができる図"><g fill="currentColor" font-family="Arial,sans-serif" font-size="12" text-anchor="middle"><text x="160" y="25">M　 M　 M　 M　 M</text><text x="28" y="69">│</text><text x="81" y="69">│</text><text x="134" y="69">│</text><text x="187" y="69">│</text><text x="240" y="69">│</text><text x="293" y="69">│</text><text x="160" y="97">6個から3個のすき間を選ぶ</text><text x="160" y="126">5!×C(6,3)×3!＝14400</text></g></svg>`;
+const TANMON_BLOCK_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="男子と女子をそれぞれ1つのかたまりにする図"><circle cx="160" cy="70" r="43" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M160 27 A43 43 0 0 1 160 113" fill="currentColor" opacity=".15"/><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="208" y="68">男子ブロック</text><text x="112" y="87">女子ブロック</text><text x="160" y="142">1×4!×4!＝576</text></g></svg>`;
+const TANMON_ALTERNATE_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="男子を円順列にして間へ女子を入れる図"><circle cx="160" cy="70" r="35" fill="none" stroke="currentColor" stroke-width="1.5"/><g fill="currentColor" font-family="Arial,sans-serif" font-size="12" text-anchor="middle"><text x="160" y="28">男</text><text x="202" y="73">男</text><text x="160" y="118">男</text><text x="118" y="73">男</text><text x="190" y="45">女</text><text x="190" y="101">女</text><text x="130" y="101">女</text><text x="130" y="45">女</text><text x="160" y="143">3!×4!＝144</text></g></svg>`;
+const TANMON_ADJ_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="AとEを1組にし、7個を円形に並べる図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="18" y="45" width="83" height="48" rx="5"/><rect x="119" y="45" width="83" height="48" rx="5"/><rect x="220" y="45" width="83" height="48" rx="5"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="60" y="65">AEを1組</text><text x="60" y="82">6!通り</text><text x="160" y="65">内部</text><text x="160" y="82">2!通り</text><text x="261" y="65">答え</text><text x="261" y="82">1440</text><text x="110" y="73">×</text><text x="211" y="73">＝</text></g></svg>`;
+const TANMON_CHOOSE_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="15人から順序を考えず4人を選ぶ図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="25" y="43" width="100" height="55" rx="5"/><rect x="195" y="43" width="100" height="55" rx="5"/><path d="M135 70H185"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="12" text-anchor="middle"><text x="75" y="65">15人</text><text x="75" y="85">選ぶ</text><text x="245" y="65">4人</text><text x="245" y="85">C(15,4)</text><text x="160" y="66">→</text></g></svg>`;
+const TANMON_REPEAT_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="全順列を同じ文字の重複分で割る図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="45" width="82" height="52" rx="5"/><rect x="119" y="45" width="82" height="52" rx="5"/><rect x="228" y="45" width="82" height="52" rx="5"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="51" y="66">全順列</text><text x="51" y="84">n!</text><text x="160" y="66">÷ 同じ文字</text><text x="160" y="84">2!など</text><text x="269" y="66">重複順列</text><text x="269" y="84">答え</text><text x="106" y="74">÷</text><text x="215" y="74">＝</text></g></svg>`;
+const TANMON_GRID_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 170" role="img" aria-label="AからBへ右6回上4回進む格子図"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M30 20V140 M73 20V140 M116 20V140 M159 20V140 M202 20V140 M245 20V140 M288 20V140 M30 20H288 M30 50H288 M30 80H288 M30 110H288 M30 140H288"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="12"><text x="16" y="157">A</text><text x="294" y="17">B</text><text x="160" y="164" text-anchor="middle">右6回・上4回 → C(10,4)</text></g></svg>`;
+const TANMON_GRID_C_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 170" role="img" aria-label="格子上の経由点Cを示す図"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M30 20V140 M73 20V140 M116 20V140 M159 20V140 M202 20V140 M245 20V140 M288 20V140 M30 20H288 M30 50H288 M30 80H288 M30 110H288 M30 140H288"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="12"><circle cx="202" cy="80" r="3"/><text x="16" y="157">A</text><text x="294" y="17">B</text><text x="207" y="78">C</text><text x="160" y="164" text-anchor="middle">A→C→Bに分ける</text></g></svg>`;
+const TANMON_APP_GRID_PQR_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 170" role="img" aria-label="格子上の経由点P、Q、Rを示す図"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M30 20V140 M73 20V140 M116 20V140 M159 20V140 M202 20V140 M245 20V140 M288 20V140 M30 20H288 M30 50H288 M30 80H288 M30 110H288 M30 140H288"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="12"><circle cx="159" cy="110" r="3"/><circle cx="202" cy="50" r="3"/><circle cx="116" cy="50" r="3"/><text x="16" y="157">A</text><text x="294" y="17">B</text><text x="164" y="108">P</text><text x="207" y="48">Q</text><text x="121" y="48">R</text></g></svg>`;
+const TANMON_COMPLEMENT_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="全体から条件に合わない場合を引く図"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="45" width="78" height="52" rx="5"/><rect x="111" y="45" width="78" height="52" rx="5"/><rect x="212" y="45" width="98" height="52" rx="5"/></g><g fill="currentColor" font-family="Arial,sans-serif" font-size="11" text-anchor="middle"><text x="49" y="66">全体</text><text x="49" y="84">全体の数</text><text x="150" y="66">不要な場合</text><text x="150" y="84">除く数</text><text x="261" y="66">残り</text><text x="261" y="84">答え</text><text x="100" y="74">−</text><text x="201" y="74">＝</text></g></svg>`;
+const TANMON_PENCIL_FIGURE = String.raw`<svg class="solution-figure-svg" viewBox="0 0 320 150" role="img" aria-label="鉛筆を丸、3人の境目を仕切りで表す図"><g fill="currentColor" font-family="Arial,sans-serif" font-size="12" text-anchor="middle"><text x="160" y="31">○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ｜ ｜</text><text x="160" y="68">○＝鉛筆10本　｜＝人の境目2本</text><text x="160" y="101">計12個から仕切り2個の位置を選ぶ</text><text x="160" y="130">C(12,2)＝66　／　先に1本ずつ → C(9,2)＝36</text></g></svg>`;
+
 window.MATH_SOLUTIONS.tanmon_ippan = {
-  "1-(1)": {
-    approach: String.raw`百の位は $0$ になれないので，そこだけ先に除きます。百の位，十の位，一の位を順に決める積の法則で数えます。`,
-    formula: {
-      title: "積の法則",
-      body: String.raw`ある操作を順に行うとき，全体の場合の数は各段階の場合の数の積で求められる。`,
-    },
-    solution: String.raw`百の位は $1,2,3,4,5,6$ の $6$ 通りです。百の位を決めた後，十の位は残った $6$ 個から選べ，一の位はさらに残った $5$ 個から選べます。
-$$
-6\times6\times5=180
-$$`,
-    answer: String.raw`$180$個`,
-  },
-  "1-(2)": {
-    approach: String.raw`5の倍数は一の位が $0$ または $5$ です。一の位を先に決め，この2つの場合を分けて数えます。`,
-    formula: {
-      title: "5の倍数の条件",
-      body: String.raw`整数が $5$ の倍数なら，一の位は $0$ または $5$ である。`,
-    },
-    solution: String.raw`一の位が $0$ のとき，百の位は $1$〜$6$ の $6$ 通り，十の位は残りの $5$ 通りです。
-$$
-6\times5=30
-$$
-一の位が $5$ のとき，百の位は $1,2,3,4,6$ の $5$ 通り，十の位は残りの $5$ 通りです。
-$$
-5\times5=25
-$$
-したがって，求める個数は
-$$
-30+25=55
-$$`,
-    answer: String.raw`$55$個`,
-  },
-  "2-(1)": {
-    approach: String.raw`左右の端を女子に固定します。両端に入る女子を順に選び，残った6人を中央の6席に並べます。`,
-    formula: {
-      title: "端の固定と順列",
-      body: String.raw`端の2席を決めた後，残りの人を中央の席に並べる。`,
-    },
-    solution: String.raw`左端の女子は $3$ 通り，右端の女子は残った $2$ 通りです。残った6人は中央の6席に $6!$ 通りに並びます。
-$$
-3\times2\times6!=4320
-$$`,
-    answer: String.raw`$4320$通り`,
-  },
-  "2-(2)": {
-    approach: String.raw`先に男子5人を並べると，女子を入れられるすき間が6個できます。そのすき間から3個を選び，各すき間に女子を1人ずつ入れます。`,
-    formula: {
-      title: "すき間に入れる方法",
-      body: String.raw`男子5人の間と両端にできる6個のすき間から，女子を入れる3個を選ぶ。`,
-    },
-    solution: String.raw`男子5人を並べる方法は $5!$ 通りです。男子を並べると，両端と男子の間に女子を入れられるすき間が $6$ 個できます。そのうち3個を選ぶ方法は $\!{}_{6}C_{3}$ 通りで，選んだすき間への女子3人の並べ方は $3!$ 通りです。
-$$
-5!\times\!{}_{6}C_{3}\times3!=120\times20\times6=14400
-$$`,
-    answer: String.raw`$14400$通り`,
-  },
-  "3-(1)": {
-    approach: String.raw`男子4人を1つのかたまり，女子4人を1つのかたまりとみなします。2つのかたまりを円卓に置き，それぞれのかたまりの中の順番を決めます。`,
-    formula: {
-      title: "円順列とブロック",
-      body: String.raw`円卓の $n$ 個の対象を並べる方法は $(n-1)!$ 通り。`,
-    },
-    solution: String.raw`男子のかたまりと女子のかたまりを円卓に置く方法は $(2-1)!$ 通りです。男子4人の並び方は $4!$ 通り，女子4人の並び方も $4!$ 通りです。
-$$
-(2-1)!\times4!\times4!=576
-$$`,
-    answer: String.raw`$576$通り`,
-  },
-  "3-(2)": {
-    approach: String.raw`男子を円形に並べてから，男子と男子の間にできる4個のすき間へ女子を1人ずつ入れます。`,
-    formula: {
-      title: "交互配置",
-      body: String.raw`男子の円順列を作り，各すき間に女子を1人ずつ入れる。`,
-    },
-    solution: String.raw`男子4人を円形に並べる方法は $(4-1)!$ 通りです。男子の間の4個のすき間に女子4人を並べる方法は $4!$ 通りです。
-$$
-(4-1)!\times4!=3!\times4!=144
-$$`,
-    answer: String.raw`$144$通り`,
-  },
-  "3-(3)": {
-    approach: String.raw`$A$ と $E$ を1つの組にして数えます。組の内部の並び方と，組を含む7個の対象の円順列を掛け合わせます。`,
-    formula: {
-      title: "隣り合う2人のブロック化",
-      body: String.raw`隣り合う2人を1組とすると，組の内部は $2!$ 通りに入れ替えられる。`,
-    },
-    solution: String.raw`$A,E$ を1つの組とみなすと，組と残り6人の計7個を円形に並べる方法は $(7-1)!$ 通りです。組の内部は $AE,EA$ の $2!$ 通りです。
-$$
-(7-1)!\times2!=6!\times2=1440
-$$`,
-    answer: String.raw`$1440$通り`,
-  },
-  "3-(4)": {
-    approach: String.raw`「隣り合わない」は，全体から「隣り合う」場合を引く余事象で数えます。`,
-    formula: {
-      title: "余事象",
-      body: String.raw`条件を満たさない場合の数は，全体の場合の数から条件を満たす場合の数を引く。`,
-    },
-    solution: String.raw`8人を円卓に並べる全体の方法は $(8-1)!=7!$ 通りです。(3)より，$A,E$ が隣り合う方法は $1440$ 通りなので，隣り合わない方法は
-$$
-7!-1440=5040-1440=3600
-$$`,
-    answer: String.raw`$3600$通り`,
-  },
-  "4-(1)": {
-    approach: String.raw`選ぶ順番を考えないので，15人から4人を選ぶ組合せとして数えます。`,
-    formula: {
-      title: "組合せ",
-      body: String.raw`順序を考えずに $n$ 個から $r$ 個を選ぶ方法は $\!{}_{n}C_{r}$ 通り。`,
-    },
-    solution: String.raw`15人から4人を選ぶので，
-$$
-{}_{15}C_{4}=\frac{15\times14\times13\times12}{4\times3\times2\times1}=1365
-$$`,
-    answer: String.raw`$1365$通り`,
-  },
-  "4-(2)": {
-    approach: String.raw`「少なくとも1人が女子」は，女子が1人もいない場合を除く余事象で数えると簡単です。`,
-    formula: {
-      title: "余事象と組合せ",
-      body: String.raw`条件を満たす選び方＝全体の選び方−条件を満たさない選び方。`,
-    },
-    solution: String.raw`全体の選び方は (1)より $1365$ 通りです。女子が1人もいない選び方は，男子9人から4人を選ぶので
-$$
-{}_{9}C_{4}=126
-$$
-通りです。したがって，少なくとも1人が女子である選び方は
-$$
-1365-126=1239
-$$`,
-    answer: String.raw`$1239$通り`,
-  },
-  "5-(1)": {
-    approach: String.raw`RADAR では R と A がそれぞれ2回ずつ現れます。同じ文字を区別しない重複順列として数えます。`,
-    formula: {
-      title: "重複順列",
-      body: String.raw`同じ文字の重複を分母で割る。`,
-    },
-    solution: String.raw`5文字をすべて区別して並べると $5!$ 通りですが，R と A の入れ替えをそれぞれ $2!$ 回ずつ同一視します。
-$$
-\frac{5!}{2!2!}=30
-$$`,
-    answer: String.raw`$30$通り`,
-  },
-  "5-(2)": {
-    approach: String.raw`p,p,q,q,r,r をすべて使うので，6文字の重複順列として数えます。`,
-    formula: {
-      title: "重複順列",
-      body: String.raw`同じ文字がそれぞれ2個ずつあるとき，並べ方は $\frac{6!}{2!2!2!}$ 通り。`,
-    },
-    solution: String.raw`6文字を区別して並べる $6!$ 通りから，p同士，q同士，r同士の入れ替えを同一視します。
-$$
-\frac{6!}{2!2!2!}=90
-$$`,
-    answer: String.raw`$90$通り`,
-  },
-  "5-(3)": {
-    approach: String.raw`p,qだけを使って4個選ぶには，p,p,q,qをすべて使うしかありません。`,
-    formula: {
-      title: "重複順列",
-      body: String.raw`p,p,q,q の並べ方は $\frac{4!}{2!2!}$ 通り。`,
-    },
-    solution: String.raw`p,p,q,q の並べ方を数えます。
-$$
-\frac{4!}{2!2!}=6
-$$`,
-    answer: String.raw`$6$通り`,
-  },
-  "5-(4)": {
-    approach: String.raw`5個の中にp,q,rをすべて含めるため，どの文字を1個だけ使うかで3つに場合分けします。`,
-    formula: {
-      title: "場合分けと重複順列",
-      body: String.raw`1,2,2 個ずつの3種類を並べる方法は $\frac{5!}{2!2!}$ 通り。`,
-    },
-    solution: String.raw`5個の中にp,q,rをすべて含める場合，個数は $(1,2,2)$ の組合せになります。1個だけ使う文字はp,q,rの3通りで，各場合の並べ方は $\frac{5!}{2!2!}$ 通りです。
-$$
-3\times\frac{5!}{2!2!}=3\times30=90
-$$`,
-    answer: String.raw`$90$通り`,
-  },
-  "6-(1)": {
-    approach: String.raw`AからBへは，右へ6回，上へ4回進む最短経路だけを考えます。`,
-    formula: {
-      title: "最短経路",
-      body: String.raw`右へa回，上へb回進む最短経路は，a+b回の中から右（または上）の位置を選ぶ。`,
-    },
-    solution: String.raw`最短経路は右6回，上4回の計10歩です。10個の位置から，上に進む4個の位置を選びます。
-$$
-{}_{10}C_{4}=210
-$$`,
-    answer: String.raw`$210$通り`,
-  },
-  "7-(1)": {
-    approach: String.raw`AからCまでと，CからBまでを分けて数え，最後に掛け合わせます。`,
-    formula: {
-      title: "経由点のある最短経路",
-      body: String.raw`経由点を通る経路数は，始点から経由点までの経路数と，経由点から終点までの経路数の積。`,
-    },
-    solution: String.raw`図より，AからCへは右4回，上2回，CからBへは右2回，上2回です。
-$$
-{}_{6}C_{2}\times{}_{4}C_{2}=15\times6=90
-$$`,
-    answer: String.raw`$90$通り`,
-  },
-  "8-(1)": {
-    approach: String.raw`AからBへは，右へ6回，上へ4回進む最短経路だけを考えます。`,
-    formula: {
-      title: "最短経路",
-      body: String.raw`右へa回，上へb回進む最短経路は，a+b回の中から右（または上）の位置を選ぶ。`,
-    },
-    solution: String.raw`AからBまでの最短経路は，右6回，上4回なので
-$$
-{}_{10}C_{4}=210
-$$`,
-    answer: String.raw`$210$通り`,
-  },
-  "8-(2)": {
-    approach: String.raw`AからPまでと，PからBまでを分けて数え，最後に掛け合わせます。`,
-    formula: {
-      title: "経由点のある最短経路",
-      body: String.raw`経由点を通る経路数は，始点から経由点までの経路数と，経由点から終点までの経路数の積。`,
-    },
-    solution: String.raw`図より，AからPへは右3回，上1回，PからBへは右3回，上3回です。
-$$
-{}_{4}C_{1}\times{}_{6}C_{3}=4\times20=80
-$$`,
-    answer: String.raw`$80$通り`,
-  },
-  "8-(3)": {
-    approach: String.raw`AからRまでと，RからBまでを分けて数え，最後に掛け合わせます。`,
-    formula: {
-      title: "経由点のある最短経路",
-      body: String.raw`経由点を通る経路数は，始点から経由点までの経路数と，経由点から終点までの経路数の積。`,
-    },
-    solution: String.raw`図より，AからRへは右2回，上3回，RからBへは右4回，上1回です。
-$$
-{}_{5}C_{2}\times{}_{5}C_{1}=10\times5=50
-$$`,
-    answer: String.raw`$50$通り`,
-  },
-  "8-(4)": {
-    approach: String.raw`Pを通る経路とQを通る経路を足し，PとQの両方を通る重複分を引きます。`,
-    formula: {
-      title: "経由点と包除",
-      body: String.raw`PまたはQを通る数は，Pを通る数とQを通る数を足して，両方を通る数を引く。`,
-    },
-    solution: String.raw`Pを経由する場合は
-$$
-{}_{4}C_{1}\times{}_{6}C_{3}=4\times20=80
-$$
-通り，Qを経由する場合は
-$$
-{}_{7}C_{3}\times{}_{3}C_{1}=35\times3=105
-$$
-通りです。PとQの両方を通る場合は
-$$
-{}_{4}C_{1}\times{}_{3}C_{1}\times{}_{3}C_{1}=4\times3\times3=36
-$$
-通りなので，包除原理より
-$$
-80+105-36=149
-$$`,
-    answer: String.raw`$149$通り`,
-  },
-  "8-(5)": {
-    approach: String.raw`P，Q，Rを通る経路を足し，2点を同時に通る重複分を引きます。`,
-    formula: {
-      title: "3集合の包除",
-      body: String.raw`3条件の少なくとも1つを満たす数は，各条件の数を足し，2条件を同時に満たす数を引き，3条件を同時に満たす数を足す。`,
-    },
-    solution: String.raw`(2)〜(4)の計算より，P，Q，Rを経由する経路はそれぞれ $80$ 通り，$105$ 通り，$50$ 通りです。PとQの両方を通る経路は $36$ 通りです。
-
-RからQへは右2回だけ進むので，RとQの両方を通る場合は
-$$
-{}_{5}C_{2}\times1\times{}_{3}C_{1}=10\times1\times3=30
-$$
-通りです。PとRは，どちらからも右と上だけでは他方へ進めないため，同じ最短経路上で両方を通れません。したがって3点すべてを通る経路もありません。
-$$
-80+105+50-36-30=169
-$$`,
-    answer: String.raw`$169$通り`,
-  },
-  "9-(1)": {
-    approach: String.raw`「少なくとも1人ずつ含まれる」は，スタッフだけ，または利用者だけになる選び方を全体から除く余事象で数えます。`,
-    formula: {
-      title: "余事象と組合せ",
-      body: String.raw`条件を満たす選び方＝全体の選び方−条件を満たさない選び方。`,
-    },
-    solution: String.raw`スタッフ6人と利用者5人の計11人から4人を選ぶ全体の選び方は
-$$
-{}_{11}C_{4}=330
-$$
-通りです。スタッフだけを選ぶ場合は $\!{}_{6}C_{4}=15$ 通り，利用者だけを選ぶ場合は $\!{}_{5}C_{4}=5$ 通りです。したがって，両方の立場を含む選び方は
-$$
-330-15-5=310
-$$`,
-    answer: String.raw`$310$通り`,
-  },
-  "9-(2)": {
-    approach: String.raw`大人だけ，高校生だけになる選び方を全体から引けば，両方を含む選び方が求められます。`,
-    formula: {
-      title: "余事象と組合せ",
-      body: String.raw`両方を含む選び方＝全体の選び方−大人だけの選び方−高校生だけの選び方。`,
-    },
-    solution: String.raw`大人7人と高校生6人の計13人から5人を選ぶ全体の選び方は
-$$
-{}_{13}C_{5}=1287
-$$
-通りです。大人だけを選ぶ場合は $\!{}_{7}C_{5}=21$ 通り，高校生だけを選ぶ場合は $\!{}_{6}C_{5}=6$ 通りです。したがって，両方の立場を含む選び方は
-$$
-1287-21-6=1260
-$$`,
-    answer: String.raw`$1260$通り`,
-  },
-  "10-(1)": {
-    approach: String.raw`まず各人がどちらの部屋に入るかを選ぶ積の法則で数えます。空室がない場合は，4人全員が同じ部屋に入る場合を全体から除きます。`,
-    formula: {
-      title: "積の法則と余事象",
-      body: String.raw`各人が2つの部屋のどちらかを選ぶ場合を数え，条件に合わない場合を全体から引く。`,
-    },
-    solution: String.raw`4人のそれぞれが部屋 $A,B$ のどちらかを選ぶので，空室があってもよい場合は
-$$
-2^4=16
-$$
-通りです。
-
-空室がない場合は，部屋 $A$ または部屋 $B$ のどちらかが空室になる場合を除きます。空室になるのは，4人全員が部屋 $A$ に入る場合と，4人全員が部屋 $B$ に入る場合の2通りです。したがって
-$$
-2^4-2=16-2=14
-$$
-通りです。`,
-    answer: String.raw`空室があってもよい場合は $16$ 通り，空室がない場合は $14$ 通り。`,
-  },
-  "10-(2)": {
-    approach: String.raw`同じ鉛筆を「○」，3人の境目を「｜」で表し，○10個と｜2本を並べます。1つの並びが，鉛筆の1つの分け方に対応します。`,
-    solution: String.raw`鉛筆は同じものなので，10本を10個の○で表します。3人の境目は仕切り2本で表します。
-
-たとえば，
-
-○○○○○○○○○○｜｜
-
-は，1人目に10本，2人目と3人目に0本ずつ配る場合です。仕切りが隣り合えば，その人は0本になります。仕切りが両端にあっても，同じように0本の人を表せます。
-
-まず，0本の人がいてもよい場合を数えます。○10個のまわりには，仕切りを置く場所が11か所あります（○の前，○と○の間，○の後）。2本の仕切りを同じ場所に置くこともできます。
-
-○10個と仕切り2本の計12個を，いったんすべて異なるものとして並べると，$12!$ 通りです。しかし，○10個の入れ替えは同じ分け方なので $10!$ 通りずつ重複し，仕切り2本の入れ替えも同じ分け方なので $2!$ 通りずつ重複しています。したがって，
-$$
-\frac{12!}{10!\,2!}
-=\frac{12\times11}{2\times1}
-=66
-$$
-通りです。
-
-次に，全員が1本以上の場合を数えます。まず3人に1本ずつ配ると，残りは7本です。残りの7本を7個の○で表すと，仕切りを置く場所は8か所になります。
-
-残りの○7個と仕切り2本の計9個を，いったんすべて異なるものとして並べると，$9!$ 通りです。○7個の入れ替え $7!$ 通りと仕切り2本の入れ替え $2!$ 通りは同じ分け方を重複して数えるので，
-$$
-\frac{9!}{7!\,2!}
-=\frac{9\times8}{2\times1}
-=36
-$$
-通りです。よって，全員が1本以上の場合は36通りです。`,
-    answer: String.raw`0本の人がいてもよい場合は $66$ 通り，全員が1本以上の場合は $36$ 通り。`,
-  },
+  "1-(1)": { approach: String.raw`3桁の数では百の位だけ $0$ にできません。百，十，一の位を順に決め，数字を重ねないために各段階の残りの個数を掛けます。`, formula: { title: "積の法則", body: String.raw`操作をいくつかの段階に分けられるとき，全体の数は各段階の数の積である。` }, solution: String.raw`百の位は $1,2,3,4,5,6$ の $6$ 通り。百の位を決めると十の位は残り $6$ 個から $6$ 通り，一の位はさらに残り $5$ 個から $5$ 通り。\n$$6\cdot6\cdot5=180$$`, answer: String.raw`$180$個`, figure: TANMON_DIGIT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-1-1-three-digit-basic.html" },
+  "1-(2)": { approach: String.raw`5の倍数は一の位が $0$ または $5$ です。末尾を先に固定し，重ならない2つの場合に分けて数えます。`, formula: { title: "5の倍数の条件", body: String.raw`10進法の整数が5の倍数であるための条件は，一の位が $0$ または $5$ であること。` }, solution: String.raw`一の位が $0$ のときは百の位 $6$ 通り，十の位 $5$ 通りで $6\cdot5=30$ 通り。一の位が $5$ のときは百の位 $5$ 通り，十の位 $5$ 通りで $5\cdot5=25$ 通り。\n$$30+25=55$$`, answer: String.raw`$55$個`, figure: TANMON_FIVE_FIGURE, explainerUrl: "./explainers/tanmon-ippan-1-2-five-multiple-basic.html" },
+  "2-(1)": { approach: String.raw`左右の端を女子で先に決めます。両端の女子を順に選び，残った6人を中央の6席に並べます。`, formula: { title: "端の固定と順列", body: String.raw`条件のある席を先に決め，残りの人を残りの席に並べる。` }, solution: String.raw`左端の女子は $3$ 通り，右端の女子は残り $2$ 通り。中央の6席への並べ方は $6!$ 通り。\n$$3\cdot2\cdot6!=4320$$`, answer: String.raw`$4320$通り`, figure: TANMON_END_FIGURE, explainerUrl: "./explainers/tanmon-ippan-2-1-girls-ends-basic.html" },
+  "2-(2)": { approach: String.raw`男子を先に並べると，両端と男子の間に6個のすき間ができます。女子を別々のすき間に1人ずつ入れれば，女子同士は隣り合いません。`, formula: { title: "すき間法", body: String.raw`先に男子を並べ，すき間から必要な個数を選び，選んだすき間へ女子を並べる。` }, solution: String.raw`男子の並べ方は $5!$ 通り。6個のすき間から3個を選ぶ方法は $\binom{6}{3}$ 通り，女子3人の並べ方は $3!$ 通り。\n$$5!\cdot\binom{6}{3}\cdot3!=120\cdot20\cdot6=14400$$`, answer: String.raw`$14400$通り`, figure: TANMON_GAPS_FIGURE, explainerUrl: "./explainers/tanmon-ippan-2-2-girls-nonadjacent-basic.html" },
+  "3-(1)": { approach: String.raw`男子4人と女子4人をそれぞれ1つのかたまりとみなします。2つのかたまりを円卓に置き，それぞれの内部の順番を決めます。`, formula: { title: "円順列とブロック", body: String.raw`円卓で $n$ 個を並べる方法は $(n-1)!$ 通り。ブロックの内部の順序は別に数える。` }, solution: String.raw`男女の2ブロックを円卓に置く方法は $(2-1)!$ 通り。男子内部と女子内部はそれぞれ $4!$ 通り。\n$$(2-1)!\cdot4!\cdot4!=576$$`, answer: String.raw`$576$通り`, figure: TANMON_BLOCK_FIGURE, explainerUrl: "./explainers/tanmon-ippan-3-1-circle-blocks-basic.html" },
+  "3-(2)": { approach: String.raw`男子を円形に並べると，男子と男子の間に4個のすき間ができます。交互にするには，その4個へ女子を1人ずつ入れます。`, formula: { title: "円卓の交互配置", body: String.raw`一方の集団を円順列にし，もう一方をその間のすき間へ並べる。` }, solution: String.raw`男子4人の円順列は $(4-1)!$ 通り。4個のすき間へ女子4人を並べる方法は $4!$ 通り。\n$$(4-1)!\cdot4!=3!\cdot4!=144$$`, answer: String.raw`$144$通り`, figure: TANMON_ALTERNATE_FIGURE, explainerUrl: "./explainers/tanmon-ippan-3-2-circle-alternate-basic.html" },
+  "3-(3)": { approach: String.raw`$A$ と $E$ を1つの組にします。組と残り6人の円順列を数え，組の内部が $AE$ と $EA$ の2通りあることを掛けます。`, formula: { title: "隣接する2人のブロック化", body: String.raw`隣り合う2人を1組とすると，組を含む円順列に内部の $2!$ 通りを掛ける。` }, solution: String.raw`$A,E$ の組と残り6人の計7個を円卓に並べる方法は $(7-1)!$ 通り。組の内部は $2!$ 通り。\n$$(7-1)!\cdot2!=6!\cdot2=1440$$`, answer: String.raw`$1440$通り`, figure: TANMON_ADJ_FIGURE, explainerUrl: "./explainers/tanmon-ippan-3-3-circle-adjacent-basic.html" },
+  "3-(4)": { approach: String.raw`「隣り合わない」を直接数える代わりに，全体から「隣り合う」場合を引きます。これが余事象の考え方です。`, formula: { title: "余事象", body: String.raw`条件を満たす数＝全体の数−条件を満たさない数。` }, solution: String.raw`8人を円卓に並べる全体は $7!=5040$ 通り。隣り合う場合は (3) の $1440$ 通りなので，\n$$7!-1440=5040-1440=3600$$`, answer: String.raw`$3600$通り`, figure: TANMON_COMPLEMENT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-3-4-circle-nonadjacent-basic.html" },
+  "4-(1)": { approach: String.raw`選ぶ順番は関係なく，選ばれた4人だけが重要です。したがって順列でなく組合せを使います。`, formula: { title: "組合せ", body: String.raw`順序を考えず $n$ 個から $r$ 個を選ぶ方法は $\binom{n}{r}=\dfrac{n!}{r!(n-r)!}$ 通り。` }, solution: String.raw`15人から順序を考えず4人を選ぶので，\n$$\binom{15}{4}=\dfrac{15\cdot14\cdot13\cdot12}{4\cdot3\cdot2\cdot1}=1365$$`, answer: String.raw`$1365$通り`, figure: TANMON_CHOOSE_FIGURE, explainerUrl: "./explainers/tanmon-ippan-4-1-combination-basic.html" },
+  "4-(2)": { approach: String.raw`「少なくとも1人が女子」は，女子が1人もいない場合の反対です。全体から女子0人を引くと，場合分けの重複がありません。`, formula: { title: "少なくとも1人と余事象", body: String.raw`少なくとも1つを含む数＝全体の数−1つも含まない数。` }, solution: String.raw`全体は (1) の $1365$ 通り。女子が0人なら男子9人から4人を選ぶので $\binom{9}{4}=126$ 通り。\n$$1365-126=1239$$`, answer: String.raw`$1239$通り`, figure: TANMON_COMPLEMENT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-4-2-at-least-girl-basic.html" },
+  "5-(1)": { approach: String.raw`RとAが2回ずつ現れます。同じ文字を入れ替えても同じ文字列なので，重複して数えた分を割ります。`, formula: { title: "重複順列", body: String.raw`同じ文字が2個ずつあるとき，全順列をそれぞれの $2!$ で割る。` }, solution: String.raw`5文字を区別すると $5!$ 通り。R同士とA同士の入れ替えを同一視して，\n$$\dfrac{5!}{2!\cdot2!}=30$$`, answer: String.raw`$30$通り`, figure: TANMON_REPEAT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-5-1-radar-basic.html" },
+  "5-(2)": { approach: String.raw`p,q,rがそれぞれ2個ずつあります。6個を区別して並べた後，同じ文字同士の入れ替えを除きます。`, formula: { title: "重複順列", body: String.raw`p,q,rが2個ずつあるとき，並べ方は $\dfrac{6!}{2!\cdot2!\cdot2!}$ 通り。` }, solution: String.raw`全6個を区別すると $6!$ 通り。p,q,rそれぞれの2個の入れ替えを同一視するので，\n$$\dfrac{6!}{2!\cdot2!\cdot2!}=90$$`, answer: String.raw`$90$通り`, figure: TANMON_REPEAT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-5-2-pqr-all-basic.html" },
+  "5-(3)": { approach: String.raw`p,qだけで4個を作ります。pもqも最大2個しかないため，p,p,q,qを使う場合に決まります。`, formula: { title: "条件から個数を決める", body: String.raw`各文字の個数の上限と，選ぶ総数を照らし合わせてから並べる。` }, solution: String.raw`p,p,q,qの並べ方は，同じp同士とq同士の重複を除いて，\n$$\dfrac{4!}{2!\cdot2!}=6$$`, answer: String.raw`$6$通り`, figure: TANMON_REPEAT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-5-3-pq-four-basic.html" },
+  "5-(4)": { approach: String.raw`5個でp,q,rをすべて含むには，個数は $(1,2,2)$ です。1個だけ使う文字を3通りに分けて数えます。`, formula: { title: "場合分けと重複順列", body: String.raw`1,2,2個の3種類を並べる方法は $\dfrac{5!}{2!\cdot2!}$。` }, solution: String.raw`1個だけ使う文字はp,q,rの $3$ 通り。各場合の並べ方は $\dfrac{5!}{2!\cdot2!}=30$ 通りなので，\n$$3\cdot\dfrac{5!}{2!\cdot2!}=3\cdot30=90$$`, answer: String.raw`$90$通り`, figure: TANMON_REPEAT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-5-4-pqr-five-basic.html" },
+  "6-(1)": { approach: String.raw`最短で進むなら左へ戻らず，右へ6回，上へ4回の計10歩だけです。10個の歩く位置のうち，上へ進む位置を選びます。`, formula: { title: "格子の最短経路", body: String.raw`右へ $a$ 回，上へ $b$ 回の最短経路は，合計 $a+b$ 個の位置から上の位置を選ぶ $\binom{a+b}{b}$。` }, solution: String.raw`右6回，上4回の計10歩。上へ進む4歩の位置を選ぶので，\n$$\binom{10}{4}=210$$`, answer: String.raw`$210$通り`, figure: TANMON_GRID_FIGURE, explainerUrl: "./explainers/tanmon-ippan-6-1-grid-shortest-basic.html" },
+  "7-(1)": { approach: String.raw`Cを必ず通るため，AからCとCからBに分けます。2区間の経路をそれぞれ選び，最後に掛けます。`, formula: { title: "経由点のある最短経路", body: String.raw`経由点を通る数＝始点から経由点までの数×経由点から終点までの数。` }, solution: String.raw`AからCは右4回，上2回なので $\binom{6}{2}=15$ 通り。CからBは右2回，上2回なので $\binom{4}{2}=6$ 通り。\n$$15\cdot6=90$$`, answer: String.raw`$90$通り`, figure: TANMON_GRID_C_FIGURE, explainerUrl: "./explainers/tanmon-ippan-7-1-grid-via-c-basic.html" },
+  "8-(1)": { approach: String.raw`この小問ではP,Q,Rを経由する条件はありません。AからBへの右6回，上4回の最短経路だけを数えます。`, formula: { title: "最短経路", body: String.raw`右6回・上4回の計10歩から，上へ進む4歩の位置を選ぶ。` }, solution: String.raw`AからBは右6回，上4回なので，\n$$\binom{10}{4}=210$$`, answer: String.raw`$210$通り`, figure: TANMON_APP_GRID_PQR_FIGURE, explainerUrl: "./explainers/tanmon-ippan-8-1-pqr-all-basic.html" },
+  "8-(2)": { approach: String.raw`Pを通る地点で前半と後半に分けます。AからP，PからBの最短経路数を掛けます。`, formula: { title: "経由点で分割", body: String.raw`経由点を通る経路数は，前半の数と後半の数の積。` }, solution: String.raw`AからPは右3回，上1回なので $\binom{4}{1}=4$ 通り。PからBは右3回，上3回なので $\binom{6}{3}=20$ 通り。\n$$4\cdot20=80$$`, answer: String.raw`$80$通り`, figure: TANMON_APP_GRID_PQR_FIGURE, explainerUrl: "./explainers/tanmon-ippan-8-2-via-p-basic.html" },
+  "8-(3)": { approach: String.raw`Rを通る地点で2区間に分け，それぞれの右・上の回数から最短経路数を求めます。`, formula: { title: "経由点で分割", body: String.raw`前半の最短経路数×後半の最短経路数を計算する。` }, solution: String.raw`AからRは右2回，上3回で $\binom{5}{2}=10$ 通り。RからBは右4回，上1回で $\binom{5}{1}=5$ 通り。\n$$10\cdot5=50$$`, answer: String.raw`$50$通り`, figure: TANMON_APP_GRID_PQR_FIGURE, explainerUrl: "./explainers/tanmon-ippan-8-3-via-r-basic.html" },
+  "8-(4)": { approach: String.raw`Pを通る集合とQを通る集合を足すと，両方を通る経路が2回入ります。そこで重複分を1回引く包除原理を使います。`, formula: { title: "2条件の包除原理", body: String.raw`PまたはQ＝P＋Q−PとQの両方。` }, solution: String.raw`Pを通る数は $80$。Qを通る数は $\binom{7}{3}\cdot\binom{3}{1}=35\cdot3=105$。PとQの両方を通る数は $4\cdot3\cdot3=36$。\n$$80+105-36=149$$`, answer: String.raw`$149$通り`, figure: TANMON_APP_GRID_PQR_FIGURE, explainerUrl: "./explainers/tanmon-ippan-8-4-via-p-or-q-basic.html" },
+  "8-(5)": { approach: String.raw`P,Q,Rの各経路を足し，2点を同時に通る重複を引きます。PとRは最短方向が逆なので同時に通れないことも確認します。`, formula: { title: "3条件の包除原理", body: String.raw`3条件の少なくとも1つ＝1条件ずつの和−2条件ずつの和＋3条件すべての和。` }, solution: String.raw`P,Q,Rを通る数は $80,105,50$。PとQの両方は $36$，QとRの両方は $\binom{5}{2}\cdot1\cdot3=30$。PとR，および3点すべては0。\n$$80+105+50-36-30=169$$`, answer: String.raw`$169$通り`, figure: TANMON_APP_GRID_PQR_FIGURE, explainerUrl: "./explainers/tanmon-ippan-8-5-via-pqr-basic.html" },
+  "9-(1)": { approach: String.raw`スタッフと利用者を両方含む場合を直接分けず，スタッフだけ・利用者だけを全体から除きます。`, formula: { title: "2集団を含む余事象", body: String.raw`両方を含む数＝全体−スタッフだけ−利用者だけ。` }, solution: String.raw`全体は $\binom{11}{4}=330$ 通り。スタッフだけは $\binom{6}{4}=15$ 通り，利用者だけは $\binom{5}{4}=5$ 通り。\n$$330-15-5=310$$`, answer: String.raw`$310$通り`, figure: TANMON_COMPLEMENT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-9-1-staff-users-basic.html" },
+  "9-(2)": { approach: String.raw`大人だけ・高校生だけの2ケースを全体から引けば，残りは大人と高校生を両方含みます。`, formula: { title: "余事象と組合せ", body: String.raw`両方を含む数＝全体−大人だけ−高校生だけ。` }, solution: String.raw`全体は $\binom{13}{5}=1287$ 通り。大人だけは $\binom{7}{5}=21$ 通り，高校生だけは $\binom{6}{5}=6$ 通り。\n$$1287-21-6=1260$$`, answer: String.raw`$1260$通り`, figure: TANMON_COMPLEMENT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-9-2-adults-students-basic.html" },
+  "10-(1)": { approach: String.raw`4人がそれぞれ部屋AかBを選ぶので，空室可は積の法則です。空室不可は，全員が同じ部屋に入る2ケースを引きます。`, formula: { title: "積の法則と余事象", body: String.raw`各人2択が4回なら $2^4$。空室不可では全員A・全員Bの2通りを除く。` }, solution: String.raw`空室があってもよい場合は $2^4=16$ 通り。空室がない場合は全員A，全員Bの2通りを除くので，\n$$16-2=14$$`, answer: String.raw`空室可は $16$ 通り，空室なしは $14$ 通り。`, figure: TANMON_COMPLEMENT_FIGURE, explainerUrl: "./explainers/tanmon-ippan-10-1-two-rooms-basic.html" },
+  "10-(2)": { approach: String.raw`同じ鉛筆を○，3人の境目を｜で表します。0本可では○10個と｜2本，全員1本以上では先に1本ずつ配って○7個を並べます。`, formula: { title: "重複組合せ（スターズアンドバーズ）", body: String.raw`同じ物と仕切りを一列に並べ，仕切りの位置を選ぶ。` }, solution: String.raw`0本の人がいてよい場合は，○10個と｜2本の計12個から仕切り2本の位置を選び，$\binom{12}{2}=66$ 通り。全員1本以上では1本ずつ配った残り7本を分けるので，計9個から仕切り2本の位置を選び，$\binom{9}{2}=36$ 通り。`, answer: String.raw`0本可は $66$ 通り，全員1本以上は $36$ 通り。`, figure: TANMON_PENCIL_FIGURE, explainerUrl: "./explainers/tanmon-ippan-10-2-pencils-basic.html" },
 };
+
+// String.rawで保持した改行記号を、アプリの段落表示が処理できる改行へ戻す。
+for (const solution of Object.values(window.MATH_SOLUTIONS.tanmon_ippan)) {
+  solution.solution = solution.solution.replaceAll("\\n", "\n");
+}
