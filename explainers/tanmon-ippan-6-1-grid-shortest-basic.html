@@ -6,12 +6,12 @@
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head><body><div class="wrap">
 <header class="doc-head"><p class="eyebrow">単問演習　場合の数・確率 ・ はじめて学ぶ人向け</p><h1>図でわかる　格子状の道の最短経路</h1><p class="sub">最短経路・組合せ ／ やさしい解説版</p></header>
 <section class="card"><div class="card-h"><span class="num">問</span><h2>この問題</h2></div><p class="lead">図の道で、AからBまで最短で進む道順の個数を求める。</p><p class="lead"><strong>求めるもの：</strong>AからBへの最短経路</p><details class="answer-toggle"><summary>答え（先に確認したい人だけ開く）</summary><span class="ans">$210$通り</span></details></section>
-<section class="card"><div class="card-h"><span class="num">1</span><h2>まず、条件を図にする</h2></div><p class="lead">最短なら左へ戻らず、右6回・上4回の計10歩だけを使います。10個の歩く位置のうち、上へ進む4個の位置を選びます。</p><figure><svg class="dg" viewBox="0 0 900 390" role="img" aria-label="6列4行の格子状の道と、始点Aと終点Bを示す図">
+<section class="card"><div class="card-h"><span class="num">1</span><h2>まず、条件を図にする</h2></div><p class="lead">最短なら左へ戻らず、右6回・上4回の計10歩だけを使います。10歩のうち、上へ進む4歩がどこかを選びます。</p><figure><svg class="dg" viewBox="0 0 900 390" role="img" aria-label="6列4行の格子状の道と、始点Aと終点Bを示す図">
 <g fill="none" stroke="currentColor" stroke-width="2"><path d="M60 80V320 M160 80V320 M260 80V320 M360 80V320 M460 80V320 M560 80V320 M660 80V320"/><path d="M60 80H660 M60 140H660 M60 200H660 M60 260H660 M60 320H660"/></g>
 <g fill="currentColor" font-size="26" class="b700"><text x="28" y="352">A</text><text x="675" y="68">B</text></g>
 <text x="360" y="374" text-anchor="middle" font-size="20" class="muted">右へ6回，上へ4回の最短経路</text>
  </svg><figcaption>図　最短経路は右6回・上4回の並べ替え。</figcaption></figure></section>
-<section class="card"><div class="card-h"><span class="num">2</span><h2>使う公式と考え方</h2></div><div class="formula-box"><h4>格子の最短経路</h4><div class="fb">右へ $a$ 回、上へ $b$ 回の最短経路は、合計 $a+b$ 個の位置から上の位置を選ぶ $\binom{a+b}{b}$。</div></div><p class="note">公式は、問題の条件を数えるための道具です。式を置く前に、何を1回として数えているかを確認します。</p></section>
+<section class="card"><div class="card-h"><span class="num">2</span><h2>使う公式と考え方</h2></div><div class="formula-box"><h4>格子の最短経路</h4><div class="fb">右へ $a$ 回、上へ $b$ 回の最短経路は、合計 $a+b$ 個の位置から上の位置を選ぶ $\binom{a+b}{b}$。</div></div><p class="note">道順を「右6回・上4回をどう並べるか」と読み替えると、組合せで数えられます。最短という条件が、右と上の回数の指定に変わっています。</p></section>
 <section class="card"><div class="card-h"><span class="num">3</span><h2>解答</h2></div><p class="lead">AからBへ最短で進むには、右へ6回、上へ4回の計10歩。上へ進む4歩の位置を10個から選ぶので、</p>
 <p class="lead">$$\binom{10}{4}=210\quad\cdots\text{（答）}$$</p><p><span class="ans">$210$通り</span></p></section>
 <section class="card"><div class="card-h"><span class="num">✓</span><h2>検算とまとめ</h2></div><div class="check"><strong>条件チェック：</strong>右6回と上4回を必ず使うため、10歩より長い道や戻る道は含まれない。</div><div class="flow"><span class="step">条件を整理</span><span class="arw">→</span><span class="step">公式を選ぶ</span><span class="arw">→</span><span class="step hl">計算</span><span class="arw">→</span><span class="step hl">条件を再確認</span></div><p class="note">必要な右・上の回数を数え、歩く順序を組合せで選ぶ。</p></section>
